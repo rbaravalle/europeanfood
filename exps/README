@@ -1,0 +1,15 @@
+Files included (filenames are combinations of the following strings)
+
+txt: for libsvm
+csv: data from the feature extraction process
+
+1) First Test:
+Global Color Histograms (gch)
+It uses the CIELab space color
+
+gchS : scanner
+gchC : camera
+
+2) Second Test:
+Color Coherence Vectors (ccv) - using the pyccv library
+ccv

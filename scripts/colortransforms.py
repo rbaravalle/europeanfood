@@ -275,3 +275,15 @@ def cielab_to_hsv(CIE_L, CIE_a, CIE_b):
     return rgb_to_hsv(R,G,B)
 
 #-------------------------------------------------#
+
+# Code added by author
+# Rodrigo Baravalle
+# rbaravalle@gmail.com
+
+# I: image
+# returns data in the cielab space from the image (tuple)
+import numpy as np
+def rgb_to_cielab_i(I):
+    I2 = map(lambda i: i[0:3],I.getdata()) # rgb tuples
+    return map(lambda i: tuple(np.array(rgb_to_cielab(i[0],i[1],i[2])).astype(np.int32)),I2)
+#-------------------------------------------------#

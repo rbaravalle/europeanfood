@@ -3,20 +3,32 @@ import sys
 import os
 from subprocess import *
 from gch import colorHistogram
+import pyccv
+import colortransforms
+import numpy as np
+
+#def colorHistogram(filename):
+#    import Image
+#    I = Image.open(filename)
+#    I.putdata(colortransforms.rgb_to_cielab_i(I))
+    #raise SystemError
+#    size = I.size[0] # Normalize image size
+#    threshold = 500
+#    return pyccv.calc_ccv(I,size,threshold)
+    #return I.histogram()
 
 def conf_mat(test, classes):
-        m = [ [0 for i in range(max(classes))] for j in range(max(classes))]
-        for i in range(len(classes)):
-            m[test[i]-1][classes[i]-1] = m[test[i]-1][classes[i]-1] + 1
-        return m
+    m = [ [0 for i in range(max(classes))] for j in range(max(classes))]
+    for i in range(len(classes)):
+        m[test[i]-1][classes[i]-1] = m[test[i]-1][classes[i]-1] + 1
+    return m
 
 # get cross validation of executing ./easy.py ../exps/gchS.txt
-def getCross():
+def getCross(fileStxt):
 
     easy = './easy.py'
-    scanner = '../exps/gchS.txt'
 
-    cmd = '{0} {1}'.format(easy, scanner)
+    cmd = '{0} {1}'.format(easy, fileStxt)
     print cmd
     f = Popen(cmd, shell = True, stdout = PIPE).stdout
 
@@ -30,14 +42,12 @@ def getCross():
         if not line: break
     return cross
 
-def test():
-    arch = './gchC.txt.predict'
+def test(fileStxt, fileCtxt, base):
+    arch = base+'.predict'
 
     easy = './easy.py'
-    scanner = '../exps/gchS.txt'
-    camera = '../exps/gchC.txt'
 
-    cmd = '{0} {1} {2}'.format(easy, scanner, camera)
+    cmd = '{0} {1} {2}'.format(easy, fileStxt, fileCtxt)
     print cmd
     f = Popen(cmd, shell = True).communicate()
    
@@ -81,6 +91,11 @@ def test():
 
 
 def main():
+    base = 'gchC.txt'
+    fileStxt = '../exps/gchS.txt'
+    fileScsv = '../exps/gchS.csv'
+    fileCtxt = '../exps/gchC.txt'
+    fileCcsv = '../exps/gchC.csv'
     cant = 20+1
     dDFs  = 64
     baguette = [['Df' for j in range(dDFs)] for i in range(cant)]
@@ -143,24 +158,20 @@ def main():
         sandwichC[i] = colorHistogram(filename)
    
 
-    with open('../exps/gchS.csv', 'wb') as f:
+    with open(fileScsv, 'wb') as f:
         writer = csv.writer(f)
         writer.writerows(baguette[1:]+lactal[1:]+salvado[1:]+sandwich[1:]+nonbread[0:20])
 
-    with open('../exps/gchC.csv', 'wb') as f:
+    with open(fileCcsv, 'wb') as f:
         writer = csv.writer(f)
         writer.writerows(baguetteC[1:]+lactalC[1:]+salvadoC[1:]+sandwichC[1:]+nonbread[20:40])
 
     prog = './a.out' # convert.c
-    csvS = '../exps/gchS.csv'
-    csvC = '../exps/gchC.csv'
-    txtS = '../exps/gchS.txt'
-    txtC = '../exps/gchC.txt'
-    cmd = '{0} "{1}" > "{2}"'.format(prog, csvS, txtS)
+    cmd = '{0} "{1}" > "{2}"'.format(prog, fileScsv, fileStxt)
     Popen(cmd, shell = True, stdout = PIPE).communicate()	
-    cmd = '{0} "{1}" > "{2}"'.format(prog, csvC, txtC)
+    cmd = '{0} "{1}" > "{2}"'.format(prog, fileCcsv, fileCtxt)
     Popen(cmd, shell = True, stdout = PIPE).communicate()
-    test()
+    test(fileStxt, fileCtxt, base)
 
 
 main()

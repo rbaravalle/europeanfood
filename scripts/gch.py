@@ -2,14 +2,11 @@ import Image
 import colortransforms as ct
 import numpy as np
 import time
+import math
 
-
-# I: image
-# returns data in the cielab space from the image (tuple)
 def rgb_to_cielab_i(I):
     I2 = map(lambda i: i[0:3],I.getdata()) # rgb tuples
     return map(lambda i: ct.rgb_to_cielab(i[0],i[1],i[2]),I2)
-
 # returns global color histogram of data
 # 64 df's (four intervals per channel)
 def colorHistogram(filename):
@@ -34,9 +31,12 @@ def colorHistogram(filename):
         baseX = minX+i*pasoX
         baseY = minY+j*pasoY
         baseZ = minZ+k*pasoZ
-        a = x[0] >= baseX and x[0] <= baseX + pasoX
-        b = x[1] >= baseY and x[1] <= baseY + pasoY
-        c = x[2] >= baseZ and x[2] <= baseZ + pasoZ
+        x0 = math.trunc(x[0])
+        x1 = math.trunc(x[1])
+        x2 = math.trunc(x[2])
+        a = x0 >= baseX and x0 <= baseX + pasoX
+        b = x1 >= baseY and x1 <= baseY + pasoY
+        c = x2 >= baseZ and x2 <= baseZ + pasoZ
         return (a and b and c)
 
     for i in range(cant):

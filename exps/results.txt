@@ -33,3 +33,9 @@ Cross Validation
 55%
 Classification
 28%
+
+../scripts/easy.py siftS.txt siftC.txt
+Cross Validation
+55%
+Classification
+39%

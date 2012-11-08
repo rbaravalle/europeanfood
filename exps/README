@@ -13,3 +13,15 @@ gchC : camera
 2) Second Test:
 Color Coherence Vectors (ccv) - using the pyccv library
 ccv
+
+3) Third Test (from the mahotas python library):
+tas
+lbp
+zernike
+haralick
+
+-----
+shapecontext
+sift
+-- surf: falta agrupar los vectores ( codebook?)
+

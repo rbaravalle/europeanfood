@@ -9,19 +9,17 @@ import numpy as np
 from featureTexture import *
 
 def features(filename,i):
-    farr = [colorHistogram,haralick,lbp]
+    farr = [colorHistogram,ccv,haralick,lbp,tas,zernike]
     return farr[i](filename)
 
 
-#def colorHistogram(filename):
-#    import Image
-#    I = Image.open(filename)
-#    I.putdata(colortransforms.rgb_to_cielab_i(I))
-    #raise SystemError
-#    size = I.size[0] # Normalize image size
-#    threshold = 500
-#    return pyccv.calc_ccv(I,size,threshold)
-    #return I.histogram()
+def ccv(filename):
+    import Image
+    I = Image.open(filename)
+    I.putdata(colortransforms.rgb_to_cielab_i(I))
+    size = I.size[0] # Normalize image size
+    threshold = 500
+    return pyccv.calc_ccv(I,size,threshold)
 
 def conf_mat(test, classes):
     m = [ [0 for i in range(max(classes))] for j in range(max(classes))]
@@ -121,6 +119,26 @@ def main(subname,which):
     nonbread = [['Df' for j in range(dDFs)] for i in range(len(dirList))]
 
 
+    local = True
+    if(local == True):
+        trainingWords, testingWords = localFeatures(subname)
+        with open(fileScsv, 'wb') as f:
+            writer = csv.writer(f)
+            writer.writerows(trainingWords)
+
+        with open(fileCcsv, 'wb') as f:
+            writer = csv.writer(f)
+            writer.writerows(testingWords)
+
+        prog = './a.out' # convert.c
+        cmd = '{0} "{1}" > "{2}"'.format(prog, fileScsv, fileStxt)
+        Popen(cmd, shell = True, stdout = PIPE).communicate()	
+        cmd = '{0} "{1}" > "{2}"'.format(prog, fileCcsv, fileCtxt)
+        Popen(cmd, shell = True, stdout = PIPE).communicate()
+        test(fileStxt, fileCtxt, base)
+        return
+
+    # else global
     import Image
     j = 0
     for i in range(len(dirList)):
@@ -180,4 +198,180 @@ def main(subname,which):
     test(fileStxt, fileCtxt, base)
 
 
-main('haralick',1)
+# SIFT BoW
+from os.path import exists, isdir, basename, join, splitext
+import sift
+from glob import glob
+from numpy import zeros, resize, sqrt, histogram, hstack, vstack, savetxt, zeros_like
+import scipy.cluster.vq as vq
+#from cPickle import dump, HIGHEST_PROTOCOL
+#import argparse
+#EXTENSIONS = [".jpg", ".bmp", ".png", ".pgm", ".tif", ".tiff"]
+#DATASETPATH = '../dataset/demosicura'
+PRE_ALLOCATION_BUFFER = 1000  # for sift
+#HISTOGRAMS_FILE = 'trainingdata.svm'
+K_THRESH = 1  # early stopping threshold for kmeans originally at 1e-5, increased for speedup
+CODEBOOK_FILE = 'codebook.file'
+
+# only one file
+def extractSift(filename):
+    #print "extracting Sift features"
+    #all_features_dict = {}
+    #for i, fname in enumerate(input_files):
+    features_fname = filename + '.sift'
+    #if exists(features_fname) == False:
+        #print "calculating sift features for", fname
+    sift.process_image(filename, features_fname)
+    #print "gathering sift features for", fname,
+    locs, descriptors = sift.read_features_from_file(features_fname)
+    #print descriptors.shape
+    #all_features_dict[0] = descriptors
+    #return all_features_dict
+    return descriptors
+
+
+def dict2numpy(dict):
+    nkeys = len(dict)
+    array = zeros((nkeys * PRE_ALLOCATION_BUFFER, 128))
+    pivot = 0
+    for key in dict.keys():
+        value = dict[key]
+        nelements = value.shape[0]
+        while pivot + nelements > array.shape[0]:
+            padding = zeros_like(array)
+            array = vstack((array, padding))
+        array[pivot:pivot + nelements] = value
+        pivot += nelements
+    array = resize(array, (pivot, 128))
+    return array
+
+
+def computeHistograms(codebook, descriptors):
+    code, dist = vq.vq(descriptors, codebook)
+    histogram_of_words, bin_edges = histogram(code,
+                                              bins=range(codebook.shape[0] + 1),
+                                              normed=True)
+    return histogram_of_words
+
+
+def localFeatures(subname):
+    base = subname+'C.txt'
+    fileStxt = '../exps/'+subname+'S.txt'
+    fileScsv = '../exps/'+subname+'S.csv'
+    fileCtxt = '../exps/'+base
+    fileCcsv = '../exps/'+subname+'C.csv'
+    cant = 20+1
+    dDFs  = 64
+    baguette = [['Df' for j in range(dDFs)] for i in range(cant)]
+    salvado   = [['Df' for j in range(dDFs)] for i in range(cant)]
+    lactal   = [['Df' for j in range(dDFs)] for i in range(cant)]
+    sandwich = [['Df' for j in range(dDFs)] for i in range(cant)]
+
+    baguetteC = [['Df' for j in range(dDFs)] for i in range(cant)]
+    salvadoC   = [['Df' for j in range(dDFs)] for i in range(cant)]
+    lactalC   = [['Df' for j in range(dDFs)] for i in range(cant)]
+    sandwichC = [['Df' for j in range(dDFs)] for i in range(cant)]
+
+    path = '../images/nonbread/res/'
+    dirList=os.listdir(path)
+    print len(dirList)
+    nonbread = [['Df' for j in range(dDFs)] for i in range(len(dirList))]
+
+    import Image
+    j = 0
+    for i in range(len(dirList)):
+        filename = path+dirList[i]
+        I = Image.open(filename)
+        if(I.mode == 'RGB'):
+            print filename
+            nonbread[j] = extractSift(filename)
+            j = j+1
+        if (j > (cant-1)*2+1):
+            break
+
+    for i in range(1,cant):
+        filename = '../images/scanner/baguette/baguette{}.tif'.format(i)
+        print filename
+        baguette[i] = extractSift(filename)
+        filename = '../images/scanner/lactal/lactal{}.tif'.format(i)
+        print filename
+        lactal[i] = extractSift(filename)
+        filename = '../images/scanner/salvado/salvado{}.tif'.format(i)
+        print filename
+        salvado[i] = extractSift(filename)
+        filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i)
+        print filename
+        sandwich[i] = extractSift(filename)
+
+
+        v = 50
+        b = 1.05
+        filename = '../images/camera/baguette/slicer/b{}.tif'.format(i)
+        print filename
+        baguetteC[i] = extractSift(filename)
+        filename = '../images/camera/lactal/l{}.tif'.format(i)
+        print filename
+        lactalC[i] = extractSift(filename)
+        filename = '../images/camera/salvado/s{}.tif'.format(i)
+        print filename
+        salvadoC[i] = extractSift(filename)
+        filename = '../images/camera/sandwich/s{}.tif'.format(i)
+        print filename
+        sandwichC[i] = extractSift(filename)
+
+
+    # array of SIFT features
+    all_featuresS = {}
+    all_featuresC = {}
+
+    arrS = baguette[1:]+lactal[1:]+salvado[1:]+sandwich[1:]+nonbread[0:cant-1]
+    arrC = baguetteC[1:]+lactalC[1:]+salvadoC[1:]+sandwichC[1:]+nonbread[cant-1:(cant-1)*2]
+
+    # to dict
+    for d in range(len(arrS)):
+        all_featuresS[d] = arrS[d]
+
+    for d in range(len(arrS)):
+        all_featuresC[d] = arrC[d]
+
+    all_features_arrayS = dict2numpy(all_featuresS)
+    all_features_arrayC = dict2numpy(all_featuresC)
+
+    print "Paso.."
+    nfeatures = all_features_arrayS.shape[0]
+    print "A"
+    nclusters = int(sqrt(nfeatures))
+    print "B"
+    # the codebook is made with the training SIFT descriptors
+    codebook, distortion = vq.kmeans(all_features_arrayS,
+                                             nclusters,
+                                             thresh=K_THRESH)
+    print "C"
+    #with open(datasetpath + CODEBOOK_FILE, 'wb') as f:
+
+    #    dump(codebook, f, protocol=HIGHEST_PROTOCOL)
+    print "Codebook OK"
+    all_word_histgramsS = [[0 for j in range(20)] for i in range(len(all_featuresS))]
+    for imagefname in all_featuresS:
+        word_histgram = computeHistograms(codebook, all_featuresS[imagefname])
+        all_word_histgramsS[imagefname] = word_histgram
+
+    #print "---------------------"
+    print "## computing visual word histograms (2)"
+    all_word_histgramsC = [[0 for j in range(20)] for i in range(len(all_featuresC))]
+    for imagefname in all_featuresC:
+        word_histgram = computeHistograms(codebook, all_featuresC[imagefname])
+        all_word_histgramsC[imagefname] = word_histgram
+        #print "W", word_histgram
+
+    print "Good Bye!"
+    #print all_word_histgramsS, all_word_histgramsC
+    return all_word_histgramsS, all_word_histgramsC
+
+#main('gch',0)
+#main('ccv',1)
+#main('haralick',2)
+#main('lbp',3)
+#main('tas',4)
+#main('zernike',5)
+main('sift',6)

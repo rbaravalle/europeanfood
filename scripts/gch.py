@@ -1,4 +1,5 @@
 import Image
+import ImageFilter
 import colortransforms as ct
 import numpy as np
 import time
@@ -12,8 +13,9 @@ def rgb_to_cielab_i(I):
 def colorHistogram(filename):
     t = time.clock()
     info = (0,100,-127,128,-127,128) # max's and min's in the CIELab space
-    data = Image.open(filename)
-    data = rgb_to_cielab_i(data)
+    I = Image.open(filename)
+    I = I.filter(ImageFilter.BLUR)
+    data = rgb_to_cielab_i(I)
     cant = 4
     features = np.zeros(cant*cant*cant).astype(np.int32)
     minX = info[0]

@@ -1,0 +1,13 @@
+../scripts/easy.py gchS.txt gchC.txt
+Cross Validation
+91%
+Classification
+20%
+
+../scripts/easy.py ccvS.txt ccvC.txt
+Cross Validation
+75%
+Classification
+16%
+
+

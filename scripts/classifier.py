@@ -6,6 +6,12 @@ from gch import colorHistogram
 import pyccv
 import colortransforms
 import numpy as np
+from featureTexture import *
+
+def features(filename,i):
+    farr = [colorHistogram,haralick,lbp]
+    return farr[i](filename)
+
 
 #def colorHistogram(filename):
 #    import Image
@@ -90,12 +96,12 @@ def test(fileStxt, fileCtxt, base):
 
 
 
-def main():
-    base = 'gchC.txt'
-    fileStxt = '../exps/gchS.txt'
-    fileScsv = '../exps/gchS.csv'
-    fileCtxt = '../exps/gchC.txt'
-    fileCcsv = '../exps/gchC.csv'
+def main(subname,which):
+    base = subname+'C.txt'
+    fileStxt = '../exps/'+subname+'S.txt'
+    fileScsv = '../exps/'+subname+'S.csv'
+    fileCtxt = '../exps/'+base
+    fileCcsv = '../exps/'+subname+'C.csv'
     cant = 20+1
     dDFs  = 64
     baguette = [['Df' for j in range(dDFs)] for i in range(cant)]
@@ -122,7 +128,7 @@ def main():
         I = Image.open(filename)
         if(I.mode == 'RGB'):
             print filename
-            nonbread[j] = colorHistogram(filename)
+            nonbread[j] = features(filename,which)
             j = j+1
         if (j > 41):
             break
@@ -130,32 +136,32 @@ def main():
     for i in range(1,cant):
         filename = '../images/scanner/baguette/baguette{}.tif'.format(i)
         print filename
-        baguette[i] = colorHistogram(filename)
+        baguette[i] = features(filename,which)
         filename = '../images/scanner/lactal/lactal{}.tif'.format(i)
         print filename
-        lactal[i] = colorHistogram(filename)
+        lactal[i] = features(filename,which)
         filename = '../images/scanner/salvado/salvado{}.tif'.format(i)
         print filename
-        salvado[i] = colorHistogram(filename)
+        salvado[i] = features(filename,which)
         filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i)
         print filename
-        sandwich[i] = colorHistogram(filename)
+        sandwich[i] = features(filename,which)
 
 
         v = 50
         b = 1.05
         filename = '../images/camera/baguette/slicer/b{}.tif'.format(i)
         print filename
-        baguetteC[i] = colorHistogram(filename)
+        baguetteC[i] = features(filename,which)
         filename = '../images/camera/lactal/l{}.tif'.format(i)
         print filename
-        lactalC[i] = colorHistogram(filename)
+        lactalC[i] = features(filename,which)
         filename = '../images/camera/salvado/s{}.tif'.format(i)
         print filename
-        salvadoC[i] = colorHistogram(filename)
+        salvadoC[i] = features(filename,which)
         filename = '../images/camera/sandwich/s{}.tif'.format(i)
         print filename
-        sandwichC[i] = colorHistogram(filename)
+        sandwichC[i] = features(filename,which)
    
 
     with open(fileScsv, 'wb') as f:
@@ -174,4 +180,4 @@ def main():
     test(fileStxt, fileCtxt, base)
 
 
-main()
+main('haralick',1)

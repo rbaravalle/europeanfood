@@ -46,5 +46,5 @@ Cross Validation
 95%
 Classification
 39%
-X % : random forest (60 trees)
+72 % : random forest (60 trees) !!!
 

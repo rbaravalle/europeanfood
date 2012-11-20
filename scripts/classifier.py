@@ -8,6 +8,9 @@ import colortransforms
 import numpy as np
 from featureTexture import *
 
+SVM = 0
+RANDOM_FOREST = 1
+
 def callF(filename,which):
     return features(filename,which,3,False)
 
@@ -104,11 +107,9 @@ def classifierPredict(dtrain,dtest,labels,fileStxt, fileCtxt, base, i):
     return pred[i](dtrain,dtest,labels,fileStxt, fileCtxt, base)
 
 
-def test(dtrain,dtest,labels,fileStxt, fileCtxt, base):
-    # 0: svm
-    # 1: random forest
+def test(dtrain,dtest,labels,fileStxt, fileCtxt, base, classifier):
 
-    testL = classifierPredict(dtrain,dtest,labels,fileStxt, fileCtxt, base,1)
+    testL = classifierPredict(dtrain,dtest,labels,fileStxt, fileCtxt, base,classifier)
 
     print "Test: ", testL
 
@@ -120,7 +121,7 @@ def test(dtrain,dtest,labels,fileStxt, fileCtxt, base):
 
 
 
-def main(subname,which,local):
+def main(subname,which,local,classifier):
     base = subname+'C.txt'
     fileStxt = '../exps/'+subname+'S.txt'
     fileScsv = '../exps/'+subname+'S.csv'
@@ -146,7 +147,7 @@ def main(subname,which,local):
 
 
     if(local == True):
-        trainingData, testingData = localFeatures(subname)
+        trainingData, testingData = localFeatures(subname,which)
         with open(fileScsv, 'wb') as f:
             writer = csv.writer(f)
             writer.writerows(trainingData)
@@ -162,7 +163,7 @@ def main(subname,which,local):
         Popen(cmd, shell = True, stdout = PIPE).communicate()
         labels = [i for i in range(len(testingData))]
         labels = map(lambda i: i/20+1, labels)
-        test(trainingData, testingData, labels, fileStxt, fileCtxt, base)
+        test(trainingData, testingData, labels, fileStxt, fileCtxt, base,classifier)
         return
 
     else:    # else global
@@ -239,28 +240,45 @@ import scipy.cluster.vq as vq
 PRE_ALLOCATION_BUFFER = 1000  # for sift
 K_THRESH = 1  # early stopping threshold for kmeans originally at 1e-5, increased for speedup
 CODEBOOK_FILE = 'codebook.file'
+DATASETPATH = 'dataset/'
+SIZE_LOCAL_FEATURE = 64 # 64: SURF, 128: SIFT
+from cPickle import dump, HIGHEST_PROTOCOL, load
+from mahotas.features import surf
 
 # only one file
 def extractSift(filename):
     features_fname = filename + '.sift'
     sift.process_image(filename, features_fname)
     locs, descriptors = sift.read_features_from_file(features_fname)
+    print "Shape: ", descriptors.shape
     return descriptors
 
 
+def extractSurf(filename):
+    features_fname = filename
+    descriptors = surf.surf(np.array(Image.open(filename).convert('L')),descriptor_only=True)
+    print "Shape: ", descriptors.shape
+    return descriptors
+
+def extractLocal(filename,i):
+    f = [extractSift, extractSurf]
+    return f[i](filename)
+
 def dict2numpy(dict):
     nkeys = len(dict)
-    array = zeros((nkeys * PRE_ALLOCATION_BUFFER, 128))
+    print "100 no? : ", nkeys
+    array = zeros((nkeys * PRE_ALLOCATION_BUFFER, SIZE_LOCAL_FEATURE))
     pivot = 0
     for key in dict.keys():
         value = dict[key]
-        nelements = value.shape[0]
+        nelements = value.shape[0] # num of elements of "value"
         while pivot + nelements > array.shape[0]:
             padding = zeros_like(array)
             array = vstack((array, padding))
         array[pivot:pivot + nelements] = value
         pivot += nelements
-    array = resize(array, (pivot, 128))
+    array = resize(array, (pivot, SIZE_LOCAL_FEATURE)) # eliminate 0's rows in "array"
+    print "Tamanio del array devuelto por dict2numpy?: ", array.shape
     return array
 
 
@@ -272,7 +290,7 @@ def computeHistograms(codebook, descriptors):
     return histogram_of_words
 
 
-def localFeatures(subname):
+def localFeatures(subname,alg):
     base = subname+'C.txt'
     fileStxt = '../exps/'+subname+'S.txt'
     fileScsv = '../exps/'+subname+'S.csv'
@@ -302,7 +320,7 @@ def localFeatures(subname):
         I = Image.open(filename)
         if(I.mode == 'RGB'):
             print filename
-            nonbread[j] = extractSift(filename)
+            nonbread[j] = extractLocal(filename,alg)
             j = j+1
         if (j > (cant-1)*2+1):
             break
@@ -310,32 +328,30 @@ def localFeatures(subname):
     for i in range(1,cant):
         filename = '../images/scanner/baguette/baguette{}.tif'.format(i)
         print filename
-        baguette[i] = extractSift(filename)
+        baguette[i] = extractLocal(filename,alg)
         filename = '../images/scanner/lactal/lactal{}.tif'.format(i)
         print filename
-        lactal[i] = extractSift(filename)
+        lactal[i] = extractLocal(filename,alg)
         filename = '../images/scanner/salvado/salvado{}.tif'.format(i)
         print filename
-        salvado[i] = extractSift(filename)
+        salvado[i] = extractLocal(filename,alg)
         filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i)
         print filename
-        sandwich[i] = extractSift(filename)
+        sandwich[i] = extractLocal(filename,alg)
 
 
-        v = 50
-        b = 1.05
         filename = '../images/camera/baguette/slicer/b{}.tif'.format(i)
         print filename
-        baguetteC[i] = extractSift(filename)
+        baguetteC[i] = extractLocal(filename,alg)
         filename = '../images/camera/lactal/l{}.tif'.format(i)
         print filename
-        lactalC[i] = extractSift(filename)
+        lactalC[i] = extractLocal(filename,alg)
         filename = '../images/camera/salvado/s{}.tif'.format(i)
         print filename
-        salvadoC[i] = extractSift(filename)
+        salvadoC[i] = extractLocal(filename,alg)
         filename = '../images/camera/sandwich/s{}.tif'.format(i)
         print filename
-        sandwichC[i] = extractSift(filename)
+        sandwichC[i] = extractLocal(filename,alg)
 
 
     # array of SIFT features
@@ -358,10 +374,22 @@ def localFeatures(subname):
     print "Kmeans"
     nfeatures = all_features_arrayS.shape[0]
     nclusters = int(sqrt(nfeatures))
+    print "nfeatures: ", nfeatures, " , nclusters: ", nclusters
+
     # the codebook is made with the training SIFT descriptors
     codebook, distortion = vq.kmeans(all_features_arrayS,
                                              nclusters,
                                              thresh=K_THRESH)
+
+
+    #with open(CODEBOOK_FILE, 'wb') as f:
+    #    dump(codebook, f, protocol=HIGHEST_PROTOCOL)
+
+    #print "---------------------"
+    #print "## loading codebook from " + CODEBOOK_FILE
+    #with open(CODEBOOK_FILE, 'rb') as f:
+    #    codebook = load(f)
+
     print "Codebook OK"
     all_word_histgramsS = [[0 for j in range(20)] for i in range(len(all_featuresS))]
     for imagefname in all_featuresS:
@@ -374,7 +402,6 @@ def localFeatures(subname):
         all_word_histgramsC[imagefname] = word_histgram
         #print "W", word_histgram
 
-    #print all_word_histgramsS, all_word_histgramsC
     return all_word_histgramsS, all_word_histgramsC
 
 
@@ -384,5 +411,6 @@ def localFeatures(subname):
 #main('lbp',3,0)
 #main('tas',4,0)
 #main('zernike',5,0)
-main('sift',6,1)
+#main('sift',0,1)
+main('surf',1,True, SVM)
 

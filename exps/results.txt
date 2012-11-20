@@ -2,7 +2,7 @@
 Cross Validation
 91%
 Classification
-20%
+20% : SVM
 X%: random forest (60 trees)
 
 
@@ -10,41 +10,50 @@ X%: random forest (60 trees)
 Cross Validation
 75%
 Classification
-16%
+16% : SVM
 23% :random forest (60 trees)
 
 ../scripts/easy.py haralickS.txt haralickC.txt
 Cross Validation
 91%
 Classification
-40%
+40% : SVM
 34% : random forest (60 trees)
 
 ../scripts/easy.py lbpS.txt lbpC.txt
 Cross Validation
 73%
 Classification
-22% 
+22%  : SVM
 34% : random forest (60 trees)
 
 ../scripts/easy.py tasS.txt tasC.txt
 Cross Validation
 90%
 Classification
-20%
+20% : SVM
 19%: random forest (60 trees)
 
 ../scripts/easy.py zernikeS.txt zernikeC.txt
 Cross Validation
 55%
 Classification
-28%
+28% : SVM
 30%: random forest (60 trees)
 
+SIFT:
 ../scripts/easy.py siftS.txt siftC.txt
 Cross Validation
 95%
 Classification
-39%
-72 % : random forest (60 trees) !!!
+39% : SVM
+72% : random forest (60 trees) !!!
+
+SURF:
+../scripts/easy.py surfS.txt surfC.txt
+Cross Validation
+91%
+Classification
+38% : SVM
+48% : random forest (60 trees)
 

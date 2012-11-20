@@ -331,11 +331,7 @@ def localFeatures(subname,alg):
         I = Image.open(filename)
         if(I.mode == 'RGB'):
             print filename
-<<<<<<< HEAD
             nonbread[j] = extractLocal(filename,alg)
-=======
-            nonbread[j] = localF(filename)
->>>>>>> 3248b79e6c1f980b9e2f9f0da631a861ca777e59
             j = j+1
         if (j > (cant-1)*2+1):
             break
@@ -343,7 +339,6 @@ def localFeatures(subname,alg):
     for i in range(1,cant):
         filename = '../images/scanner/baguette/baguette{}.tif'.format(i)
         print filename
-<<<<<<< HEAD
         baguette[i] = extractLocal(filename,alg)
         filename = '../images/scanner/lactal/lactal{}.tif'.format(i)
         print filename
@@ -354,23 +349,9 @@ def localFeatures(subname,alg):
         filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i)
         print filename
         sandwich[i] = extractLocal(filename,alg)
-=======
-        baguette[i] = localF(filename)
-        filename = '../images/scanner/lactal/lactal{}.tif'.format(i)
-        print filename
-        lactal[i] = localF(filename)
-        filename = '../images/scanner/salvado/salvado{}.tif'.format(i)
-        print filename
-        salvado[i] = localF(filename)
-        filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i)
-        print filename
-        sandwich[i] = localF(filename)
->>>>>>> 3248b79e6c1f980b9e2f9f0da631a861ca777e59
-
 
         filename = '../images/camera/baguette/slicer/b{}.tif'.format(i)
         print filename
-<<<<<<< HEAD
         baguetteC[i] = extractLocal(filename,alg)
         filename = '../images/camera/lactal/l{}.tif'.format(i)
         print filename
@@ -381,18 +362,6 @@ def localFeatures(subname,alg):
         filename = '../images/camera/sandwich/s{}.tif'.format(i)
         print filename
         sandwichC[i] = extractLocal(filename,alg)
-=======
-        baguetteC[i] = localF(filename)
-        filename = '../images/camera/lactal/l{}.tif'.format(i)
-        print filename
-        lactalC[i] = localF(filename)
-        filename = '../images/camera/salvado/s{}.tif'.format(i)
-        print filename
-        salvadoC[i] = localF(filename)
-        filename = '../images/camera/sandwich/s{}.tif'.format(i)
-        print filename
-        sandwichC[i] = localF(filename)
->>>>>>> 3248b79e6c1f980b9e2f9f0da631a861ca777e59
 
 
     # array of SIFT features
@@ -452,10 +421,6 @@ def localFeatures(subname,alg):
 #main('lbp',3,0)
 #main('tas',4,0)
 #main('zernike',5,0)
-<<<<<<< HEAD
 #main('sift',0,1)
 main('surf',1,True, SVM)
-=======
-main('surf',6,1)
->>>>>>> 3248b79e6c1f980b9e2f9f0da631a861ca777e59
 

@@ -253,6 +253,17 @@ def extractSift(filename):
     print "Shape: ", descriptors.shape
     return descriptors
 
+from mahotas import surf
+def extractSURF(filename):
+    import Image
+    I = Image.open(filename)
+    f = np.array(I.convert('L').getdata()).reshape(I.size[0],I.size[1])
+    f = f.astype(np.uint8)
+    return surf.surf(f,descriptor_only=True)
+
+
+def localF(filename):
+    return extractSURF(filename)
 
 def extractSurf(filename):
     features_fname = filename
@@ -320,7 +331,11 @@ def localFeatures(subname,alg):
         I = Image.open(filename)
         if(I.mode == 'RGB'):
             print filename
+<<<<<<< HEAD
             nonbread[j] = extractLocal(filename,alg)
+=======
+            nonbread[j] = localF(filename)
+>>>>>>> 3248b79e6c1f980b9e2f9f0da631a861ca777e59
             j = j+1
         if (j > (cant-1)*2+1):
             break
@@ -328,6 +343,7 @@ def localFeatures(subname,alg):
     for i in range(1,cant):
         filename = '../images/scanner/baguette/baguette{}.tif'.format(i)
         print filename
+<<<<<<< HEAD
         baguette[i] = extractLocal(filename,alg)
         filename = '../images/scanner/lactal/lactal{}.tif'.format(i)
         print filename
@@ -338,10 +354,23 @@ def localFeatures(subname,alg):
         filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i)
         print filename
         sandwich[i] = extractLocal(filename,alg)
+=======
+        baguette[i] = localF(filename)
+        filename = '../images/scanner/lactal/lactal{}.tif'.format(i)
+        print filename
+        lactal[i] = localF(filename)
+        filename = '../images/scanner/salvado/salvado{}.tif'.format(i)
+        print filename
+        salvado[i] = localF(filename)
+        filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i)
+        print filename
+        sandwich[i] = localF(filename)
+>>>>>>> 3248b79e6c1f980b9e2f9f0da631a861ca777e59
 
 
         filename = '../images/camera/baguette/slicer/b{}.tif'.format(i)
         print filename
+<<<<<<< HEAD
         baguetteC[i] = extractLocal(filename,alg)
         filename = '../images/camera/lactal/l{}.tif'.format(i)
         print filename
@@ -352,6 +381,18 @@ def localFeatures(subname,alg):
         filename = '../images/camera/sandwich/s{}.tif'.format(i)
         print filename
         sandwichC[i] = extractLocal(filename,alg)
+=======
+        baguetteC[i] = localF(filename)
+        filename = '../images/camera/lactal/l{}.tif'.format(i)
+        print filename
+        lactalC[i] = localF(filename)
+        filename = '../images/camera/salvado/s{}.tif'.format(i)
+        print filename
+        salvadoC[i] = localF(filename)
+        filename = '../images/camera/sandwich/s{}.tif'.format(i)
+        print filename
+        sandwichC[i] = localF(filename)
+>>>>>>> 3248b79e6c1f980b9e2f9f0da631a861ca777e59
 
 
     # array of SIFT features
@@ -411,6 +452,10 @@ def localFeatures(subname,alg):
 #main('lbp',3,0)
 #main('tas',4,0)
 #main('zernike',5,0)
+<<<<<<< HEAD
 #main('sift',0,1)
 main('surf',1,True, SVM)
+=======
+main('surf',6,1)
+>>>>>>> 3248b79e6c1f980b9e2f9f0da631a861ca777e59
 

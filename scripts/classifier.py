@@ -7,20 +7,21 @@ import pyccv
 import colortransforms
 import numpy as np
 from featureTexture import *
+import singularity
 
 SVM = 0
 RANDOM_FOREST = 1
 
-def callF(filename,which):
-    return features(filename,which,3,False)
+def callF(filename,which,extra):
+    return features(filename,which,3,False,extra)
 
-def features(filename,i,j,combine):
-    farr = [colorHistogram,ccv,haralick,lbp,tas,zernike]
+def features(filename,i,j,combine,extra):
+    farr = [colorHistogram,ccv,haralick,lbp,tas,zernike, singularity.spec]
 
     if(combine==True):
         return hstack((farr[1](filename),farr[2](filename),farr[3](filename),farr[4](filename),farr[5](filename)))
 
-    return farr[i](filename)
+    return farr[i](filename,extra)
 
 
 def ccv(filename):
@@ -167,47 +168,50 @@ def main(subname,which,local,classifier):
         return
 
     else:    # else global
+        cantDF = 40
         import Image
         j = 0
+        extra = [cantDF,40,1.15]
         for i in range(len(dirList)):
             filename = path+dirList[i]
             I = Image.open(filename)
             if(I.mode == 'RGB'):
                 print filename
-                nonbread[j] = callF(filename,which)
+                nonbread[j] = callF(filename,which,extra)
                 j = j+1
             if (j > cant*2+1):
                 break
 
+
         for i in range(1,cant):
+            extra = [cantDF,40,1.2]
             filename = '../images/scanner/baguette/baguette{}.tif'.format(i)
             print filename
-            baguette[i] = callF(filename,which)
+            baguette[i] = callF(filename,which,extra)
             filename = '../images/scanner/lactal/lactal{}.tif'.format(i)
             print filename
-            lactal[i] = callF(filename,which)
+            lactal[i] = callF(filename,which,extra)
             filename = '../images/scanner/salvado/salvado{}.tif'.format(i)
             print filename
-            salvado[i] = callF(filename,which)
+            salvado[i] = callF(filename,which,extra)
             filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i)
             print filename
-            sandwich[i] = callF(filename,which)
+            sandwich[i] = callF(filename,which,extra)
 
 
-            v = 50
-            b = 1.05
+            extra = [cantDF,50,1.05]
             filename = '../images/camera/baguette/slicer/b{}.tif'.format(i)
             print filename
-            baguetteC[i] = callF(filename,which)
+            baguetteC[i] = callF(filename,which,extra)
             filename = '../images/camera/lactal/l{}.tif'.format(i)
             print filename
-            lactalC[i] = callF(filename,which)
+            lactalC[i] = callF(filename,which,extra)
             filename = '../images/camera/salvado/s{}.tif'.format(i)
             print filename
-            salvadoC[i] = callF(filename,which)
+            salvadoC[i] = callF(filename,which,extra)
             filename = '../images/camera/sandwich/s{}.tif'.format(i)
             print filename
-            sandwichC[i] = callF(filename,which)
+            sandwichC[i] = callF(filename,which,extra)
    
 
     trainingData = baguette[1:]+lactal[1:]+salvado[1:]+sandwich[1:]+nonbread[0:20]
@@ -228,7 +232,7 @@ def main(subname,which,local,classifier):
     Popen(cmd, shell = True, stdout = PIPE).communicate()
     labels = [i for i in range(len(testingData))]
     labels = map(lambda i: i/20+1, labels)
-    test(trainingData, testingData, labels,fileStxt, fileCtxt, base)
+    test(trainingData, testingData, labels,fileStxt, fileCtxt, base,classifier)
 
 
 # SIFT BoW
@@ -262,8 +266,6 @@ def extractSURF(filename):
     return surf.surf(f,descriptor_only=True)
 
 
-def localF(filename):
-    return extractSURF(filename)
 
 def extractSurf(filename):
     features_fname = filename
@@ -272,7 +274,7 @@ def extractSurf(filename):
     return descriptors
 
 def extractLocal(filename,i):
-    f = [extractSift, extractSurf]
+    f = [extractSift, extractSURF]
     return f[i](filename)
 
 def dict2numpy(dict):
@@ -422,5 +424,7 @@ def localFeatures(subname,alg):
 #main('tas',4,0)
 #main('zernike',5,0)
 #main('sift',0,1)
-main('surf',1,True, SVM)
+#main('surf',1,True, RANDOM_FOREST)
+#main('singularity',6,False,SVM)
+main('singularity',6,False,SVM)
 

@@ -52,8 +52,24 @@ Classification
 SURF:
 ../scripts/easy.py surfS.txt surfC.txt
 Cross Validation
-91%
+94%
 Classification
-38% : SVM
-48% : random forest (60 trees)
+41% : SVM
+66% : random forest (60 trees)
+
+SINGULARITY MULTIFRACTAL SPECTRUM
+../scripts/easy.py surfS.txt surfC.txt
+Cross Validation
+89%
+Classification
+44% : SVM
+37% : random forest (60 trees)
+
+
+
+[4, 0, 1, 0, 0]
+[2, 7, 9, 2, 1]
+[0, 0, 0, 0, 1]
+[5, 13, 9, 18, 2]
+[9, 0, 1, 0, 16]
 

@@ -12,11 +12,6 @@ from scipy.sparse import coo_matrix
 import scipy.sparse.linalg as linsolve
 import time
 import pyopencl as cl
-import pyopencl.array as cla
-import maxIntImg
-import pyopencl as cl
-import pyopencl.array
-#import pyopencl.reduction
 
 ctx = cl.create_some_context()
 queue = cl.CommandQueue(ctx)
@@ -38,7 +33,7 @@ def spec(filename, extra):
 
         l = 4 # (maximum window size-1) / 2
         temp = np.log((1.0,3.0,5.0,7.0))
-        measure = np.ones((Nx,l*Ny)).astype(np.int32)
+        measure = np.zeros(l*Ny).astype(np.int32)
 
         b = np.vstack((temp,np.ones((1,l)))).T
         AA=coo_matrix(np.kron(np.identity(Nx), b))     
@@ -48,9 +43,9 @@ def spec(filename, extra):
         prg = cl.Program(ctx, """
         int maxx(__global int *img, int x1, int y1, int x2, int y2, const int Ny) {
             int i, j;
-            int maxim = 1;
-            for(i = x1; i <= x2; i++)
-                for(j = y1; j <= y2; j++)
+            int maxim = 0;
+            for(i = x1; i < x2; i++)
+                for(j = y1; j < y2; j++)
                     if(img[i*Ny + j] > maxim) maxim = img[i*Ny + j];
 
             return maxim;
@@ -60,25 +55,30 @@ def spec(filename, extra):
              int j = get_global_id(0);
              int jim = (int)(j/l)+d;
              dest[j] = maxx(img,max(i-((j%l)+1),0),max(jim-((j%l)+1),0),
-                                min(i+(j%l)+1,Nx-1),min(jim+(j%l)+1,Ny-1), Ny);
+                                min(i+(j%l)+1,Nx-1),min(jim+(j%l)+1,Ny-1), Ny) + 1;
+
         }
         """).build()
 
-        ms = measure[0][0:measure.shape[1]/2]
+        ms = measure[0:measure.shape[0]/2]
         img_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=arr)
         dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, ms.nbytes)
         sh = ms.shape
 
+
         for i in range(Nx):
             d = 0
             prg.measure(queue, sh, None, dest_buf, img_buf, np.int32(Nx), np.int32(Ny), np.int32(l), np.int32(i), np.int32(d))
-            cl.enqueue_read_buffer(queue, dest_buf, measure[i][0:Ny*2]).wait()
+            cl.enqueue_read_buffer(queue, dest_buf, measure[0:Ny*2]).wait()
             d = Ny/2
             prg.measure(queue, sh, None, dest_buf, img_buf, np.int32(Nx), np.int32(Ny), np.int32(l), np.int32(i), np.int32(d))
-            cl.enqueue_read_buffer(queue, dest_buf, measure[i][Ny*2:]).wait()
+            cl.enqueue_read_buffer(queue, dest_buf, measure[Ny*2:]).wait()
 
-            # Instead of doing polyfits, a sparse linear system is constructed and solved
-            bb=np.log(measure[i])
+        # Instead of doing polyfits, a sparse linear system is constructed and solved
+            if(i==Nx-1):
+                print measure
+
+            bb=np.log(measure)
             z = linsolve.lsqr(AA,bb)[0]
             z = z.reshape(2,Ny,order = 'F')
             alphaIm[i] = z[0]
@@ -86,13 +86,13 @@ def spec(filename, extra):
         maxim = np.max(alphaIm)
         minim = np.min(alphaIm)
 
-        print alphaIm[0]
-
         print "T: ", time.clock() - t
         t = time.clock()
         # Alpha image
         plt.imshow(alphaIm, cmap=matplotlib.cm.gray)
         plt.show()
+        print measure
+        #return
 
         paso = (maxim-minim)/cuantas
         if(paso <= 0):
@@ -100,6 +100,7 @@ def spec(filename, extra):
             clases = map(lambda i: i+minim,np.zeros(cuantas))
         else:
             clases = np.arange(minim,maxim,paso)
+
 
         # Window
         cant = int(np.floor(np.log(Nx)))

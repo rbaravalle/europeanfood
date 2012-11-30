@@ -1,10 +1,10 @@
 import numpy as np
-import singularity2
+import singularity2CL as sing
 import Image
 
 def inner_localMF(I, N):
    if(N==0):
-      return singularity2.spec(I,[20])
+      return sing.spec(I,[20])
 
    w,h = I.size
    print w, h
@@ -29,4 +29,4 @@ def localMF(I,N):
 
    return inner_localMF(I.crop((0,0,siz,siz)),N)
 
-print localMF('../images/scanner/baguette/baguette1.tif',2)
+#print localMF('../images/scanner/baguette/baguette1.tif',2)

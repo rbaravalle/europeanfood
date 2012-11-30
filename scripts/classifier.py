@@ -3,11 +3,13 @@ import sys
 import os
 from subprocess import *
 from gch import colorHistogram
-import pyccv
+#import pyccv
 import colortransforms
 import numpy as np
-from featureTexture import *
-import singularity
+#from featureTexture import *
+import singularity2CL as sg
+import localmfrac
+import time
 
 SVM = 0
 RANDOM_FOREST = 1
@@ -16,12 +18,15 @@ def callF(filename,which,extra):
     return features(filename,which,3,False,extra)
 
 def features(filename,i,j,combine,extra):
-    farr = [colorHistogram,ccv,haralick,lbp,tas,zernike, singularity.spec]
-
+    #farr = [colorHistogram,ccv,haralick,lbp,tas,zernike, singularity.spec]
+    farr = [sg.spec]
     if(combine==True):
         return hstack((farr[1](filename),farr[2](filename),farr[3](filename),farr[4](filename),farr[5](filename)))
-
-    return farr[i](filename,extra)
+    t =  time.clock()
+    res = farr[0](filename,[20])
+    t =  time.clock() - t
+    print "Time: ", t
+    return res
 
 
 def ccv(filename):
@@ -214,8 +219,8 @@ def main(subname,which,local,classifier):
             sandwichC[i] = callF(filename,which,extra)
    
 
-    trainingData = baguette[1:]+lactal[1:]+salvado[1:]+sandwich[1:]+nonbread[0:20]
-    testingData = baguetteC[1:]+lactalC[1:]+salvadoC[1:]+sandwichC[1:]+nonbread[20:40]
+    trainingData = baguette[1:]+lactal[1:]+salvado[1:]+sandwich[1:]+nonbread[0:cant-1]
+    testingData = baguetteC[1:]+lactalC[1:]+salvadoC[1:]+sandwichC[1:]+nonbread[cant-1:2*(cant-1)]
     with open(fileScsv, 'wb') as f:
         writer = csv.writer(f)
         writer.writerows(trainingData)
@@ -237,8 +242,8 @@ def main(subname,which,local,classifier):
 
 # SIFT BoW
 from os.path import exists, isdir, basename, join, splitext
-import sift
-from glob import glob
+#import sift
+#from glob import glob
 from numpy import zeros, resize, sqrt, histogram, hstack, vstack, savetxt, zeros_like
 import scipy.cluster.vq as vq
 PRE_ALLOCATION_BUFFER = 1000  # for sift

@@ -74,9 +74,7 @@ def spec(filename, extra):
             prg.measure(queue, sh, None, dest_buf, img_buf, np.int32(Nx), np.int32(Ny), np.int32(l), np.int32(i), np.int32(d))
             cl.enqueue_read_buffer(queue, dest_buf, measure[Ny*2:]).wait()
 
-        # Instead of doing polyfits, a sparse linear system is constructed and solved
-            if(i==Nx-1):
-                print measure
+            # Instead of doing polyfits, a sparse linear system is constructed and solved
 
             bb=np.log(measure)
             z = linsolve.lsqr(AA,bb)[0]
@@ -89,9 +87,8 @@ def spec(filename, extra):
         print "T: ", time.clock() - t
         t = time.clock()
         # Alpha image
-        plt.imshow(alphaIm, cmap=matplotlib.cm.gray)
-        plt.show()
-        print measure
+        #plt.imshow(alphaIm, cmap=matplotlib.cm.gray)
+        #plt.show()
         #return
 
         paso = (maxim-minim)/cuantas

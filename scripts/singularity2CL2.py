@@ -108,14 +108,13 @@ def spec(filename, extra):
         alphaIm = np.vstack((hs,hs))
 
         # Multifractal dimentions
-        falpha = np.zeros(cuantas)
+        falpha = np.zeros(cuantas).astype(np.float32)
 
-        clases_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=clases)
-        alphaIm_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=alphaIm)
-        #N_buf = cl.Buffer(ctx, mf.WRITE_ONLY, N.nbytes)
+        clases_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=clases.astype(np.float32))
+        alphaIm_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=alphaIm.astype(np.float32))
 
         for c in range(cuantas):
-            N = np.zeros(cant+1).astype(np.int32)
+            N = np.zeros(cant+1)
             # window sizes
             for k in range(cant+1):
                 sizeBlocks = 2*k+1
@@ -125,39 +124,40 @@ def spec(filename, extra):
                 flag_buf = cl.Buffer(ctx, mf.WRITE_ONLY, flag.nbytes)
                 sh = flag.shape
 
+
                 prg = cl.Program(ctx, """
                     __kernel void krnl(__global int *flag, __global float *clases, 
-                                       __global float *alphaIm,const int sizeBlocks, const int Ny,
+                                       __global float* alphaIm,const int sizeBlocks, const int Ny,
                                         const int numBlocks_y, const int c, const int cuantas) {
-                        int i = get_global_id(0);
-                        int j = get_global_id(1);
-                        int xi = (i)*sizeBlocks;
-                        int xf = (i+1)*sizeBlocks-1;
-                        int yi = (j)*sizeBlocks;
-                        int yf = (j+1)*sizeBlocks-1;
+                        int i = get_global_id(0)+1;
+                        int j = get_global_id(1)+1;
+                        int xi = (i-1)*sizeBlocks;
+                        int xf = (i)*sizeBlocks-1;
+                        int yi = (j-1)*sizeBlocks;
+                        int yf = (j)*sizeBlocks-1;
                         if(xf == xi) xf = xf+1;
                         if(yf == yi) yf = yf+1;
-                        //block = alphaIm[xi : xf, yi : yf]
 
                         int f = 0;
-                        int s1 = xf-xi+1;
-                        int s2 = yf-yi+1;
-
+                        int s1 = xf-xi;
+                        int s2 = yf-yi;
+                        
                         if(c != cuantas-1) {
                             // f = 1 if any pixel in block is between clases[c] and clases[c+1]
                             int w, t;
                             for(w = 0; w < s1; w++) {
                                 for(t = 0; t < s2; t++) {
                                     float b = alphaIm[(xi+w)*Ny + yi + t];
-                                    if (b >= clases[c] and b < clases[c+1])
+                                    if (b >= clases[c] and b < clases[c+1]) {
                                        f = 1;
                                        break;
+                                    }
                                 }
                                 if(f == 1) break;
                             }
                         }
                         else {
-                            // f = 1 if any pixel in block is equal to classes[c]+1
+                            // f = 1 if any pixel in block is equal to classes[c]
                             int w, t;
                             for(w = 0; w < s1; w++) {
                                 for(t = 0; t < s2; t++) {
@@ -171,16 +171,14 @@ def spec(filename, extra):
                                     break;
                             }
                         }
-                        flag[(i)*numBlocks_y + j] = f;
-
-                        //N[k] += f;
+                        flag[(i-1)*numBlocks_y + j-1] = f;
                     }
                 """).build()                
 
                 prg.krnl(queue, sh, None, flag_buf, clases_buf, alphaIm_buf, np.int32(sizeBlocks), np.int32(Ny), np.int32(numBlocks_y), np.int32(c), np.int32(cuantas))
                 cl.enqueue_read_buffer(queue, flag_buf, flag).wait()
                 N[k] = cla.sum(cla.to_device(queue,flag)).get()
-            print "N: ", N, "c: ", c, clases[c]
+            print "N: ", flag[0], np.sum(flag[0]), "c: ", c, clases[c]
 
             # Haussodorf (box) dimention of the alpha distribution
             falpha[c] = -np.polyfit(map(lambda i: np.log(i*2+1),range(cant+1)),np.log(map(lambda i: i+1,N)),1)[0]

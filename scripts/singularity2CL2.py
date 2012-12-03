@@ -2,8 +2,8 @@ from random import randrange,randint
 from math import log
 from scipy import ndimage
 #from pylab import plot, title, show , legend
-import matplotlib
-from matplotlib import pyplot as plt
+#import matplotlib
+#from matplotlib import pyplot as plt
 import Image
 import numpy as np
 import sys

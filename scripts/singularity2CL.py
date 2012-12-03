@@ -28,7 +28,7 @@ def spec(filename, extra):
         points = []     # number of elements in the structure
         gray = a.convert('L') # rgb 2 gray
 
-        alphaIm = np.zeros((Nx,Ny), dtype=np.double ) # Nx rows x Ny columns
+        alphaIm = np.zeros((Nx,Ny), dtype=np.float32 ) # Nx rows x Ny columns
         #measure = np.zeros(4, dtype=np.double ) # Ny rows x 4 columns
 
         l = 4 # (maximum window size-1) / 2
@@ -110,49 +110,47 @@ def spec(filename, extra):
         falpha = np.zeros(cuantas)
 
         for c in range(cuantas):
-            N = np.zeros(cant+1)
+            N = np.zeros(cant+1).astype(np.int32)
             # window sizes
             for k in range(cant+1):
                 sizeBlocks = 2*k+1
                 numBlocks_x = int(np.ceil(Nx/sizeBlocks))
                 numBlocks_y = int(np.ceil(Ny/sizeBlocks))
 
-                flag = np.zeros((numBlocks_x,numBlocks_y))
-
-                for i in range(1,numBlocks_x):
-                    for j in range(1,numBlocks_y):
+                flag = np.zeros((numBlocks_x,numBlocks_y)).astype(np.int32)
+                
+                for i in range(1,numBlocks_x+1):
+                    for j in range(1,numBlocks_y+1):
                         xi = (i-1)*sizeBlocks
                         xf = i*sizeBlocks-1
                         yi = (j-1)*sizeBlocks
                         yf = j*sizeBlocks-1
                         if(xf == xi): xf = xf+1
                         if(yf == yi): yf = yf+1
-                        block = alphaIm[xi : xf, yi : yf]
+                        #block = alphaIm[xi : xf, yi : yf]
 
                         f = 0;
-                        s1 = len(block)
-                        s2 = len(block[0])
+                        s1 = xf-xi
+                        s2 = yf-yi
 
                         if(c != cuantas-1):
                             # f = 1 if any pixel in block is between clases[c] and clases[c+1]
-                            for w in range(s1):
-                                for t in range(s2):
-                                    b = block[w,t]
+                            for w in range(xi,xf):
+                                for t in range(yi,yf):
+                                    b = alphaIm[w,t]
                                     if (b >= clases[c] and b < clases[c+1]):
                                        f = 1
-                                    if(f == 1):
-                                        break
+                                       break
                                 if(f == 1):
                                     break
                         else:
                             # f = 1 if any pixel in block is equal to classes[c]+1
-                            for w in range(s1):
-                                for t in range(s2):
-                                    b = block[w,t]
+                            for w in range(xi,xf):
+                                for t in range(yi,yf):
+                                    b = alphaIm[w,t]
                                     if (b == clases[c]): # !!
                                        f = 1
-                                    if(f == 1):
-                                        break
+                                       break
                                 if(f == 1):
                                     break
                         
@@ -161,6 +159,7 @@ def spec(filename, extra):
                         # number of blocks with holder exponents for this class (c)
                         # and for this window size (k)
                         N[k] = N[k] + f;
+            print "N: ", flag[0], np.sum(flag[0]), "c: ", c, clases[c]
 
             # Haussodorf (box) dimention of the alpha distribution
             falpha[c] = -np.polyfit(map(lambda i: np.log(i*2+1),range(cant+1)),np.log(map(lambda i: i+1,N)),1)[0]

@@ -2,8 +2,8 @@ from random import randrange,randint
 from math import log
 from scipy import ndimage
 #from pylab import plot, title, show , legend
-import matplotlib
-from matplotlib import pyplot as plt
+#import matplotlib
+#from matplotlib import pyplot as plt
 import Image
 import numpy as np
 import sys
@@ -49,12 +49,12 @@ def spec(filename, extra):
         maxim = np.max(alphaIm)
         minim = np.min(alphaIm)
         alphaIm = alphaIm.T
-        print "T: ", time.clock() - t
-        t = time.clock()
+        #print "T: ", time.clock() - t
+        #t = time.clock()
         # Alpha image
-        plt.imshow(alphaIm, cmap=matplotlib.cm.gray)
-        plt.show()
-        print measure
+        #plt.imshow(alphaIm, cmap=matplotlib.cm.gray)
+        #plt.show()
+        #print measure
         #return
 
         paso = (maxim-minim)/cuantas
@@ -84,8 +84,8 @@ def spec(filename, extra):
 
                 flag = np.zeros((numBlocks_x,numBlocks_y))
 
-                for i in range(1,numBlocks_x):
-                    for j in range(1,numBlocks_y):
+                for i in range(1,numBlocks_x+1):
+                    for j in range(1,numBlocks_y+1):
                         xi = (i-1)*sizeBlocks
                         xf = i*sizeBlocks-1
                         yi = (j-1)*sizeBlocks
@@ -129,6 +129,6 @@ def spec(filename, extra):
 
             # Haussodorf (box) dimention of the alpha distribution
             falpha[c] = -np.polyfit(map(lambda i: np.log(i*2+1),range(cant+1)),np.log(map(lambda i: i+1,N)),1)[0]
-        #print "T: ", time.clock() - t
+        print "T: ", time.clock() - t
         s = np.hstack((clases,falpha))
         return s

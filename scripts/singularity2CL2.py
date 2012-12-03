@@ -12,6 +12,7 @@ from scipy.sparse import coo_matrix
 import scipy.sparse.linalg as linsolve
 import time
 import pyopencl as cl
+import pyopencl.array as cla
 
 ctx = cl.create_some_context()
 queue = cl.CommandQueue(ctx)
@@ -109,10 +110,9 @@ def spec(filename, extra):
         # Multifractal dimentions
         falpha = np.zeros(cuantas)
 
-        N = np.zeros(cant+1).astype(np.int32)
         clases_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=clases)
         alphaIm_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=alphaIm)
-        N_buf = cl.Buffer(ctx, mf.WRITE_ONLY, N.nbytes)
+        #N_buf = cl.Buffer(ctx, mf.WRITE_ONLY, N.nbytes)
 
         for c in range(cuantas):
             N = np.zeros(cant+1).astype(np.int32)
@@ -121,34 +121,34 @@ def spec(filename, extra):
                 sizeBlocks = 2*k+1
                 numBlocks_x = int(np.ceil(Nx/sizeBlocks))
                 numBlocks_y = int(np.ceil(Ny/sizeBlocks))
-
                 flag = np.zeros((numBlocks_x,numBlocks_y)).astype(np.int32)
                 flag_buf = cl.Buffer(ctx, mf.WRITE_ONLY, flag.nbytes)
                 sh = flag.shape
 
                 prg = cl.Program(ctx, """
-                    __kernel void krnl(__global int *flag, __global int *N, __global float *clases, __global float *alphaIm,
-                              const int sizeBlocks, const int Ny, const int numBlocks_y, const int k, const int c, const int cuantas) {
-                        int j = get_global_id(0);
-                        int i = get_global_id(1);
-                        int xi = (i-1)*sizeBlocks;
-                        int xf = i*sizeBlocks-1;
-                        int yi = (j-1)*sizeBlocks;
-                        int yf = j*sizeBlocks-1;
+                    __kernel void krnl(__global int *flag, __global float *clases, 
+                                       __global float *alphaIm,const int sizeBlocks, const int Ny,
+                                        const int numBlocks_y, const int c, const int cuantas) {
+                        int i = get_global_id(0);
+                        int j = get_global_id(1);
+                        int xi = (i)*sizeBlocks;
+                        int xf = (i+1)*sizeBlocks-1;
+                        int yi = (j)*sizeBlocks;
+                        int yf = (j+1)*sizeBlocks-1;
                         if(xf == xi) xf = xf+1;
                         if(yf == yi) yf = yf+1;
                         //block = alphaIm[xi : xf, yi : yf]
 
                         int f = 0;
-                        int s1 = xf-xi;
-                        int s2 = yf-yi;
+                        int s1 = xf-xi+1;
+                        int s2 = yf-yi+1;
 
                         if(c != cuantas-1) {
                             // f = 1 if any pixel in block is between clases[c] and clases[c+1]
                             int w, t;
                             for(w = 0; w < s1; w++) {
                                 for(t = 0; t < s2; t++) {
-                                    int b = alphaIm[(xi+w)*Ny + yi + t];
+                                    float b = alphaIm[(xi+w)*Ny + yi + t];
                                     if (b >= clases[c] and b < clases[c+1])
                                        f = 1;
                                        break;
@@ -161,7 +161,7 @@ def spec(filename, extra):
                             int w, t;
                             for(w = 0; w < s1; w++) {
                                 for(t = 0; t < s2; t++) {
-                                    int b = alphaIm[(xi+w)*Ny + yi + t];
+                                    float b = alphaIm[(xi+w)*Ny + yi + t];
                                     if (b == clases[c]) { // !!
                                        f = 1;
                                        break;
@@ -171,22 +171,17 @@ def spec(filename, extra):
                                     break;
                             }
                         }
-                        //flag[(i-1)*numBlocks_y + j-1] = f;
+                        flag[(i)*numBlocks_y + j] = f;
 
-                        // number of blocks with holder exponents for this class (c)
-                        // and for this window size (k)
-                        N[k] += f;
+                        //N[k] += f;
                     }
                 """).build()                
 
-                prg.krnl(queue, sh, None, flag_buf, N_buf, clases_buf, alphaIm_buf, np.int32(sizeBlocks), np.int32(Ny), np.int32(numBlocks_y), np.int32(k), np.int32(c), np.int32(cuantas))
+                prg.krnl(queue, sh, None, flag_buf, clases_buf, alphaIm_buf, np.int32(sizeBlocks), np.int32(Ny), np.int32(numBlocks_y), np.int32(c), np.int32(cuantas))
                 cl.enqueue_read_buffer(queue, flag_buf, flag).wait()
-                cl.enqueue_read_buffer(queue, N_buf, N).wait()
+                N[k] = cla.sum(cla.to_device(queue,flag)).get()
+            print "N: ", N, "c: ", c, clases[c]
 
-               # for i in range(1,numBlocks_x):
-               #     for j in range(1,numBlocks_y):
-                        
-            print "N: ", N
             # Haussodorf (box) dimention of the alpha distribution
             falpha[c] = -np.polyfit(map(lambda i: np.log(i*2+1),range(cant+1)),np.log(map(lambda i: i+1,N)),1)[0]
         #print "T: ", time.clock() - t

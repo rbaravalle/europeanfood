@@ -21,8 +21,10 @@ mf = cl.mem_flags
 def spec(filename, extra):
         t = time.clock()
         cuantas = extra[0]
-        a = Image.open(filename)
-        #a = filename
+        if(extra[1]==True):
+            a = Image.open(filename)
+        else:
+            a = filename
         Nx, Ny = a.size
         L = Nx*Ny
 
@@ -180,5 +182,5 @@ def spec(filename, extra):
             # Haussodorf (box) dimention of the alpha distribution
             falpha[c] = -np.polyfit(map(lambda i: np.log(i*2+1),range(cant+1)),np.log(map(lambda i: i+1,N)),1)[0]
         s = np.hstack((clases,falpha))
-        print "T: ", time.clock() - t
+        #print "T: ", time.clock() - t
         return s

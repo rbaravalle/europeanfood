@@ -1,13 +1,13 @@
 import numpy as np
-import singularity2CL as sing
+import singularity2CL2 as sing
 import Image
 
 def inner_localMF(I, N):
    if(N==0):
-      return sing.spec(I,[20])
+      return sing.spec(I,[20,0])
 
    w,h = I.size
-   print w, h
+   #print w, h
 
     # crop?
    return np.hstack(( inner_localMF(I.crop((0,0,w/2,h/2)), N-1), \
@@ -26,6 +26,7 @@ def localMF(I,N):
    I = Image.open(I)
    w,h = I.size
    siz = min(po2(w),po2(h))
+   siz = 340
 
    return inner_localMF(I.crop((0,0,siz,siz)),N)
 

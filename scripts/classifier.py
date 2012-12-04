@@ -7,9 +7,10 @@ from gch import colorHistogram
 import colortransforms
 import numpy as np
 #from featureTexture import *
-import singularity2CL as sg
+import singularityCL as sg
 import localmfrac
 import time
+import cielab
 
 SVM = 0
 RANDOM_FOREST = 1
@@ -23,9 +24,9 @@ def features(filename,i,j,combine,extra):
     if(combine==True):
         return hstack((farr[1](filename),farr[2](filename),farr[3](filename),farr[4](filename),farr[5](filename)))
     t =  time.clock()
-    res = farr[0](filename,[20])
+    res = farr[0](filename,[20,True,True])
     t =  time.clock() - t
-    print "Time: ", t
+    #print "Time: ", t
     return res
 
 
@@ -431,5 +432,5 @@ def localFeatures(subname,alg):
 #main('sift',0,1)
 #main('surf',1,True, RANDOM_FOREST)
 #main('singularity',6,False,SVM)
-main('singularity',6,False,SVM)
+main('singularity20',6,False,SVM)
 

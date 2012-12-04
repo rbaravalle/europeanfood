@@ -180,6 +180,6 @@ def spec(filename, extra):
 
             # Haussdorf (box) dimention of the alpha distribution
             falpha[c] = -np.polyfit(map(lambda i: np.log(i*2+1),range(cant+1)),np.log(map(lambda i: i+1,N)),1)[0]
-        #s = np.hstack((clases,falpha))
-        return falpha
-        #return s
+        s = np.hstack((clases,falpha))
+        return s
+        #return falpha

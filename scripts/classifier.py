@@ -6,7 +6,7 @@ from gch import colorHistogram
 #import pyccv
 import colortransforms
 import numpy as np
-#from featureTexture import *
+from featureTexture import *
 import singularityCL as sg
 import localmfrac
 import time
@@ -20,11 +20,16 @@ def callF(filename,which,extra):
 
 def features(filename,i,j,combine,extra):
     #farr = [colorHistogram,ccv,haralick,lbp,tas,zernike, singularity.spec]
-    farr = [sg.spec]
+    #farr = [localmfrac.localMF]
+    #farr = [cielab.lab]
+    farr = [lbp]
+    #farr = [sg.spec]
     if(combine==True):
         return hstack((farr[1](filename),farr[2](filename),farr[3](filename),farr[4](filename),farr[5](filename)))
     t =  time.clock()
-    res = farr[0](filename,[20,True,True])
+    # num of FDs , Open Image?,  convert to grayscale?, (cielab) use L,a,b?
+    extra = [40,True, True,True]
+    res = farr[0](filename)
     t =  time.clock() - t
     #print "Time: ", t
     return res
@@ -116,9 +121,17 @@ def classifierPredict(dtrain,dtest,labels,fileStxt, fileCtxt, base, i):
 
 def test(dtrain,dtest,labels,fileStxt, fileCtxt, base, classifier):
 
-    testL = classifierPredict(dtrain,dtest,labels,fileStxt, fileCtxt, base,classifier)
+    testL = classifierPredict(dtrain,dtest,labels,fileStxt, fileCtxt, base,0)
 
-    print "Test: ", testL
+    print "Test 0: ", testL
+
+    b = conf_mat(testL,labels)
+    for row in b:
+        print row
+
+    testL = classifierPredict(dtrain,dtest,labels,fileStxt, fileCtxt, base,1)
+
+    print "Test 1: ", testL
 
     b = conf_mat(testL,labels)
     for row in b:
@@ -243,7 +256,7 @@ def main(subname,which,local,classifier):
 
 # SIFT BoW
 from os.path import exists, isdir, basename, join, splitext
-#import sift
+import sift
 #from glob import glob
 from numpy import zeros, resize, sqrt, histogram, hstack, vstack, savetxt, zeros_like
 import scipy.cluster.vq as vq
@@ -251,9 +264,10 @@ PRE_ALLOCATION_BUFFER = 1000  # for sift
 K_THRESH = 1  # early stopping threshold for kmeans originally at 1e-5, increased for speedup
 CODEBOOK_FILE = 'codebook.file'
 DATASETPATH = 'dataset/'
-SIZE_LOCAL_FEATURE = 64 # 64: SURF, 128: SIFT
+SIZE_LOCAL_FEATURE = 40 # 64: SURF, 128: SIFT, DF*2: MF
 from cPickle import dump, HIGHEST_PROTOCOL, load
 from mahotas.features import surf
+from singularityBoF import featuresMF
 
 # only one file
 def extractSift(filename):
@@ -271,8 +285,6 @@ def extractSURF(filename):
     f = f.astype(np.uint8)
     return surf.surf(f,descriptor_only=True)
 
-
-
 def extractSurf(filename):
     features_fname = filename
     descriptors = surf.surf(np.array(Image.open(filename).convert('L')),descriptor_only=True)
@@ -280,7 +292,7 @@ def extractSurf(filename):
     return descriptors
 
 def extractLocal(filename,i):
-    f = [extractSift, extractSURF]
+    f = [extractSift, extractSURF, featuresMF]
     return f[i](filename)
 
 def dict2numpy(dict):
@@ -429,8 +441,10 @@ def localFeatures(subname,alg):
 #main('lbp',3,0)
 #main('tas',4,0)
 #main('zernike',5,0)
-#main('sift',0,1)
+#main('sift',0,True,1)
 #main('surf',1,True, RANDOM_FOREST)
 #main('singularity',6,False,SVM)
-main('singularity20',6,False,SVM)
+#main('xxx3lbp',6,False,RANDOM_FOREST)
+# Multi Fractal Bag of Features
+main('singularityBoF3',2,True,RANDOM_FOREST)
 

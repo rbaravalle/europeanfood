@@ -14,7 +14,7 @@ def lab(filename,extra):
         b = ct.rgb_to_cielab_i_X(I,2)
         a = singularityCL.spec(a,extra)
         b = singularityCL.spec(b,extra)
-        return np.hstack((L,a,b))
+        return np.vstack((L,a,b))
     return np.array(L)
 
 

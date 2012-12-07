@@ -142,10 +142,10 @@ def spec(filename, extra):
                         }
                     }
                 }
-                
+                float totalDif = maxim - minim;
                 int nB = floor(256.0/numBlocks_y); // num of subdivisions in the Z coordinate
-                int l = floor((maxx-minim)/nB)+1;
-                int k = floor((minn-minim)/nB)+1;
+                int l = floor(((maxx-minim)/totalDif)*nB)+1;
+                int k = floor(((minn-minim)/totalDif)*nB)+1;
                 flag[i*numBlocks_y + j] = l-k+1;
             }
         """).build()  
@@ -170,7 +170,7 @@ def spec(filename, extra):
                 cl.enqueue_read_buffer(queue, flag_buf, flag).wait()
                 N[k-1] = cla.sum(cla.to_device(queue,flag)).get()
 
-            #print N
+            print N
             # Haussdorf (box) dimention of the alpha distribution
             falpha[c] = -np.polyfit(map(lambda i: np.log((2*i+1)),range(1,cant+2)),np.log(map(lambda i: i+1,N)),1)[0]
         s = np.hstack((clases,falpha))

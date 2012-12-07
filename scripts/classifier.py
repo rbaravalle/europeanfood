@@ -274,8 +274,26 @@ def extractSift(filename):
     features_fname = filename + '.sift'
     sift.process_image(filename, features_fname)
     locs, descriptors = sift.read_features_from_file(features_fname)
-    print "Shape: ", descriptors.shape
     return descriptors
+
+# perform a multifractal spectrum in the first M points detected by sift
+def extractMF(filename):
+    features_fname = filename + '.sift'
+    sift.process_image(filename, features_fname)
+    locs, descriptors = sift.read_features_from_file(features_fname)
+    sh = locs.shape[0]
+    res = np.zeros((sh,SIZE_LOCAL_FEATURE)).astype(np.float32)
+    extra = [20,False,True,False,0,0,0]
+    WIN = 5
+    for i in range(sh):
+        x = np.int32(round(locs[i][0]))
+        y = np.int32(round(locs[i][1]))
+        I = Image.open(filename)
+        Nx,Ny = I.size
+        a = sg.spec(I.crop((max(x-WIN,0),max(y-WIN,0),min(x+WIN,Nx-1),min(y+WIN,Ny-1))),extra)
+        res[i] = a
+    print res.shape
+    return res
 
 from mahotas import surf
 def extractSURF(filename):
@@ -292,7 +310,7 @@ def extractSurf(filename):
     return descriptors
 
 def extractLocal(filename,i):
-    f = [extractSift, extractSURF, featuresMF]
+    f = [extractSift, extractSURF, extractMF] #featuresMF]
     return f[i](filename)
 
 def dict2numpy(dict):
@@ -343,7 +361,6 @@ def localFeatures(subname,alg):
     dirList=os.listdir(path)
     print len(dirList)
     nonbread = [['Df' for j in range(dDFs)] for i in range(len(dirList))]
-
     import Image
     j = 0
     for i in range(len(dirList)):
@@ -441,10 +458,9 @@ def localFeatures(subname,alg):
 #main('lbp',3,0)
 #main('tas',4,0)
 #main('zernike',5,0)
-#main('sift',0,True,1)
 #main('surf',1,True, RANDOM_FOREST)
 #main('singularity',6,False,SVM)
 #main('xxx3lbp',6,False,RANDOM_FOREST)
 # Multi Fractal Bag of Features
-main('singularityBoF3',2,True,RANDOM_FOREST)
+main('singularityEntropy',2,True,RANDOM_FOREST)
 

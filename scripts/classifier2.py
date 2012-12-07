@@ -85,7 +85,7 @@ def csvm(dtrain,labels,fileStxt, base):
 
 from sklearn.neighbors import KNeighborsClassifier
 def cnearestneighbors(data,labels,fileStxt,base):
-    cnn = KNeighborsClassifier(n_neighbors=5, weights='uniform', algorithm='brute', leaf_size=30, warn_on_equidistant=True)
+    cnn = KNeighborsClassifier(n_neighbors=5, weights='uniform', algorithm='auto', leaf_size=30, warn_on_equidistant=True)
 
     scores = cross_validation.cross_val_score(cnn, data, labels, cv=4)
     print scores

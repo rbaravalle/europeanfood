@@ -7,7 +7,7 @@ from gch import colorHistogram
 import colortransforms
 import numpy as np
 from featureTexture import *
-import singularityEntropyCL as sg
+import singularityCL as sg
 import localmfrac
 import time
 import cielab
@@ -145,15 +145,12 @@ def main(subname,which,local):
 
     if(local == True):
         data = localFeatures(subname,which)
-        with open(fileScsv, 'wb') as f:
-            writer = csv.writer(f)
-            writer.writerows(data)
 
-        prog = './clas2' # convert.c
+        prog = './clas3' # convert.c
         cmd = '{0} "{1}" > "{2}"'.format(prog, fileScsv, fileStxt)
         Popen(cmd, shell = True, stdout = PIPE).communicate()	
         labels = [i for i in range(len(data))]
-        labels = map(lambda i: i/(2*(cant-1))+1, labels)
+        labels = map(lambda i: i/((cant-1))+1, labels)
         test(data, labels, fileStxt, base)
         return
 
@@ -279,78 +276,47 @@ def localFeatures(subname,alg):
     base = subname+'C.txt'
     fileStxt = '../exps/'+subname+'S.txt'
     fileScsv = '../exps/'+subname+'S.csv'
-    fileCtxt = '../exps/'+base
-    fileCcsv = '../exps/'+subname+'C.csv'
-    cant = 20+1
-    dDFs  = 64
-    baguette = [['Df' for j in range(dDFs)] for i in range(cant)]
-    salvado   = [['Df' for j in range(dDFs)] for i in range(cant)]
-    lactal   = [['Df' for j in range(dDFs)] for i in range(cant)]
-    sandwich = [['Df' for j in range(dDFs)] for i in range(cant)]
-
-    baguetteC = [['Df' for j in range(dDFs)] for i in range(cant)]
-    salvadoC   = [['Df' for j in range(dDFs)] for i in range(cant)]
-    lactalC   = [['Df' for j in range(dDFs)] for i in range(cant)]
-    sandwichC = [['Df' for j in range(dDFs)] for i in range(cant)]
-
-    path = '../images/nonbread/brodatz/'
-    dirList=os.listdir(path)
-    print len(dirList)
-    nonbread = [['Df' for j in range(dDFs)] for i in range(len(dirList))]
+    cantF = 128+1
+    cant = 25+1
     import Image
-    j = 0
-    for i in range(len(dirList)):
-        filename = path+dirList[i]
+    path = '../images/nonbread/brodatz/'
+    pathSub = '../images/nonbread/brodatz/sub/'
+    dirList=sorted(os.listdir(path))
+    cantClases = len(dirList)
+    total = cantClases*(cant-1)
+    #brodatz = np.zeros((total,cantF))
+    brodatz = [['Df' for j in range(128)] for i in range(total)]
+    win = 128
+    for f in range(cantClases):
+        filename = path+dirList[f]
+        if(filename==pathSub):
+            continue
         I = Image.open(filename)
-        if(I.mode == 'RGB'):
-            print filename
-            nonbread[i][j] = extractLocal(filename,alg)
-            j = j+1
-        if (j > (cant-1)*2+1):
-            break
+        print filename
+        # subdivide image in regions
+        # each region is a sample of this texture class
+        for i in range(5):
+            for j in range(5):
+                I2 = I.crop((win*i,win*j,win*(i+1),win*(j+1)))
+                file2 = pathSub+dirList[f]+str(i*5+j)+'.gif'
+                I2.save(file2)
+                brodatz[f*25+i*5+j]  = extractLocal(file2,0)
+        if (i > cant*2+1):
+            break      
 
-    for i in range(1,cant):
-        filename = '../images/scanner/baguette/baguette{}.tif'.format(i)
-        print filename
-        baguette[i] = extractLocal(filename,alg)
-        filename = '../images/scanner/lactal/lactal{}.tif'.format(i)
-        print filename
-        lactal[i] = extractLocal(filename,alg)
-        filename = '../images/scanner/salvado/salvado{}.tif'.format(i)
-        print filename
-        salvado[i] = extractLocal(filename,alg)
-        filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i)
-        print filename
-        sandwich[i] = extractLocal(filename,alg)
-
-        filename = '../images/camera/baguette/slicer/b{}.tif'.format(i)
-        print filename
-        baguetteC[i] = extractLocal(filename,alg)
-        filename = '../images/camera/lactal/l{}.tif'.format(i)
-        print filename
-        lactalC[i] = extractLocal(filename,alg)
-        filename = '../images/camera/salvado/s{}.tif'.format(i)
-        print filename
-        salvadoC[i] = extractLocal(filename,alg)
-        filename = '../images/camera/sandwich/s{}.tif'.format(i)
-        print filename
-        sandwichC[i] = extractLocal(filename,alg)
-
+    print "2775?: ", len(brodatz)
+    with open(fileScsv, 'wb') as f:
+        writer = csv.writer(f)
+        writer.writerows(brodatz)
 
     # array of SIFT features
     all_featuresS = {}
-    all_featuresC = {}
 
-    arrS = baguette[1:]+ baguetteC[1:]+lactal[1:]+lactalC[1:]+salvado[1:]+salvadoC[1:]+sandwich[1:]+sandwichC[1:]+nonbread[0:(2*(cant-1))]
     # to dict
     for d in range(len(arrS)):
         all_featuresS[d] = arrS[d]
 
-    #for d in range(len(arrS)):
-    #    all_featuresC[d] = arrC[d]
-
     all_features_arrayS = dict2numpy(all_featuresS)
-    #all_features_arrayC = dict2numpy(all_featuresC)
 
     print "Kmeans"
     nfeatures = all_features_arrayS.shape[0]
@@ -379,8 +345,8 @@ def localFeatures(subname,alg):
 #main('zernike',5,0)
 #main('surf',1,True, RANDOM_FOREST)
 #main('singularity',6,False,SVM)
-#main('sift2',0,True,RANDOM_FOREST)
-# Multi Fractal Bag of Features
+main('siftBrodatz2',0,True)
+
 #main('singularityBoF1000_5',2,True,RANDOM_FOREST)
 
-main('brodatz',6,False)
+#main('brodatz',6,False)

@@ -71,7 +71,7 @@ def spec(filename, extra):
              float total = (yf-yi)*(xf-xi); // size of region
              for(s = 0; s <= 255; s++) {
                  float v = hist[s]/total; // probability
-                 res += v*log2(v+0.001);
+                 res += v*log2(v+0.0001);
              }
 
              alphaIm[i*Ny+j] = res;
@@ -91,6 +91,7 @@ def spec(filename, extra):
 
         maxim = np.max(alphaIm)
         minim = np.min(alphaIm)
+        print maxim, minim
 
         import matplotlib
         from matplotlib import pyplot as plt
@@ -143,10 +144,9 @@ def spec(filename, extra):
                 }
                 
                 int nB = floor(256.0/numBlocks_y); // num of subdivisions in the Z coordinate
-                int l = floor((maxim-maxx)/nB)+1;
+                int l = floor((maxx-minim)/nB)+1;
                 int k = floor((minn-minim)/nB)+1;
-                int f = l-k+1;
-                flag[i*numBlocks_y + j] = f;
+                flag[i*numBlocks_y + j] = l-k+1;
             }
         """).build()  
 
@@ -170,6 +170,7 @@ def spec(filename, extra):
                 cl.enqueue_read_buffer(queue, flag_buf, flag).wait()
                 N[k-1] = cla.sum(cla.to_device(queue,flag)).get()
 
+            #print N
             # Haussdorf (box) dimention of the alpha distribution
             falpha[c] = -np.polyfit(map(lambda i: np.log((2*i+1)),range(1,cant+2)),np.log(map(lambda i: i+1,N)),1)[0]
         s = np.hstack((clases,falpha))

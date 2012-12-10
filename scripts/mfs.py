@@ -149,26 +149,27 @@ def mfs(im,extra):
     #Estimate MFS by box-counting
     num = np.zeros(ite_num)
     MFS = np.zeros(f_num)
-    for k in range(1,f_num):
+    for k in range(1,f_num+1):
         #idx = find(Idx_IM == k)
         IM = np.zeros(IM.shape)
         IM = (Idx_IM==k).choose(Idx_IM,255+k)
         IM = (IM<255+k).choose(IM,0)
         IM = (IM>0).choose(IM,1)
-        temp = max(IM.sum()/(255+k),1)
+        temp = max(IM.sum(),1)
+        print r, temp
         num[0] = log10(temp)/log10(r);    
-        for j in range(2,ite_num):
+        for j in range(2,ite_num+1):
             mask = np.ones((j,j))
             bw = scipy.signal.convolve2d(IM, mask,mode="same") # FALTA ?!?!
-            print bw
             indx = np.arange(0,IM.shape[0],j)
             indy = np.arange(0,IM.shape[1],j)
             bw = bw[np.ix_(indx,indy)]
-            idx = (bw>0).choose(bw,1)#find(bw>0)
-            temp = max(idx.sum(),1)
-            #print temp
+            idx = (bw>0).sum()
+            temp = max(idx,1)
             num[j-1] = log10(temp)/log10(r/j)
-        MFS[k-1] = np.dot(c,num) #sum(c.*num)
+
+        print num
+        MFS[k-1] = sum(c*num) #sum(c.*num)
 
     print MFS
     return MFS

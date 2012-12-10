@@ -144,7 +144,7 @@ def spec(filename, extra):
                     }
                 }
                 float totalDif = maxim - minim;
-                int nB = floor(256.0/numBlocks_y); // num of subdivisions in the Z coordinate
+                int nB = numBlocks_y; // num of subdivisions in the Z coordinate
                 int l = floor(((maxx-minim)/totalDif)*nB)+1;
                 int k = floor(((minn-minim)/totalDif)*nB)+1;
                 flag[i*numBlocks_y + j] = l-k+1;

@@ -7,7 +7,7 @@ from gch import colorHistogram
 import colortransforms
 import numpy as np
 from featureTexture import *
-import singularityCL as sg
+import singularityEntropyCL as sg
 import localmfrac
 import time
 import cielab
@@ -16,6 +16,7 @@ from sklearn import cross_validation
 
 SVM = 0
 RANDOM_FOREST = 1
+cantDF = 10
 
 def callF(filename,which,extra):
     return features(filename,which,3,False,extra)
@@ -30,7 +31,7 @@ def features(filename,i,j,combine,extra):
     #    return hstack((farr[1](filename),farr[2](filename),farr[3](filename),farr[4](filename),farr[5](filename)))
     t =  time.clock()
     # num of FDs , Open Image?,  convert to grayscale?, (cielab) use L,a,b?
-    extra = [20,False, True,False,0]
+    extra = [cantDF,False, True,False,0]
     res = farr[0](filename,extra)
     t =  time.clock() - t
     #print "Time: ", t
@@ -135,12 +136,12 @@ def main(subname,which,local):
     #fileCtxt = '../exps/'+base
     #fileCcsv = '../exps/'+subname+'C.csv'
     cant = 25+1
-    dDFs  = 40
+    dDFs  = cantDF*2
 
     path = '../images/nonbread/brodatz/'
-    dirList=os.listdir(path)
+    dirList=sorted(os.listdir(path))
     print len(dirList)
-    total = len(dirList)*(cant-1)
+    total = (len(dirList)-1)*(cant-1)
     brodatz = np.zeros((total,dDFs))
 
     if(local == True):
@@ -155,11 +156,10 @@ def main(subname,which,local):
         return
 
     else:    # else global
-        cantDF = 20
         import Image
         j = 0
         extra = [cantDF,40,1.15]
-        cantClases = len(dirList)
+        cantClases = len(dirList)-1
         win = 128
         for f in range(cantClases):
             filename = path+dirList[f]
@@ -248,7 +248,6 @@ def extractLocal(filename,i):
 
 def dict2numpy(dict):
     nkeys = len(dict)
-    print "100 no? : ", nkeys
     array = zeros((nkeys * PRE_ALLOCATION_BUFFER, SIZE_LOCAL_FEATURE))
     pivot = 0
     for key in dict.keys():
@@ -282,15 +281,13 @@ def localFeatures(subname,alg):
     path = '../images/nonbread/brodatz/'
     pathSub = '../images/nonbread/brodatz/sub/'
     dirList=sorted(os.listdir(path))
-    cantClases = len(dirList)
+    cantClases = len(dirList)-1 # -1 because of the "sub" directory
     total = cantClases*(cant-1)
     #brodatz = np.zeros((total,cantF))
     brodatz = [['Df' for j in range(128)] for i in range(total)]
     win = 128
-    for f in range(cantClases):
+    for f in range(cantClases-110):
         filename = path+dirList[f]
-        if(filename==pathSub):
-            continue
         I = Image.open(filename)
         print filename
         # subdivide image in regions
@@ -313,8 +310,8 @@ def localFeatures(subname,alg):
     all_featuresS = {}
 
     # to dict
-    for d in range(len(arrS)):
-        all_featuresS[d] = arrS[d]
+    for d in range(len(brodatz)):
+        all_featuresS[d] = brodatz[d]
 
     all_features_arrayS = dict2numpy(all_featuresS)
 
@@ -345,8 +342,8 @@ def localFeatures(subname,alg):
 #main('zernike',5,0)
 #main('surf',1,True, RANDOM_FOREST)
 #main('singularity',6,False,SVM)
-main('siftBrodatz2',0,True)
+#main('siftBrodatz2',0,True)
 
 #main('singularityBoF1000_5',2,True,RANDOM_FOREST)
 
-#main('brodatz',6,False)
+main('EFDbrodatz',6,False)

@@ -10,7 +10,9 @@ def gauss_kern(size, sizey):
     """ Returns a normalized 2D gauss kernel array for convolutions """
     m = np.float32(size)
     n = np.float32(sizey)
-    sigma = 1;    
+    sigma = 2;     # ???
+    if(size <= 3): sigma = 1.5;
+    if(size == 5): sigma = 2.5;
     y, x = np.mgrid[-(m-1)/2:(m-1)/2+1, -(n-1)/2:(n-1)/2+1]
 
     b = 2*(sigma**2)
@@ -49,7 +51,7 @@ def mfs(im,extra):
     #Code ported to python : Rodrigo Baravalle. December 2012
 
 
-    im = Image.open(im)
+    #im = Image.open(im)
     ind_num = 1; #density counting levels
     f_num = 26;  #the dimension of MFS
     ite_num = 3; #Box counting levels              
@@ -92,9 +94,17 @@ def mfs(im,extra):
     
     bw[0] = im + 1
 
-    for k in range(1,ind_num):
-        bw[k] = scipy.signal.convolve2d(bw[0], gauss_kern(k+1,k+1),mode="full")[1:,1:]
-        bw[k] = bw[k] * ((k+1)**2)
+    k = 1
+    if(ind_num > 1):
+        bw[1] = scipy.signal.convolve2d(bw[0], gauss_kern(k+1,(k+1)),mode="full")[1:,1:]*((k+1)**2)
+
+    for k in range(2,ind_num):
+        temp = scipy.signal.convolve2d(bw[0], gauss_kern(k+1,(k+1)),mode="full")*((k+1)**2)
+        if(k==4):
+            bw[k] = temp[k-1-1:temp.shape[0]-(k/2),k-1-1:temp.shape[1]-(k/2)]            
+        else:
+            bw[k] = temp[k-1:temp.shape[0]-(1),k-1:temp.shape[1]-(1)]
+
 
     bw = np.log10(bw)
     n1 = c[0]*c[0]
@@ -175,6 +185,5 @@ def mfs(im,extra):
 
         MFS[k-1] = sum(c*num)
 
-    print MFS
     return MFS
 

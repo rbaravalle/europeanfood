@@ -17,7 +17,7 @@ from sklearn import cross_validation
 
 SVM = 0
 RANDOM_FOREST = 1
-cantDF = 8
+cantDF = 16
 
 def callF(filename,which,extra):
     return features(filename,which,3,False,extra)
@@ -32,7 +32,7 @@ def features(filename,i,j,combine,extra):
     #    return hstack((farr[1](filename),farr[2](filename),farr[3](filename),farr[4](filename),farr[5](filename)))
     t =  time.clock()
     # num of FDs , Open Image?,  convert to grayscale?, (cielab) use L,a,b?
-    extra = [1,16]
+    extra = [5,32]
     res = farr[0](filename,extra)
     t =  time.clock() - t
     #print "Time: ", t

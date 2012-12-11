@@ -4,8 +4,7 @@ from math import exp, log10
 import scipy.ndimage.filters as sf
 import matplotlib
 from matplotlib import pyplot as plt
-import cv
-from numpy.fft import fft2, ifft2
+import scipy.signal
 
 def gauss_kern(size, sizey):
     """ Returns a normalized 2D gauss kernel array for convolutions """
@@ -50,8 +49,7 @@ def mfs(im,extra):
     #Code ported to python : Rodrigo Baravalle. December 2012
 
 
-    #im = Image.open(im)
-
+    im = Image.open(im)
     ind_num = 1; #density counting levels
     f_num = 26;  #the dimension of MFS
     ite_num = 3; #Box counting levels              
@@ -91,43 +89,52 @@ def mfs(im,extra):
 
     c = map(lambda i: log10(i), c)
     bw = np.zeros((ind_num,im.shape[0],im.shape[1])).astype(np.float32)
-    bw[0] = map(lambda i:map(lambda j: j+1,i) , im)
-
-    import scipy.signal
-    for k in range(1,ind_num):
-        bw[k] = scipy.signal.convolve2d(bw[0], gauss_kern(k+1,k+1),mode="same") # FALTA ?!?!
-        #bw[k] = map(lambda i: map (lambda j: log10(j*(k**2)),i), bw[k])
-
     
+    bw[0] = im + 1
+
+    for k in range(1,ind_num):
+        bw[k] = scipy.signal.convolve2d(bw[0], gauss_kern(k+1,k+1),mode="full")[1:,1:]
+        bw[k] = bw[k] * ((k+1)**2)
+
+    bw = np.log10(bw)
     n1 = c[0]*c[0]
-    n2 = np.log10(bw[0])*c[0]
+    n2 = bw[0]*c[0]
 
     for k in range(1,ind_num):
         n1 = n1+c[k]*c[k]
         n2 = n2 + bw[k]*c[k]
 
-    #if(ind_num >1):    FALTA
-    #    D = (n2*ind_num-sum(c)*sum(bw,3))./(n1*ind_num -sum(c)*sum(c));
+    sum3 = bw[0]
+    for i in range(1,ind_num):
+        sum3 = sum3 + bw[i]
 
-    #if (ind_num > 1)
-    #    max_D  = 4; min_D =1;
-    #    D = grayscale_box(2)*(D-min_D)/(max_D - min_D)+grayscale_box(1);
-    #else FALTA
-    D = im
+    if(ind_num >1):
+        D = (n2*ind_num-sum(c)*sum3)/(n1*ind_num -sum(c)*sum(c));
+
+    if (ind_num > 1):
+        max_D  = np.float32(4)
+        min_D = np.float32(1)
+        D = grayscale_box[1]*(D-min_D)/(max_D - min_D)+grayscale_box[0]
+    else:
+        D = im
+
+
 
     #Partition the density
     # throw away the boundary
-    D = D[ind_num-1:D.shape[0]-ind_num+1, ind_num-1:D.shape[1]-ind_num+1] # REVISAR
+    D = D[ind_num-1:D.shape[0]-ind_num+1, ind_num-1:D.shape[1]-ind_num+1]
+
     IM = np.zeros(D.shape)
     gap = np.ceil((grayscale_box[1] - grayscale_box[0])/np.float32(f_num));
-    center = np.zeros(f_num+1);
+    center = np.zeros(f_num);
     for k in range(1,f_num+1):
         bin_min = (k-1) * gap;
         bin_max = k * gap - 1;
         center[k-1] = round((bin_min + bin_max) / 2);
-        aux = np.zeros(D.shape)
         D = ((D <= bin_max) & (D >= bin_min)).choose(D,center[k-1])
         
+    D = ((D >= bin_max)).choose(D,0)
+    D = ((D < 0)).choose(D,0)
     IM = D
 
     #Constructing the filter for approximating log fitting
@@ -150,7 +157,6 @@ def mfs(im,extra):
     num = np.zeros(ite_num)
     MFS = np.zeros(f_num)
     for k in range(1,f_num+1):
-        #idx = find(Idx_IM == k)
         IM = np.zeros(IM.shape)
         IM = (Idx_IM==k).choose(Idx_IM,255+k)
         IM = (IM<255+k).choose(IM,0)
@@ -159,7 +165,7 @@ def mfs(im,extra):
         num[0] = log10(temp)/log10(r);    
         for j in range(2,ite_num+1):
             mask = np.ones((j,j))
-            bw = scipy.signal.convolve2d(IM, mask,mode="same") # FALTA ?!?!
+            bw = scipy.signal.convolve2d(IM, mask,mode="full")[1:,1:]
             indx = np.arange(0,IM.shape[0],j)
             indy = np.arange(0,IM.shape[1],j)
             bw = bw[np.ix_(indx,indy)]
@@ -167,7 +173,8 @@ def mfs(im,extra):
             temp = max(idx,1)
             num[j-1] = log10(temp)/log10(r/j)
 
-        MFS[k-1] = sum(c*num) #sum(c.*num)
+        MFS[k-1] = sum(c*num)
 
+    print MFS
     return MFS
 

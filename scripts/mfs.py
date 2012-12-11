@@ -50,7 +50,7 @@ def mfs(im,extra):
     #Code ported to python : Rodrigo Baravalle. December 2012
 
 
-    im = Image.open(im)
+    #im = Image.open(im)
 
     ind_num = 1; #density counting levels
     f_num = 26;  #the dimension of MFS
@@ -156,7 +156,6 @@ def mfs(im,extra):
         IM = (IM<255+k).choose(IM,0)
         IM = (IM>0).choose(IM,1)
         temp = max(IM.sum(),1)
-        print r, temp
         num[0] = log10(temp)/log10(r);    
         for j in range(2,ite_num+1):
             mask = np.ones((j,j))
@@ -168,9 +167,7 @@ def mfs(im,extra):
             temp = max(idx,1)
             num[j-1] = log10(temp)/log10(r/j)
 
-        print num
         MFS[k-1] = sum(c*num) #sum(c.*num)
 
-    print MFS
     return MFS
 

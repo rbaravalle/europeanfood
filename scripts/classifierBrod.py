@@ -8,6 +8,7 @@ import colortransforms
 import numpy as np
 from featureTexture import *
 import singularityEntropyCL as sg
+import mfs
 import localmfrac
 import time
 import cielab
@@ -16,7 +17,7 @@ from sklearn import cross_validation
 
 SVM = 0
 RANDOM_FOREST = 1
-cantDF = 10
+cantDF = 8
 
 def callF(filename,which,extra):
     return features(filename,which,3,False,extra)
@@ -26,12 +27,12 @@ def features(filename,i,j,combine,extra):
     #farr = [localmfrac.localMF]
     #farr = [cielab.lab]
     #farr = [lbp]
-    farr = [sg.spec]
+    farr = [mfs.mfs]
     #if(combine==True):
     #    return hstack((farr[1](filename),farr[2](filename),farr[3](filename),farr[4](filename),farr[5](filename)))
     t =  time.clock()
     # num of FDs , Open Image?,  convert to grayscale?, (cielab) use L,a,b?
-    extra = [cantDF,False, True,False,0]
+    extra = [1,16]
     res = farr[0](filename,extra)
     t =  time.clock() - t
     #print "Time: ", t
@@ -346,4 +347,4 @@ def localFeatures(subname,alg):
 
 #main('singularityBoF1000_5',2,True,RANDOM_FOREST)
 
-main('EFDbrodatz',6,False)
+main('mfsbrodatz',6,False)

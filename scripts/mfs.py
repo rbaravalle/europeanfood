@@ -50,12 +50,7 @@ def mfs(im,extra):
     #Date: Apr 24, 2007
     #Code ported to python : Rodrigo Baravalle. December 2012
 
-
-    #im = Image.open(im)
-    ind_num = 1; #density counting levels
-    f_num = 26;  #the dimension of MFS
-    ite_num = 3; #Box counting levels              
-
+    ind_num = 1
     if(len(extra) == 1):
         ind_num = extra[0]  #density counting levels
         f_num = 26          #the dimension of MFS
@@ -64,14 +59,20 @@ def mfs(im,extra):
         ind_num = extra[0]
         f_num = extra[1]
         ite_num = 3
-    if(len(extra) == 3):
+    if(len(extra) >= 3):
         ind_num = extra[0]
         f_num = extra[1]
         ite_num = extra[2]
 
-    # Preprocessing: if IM is a color image convert it to a gray image 
-    im = im.convert("L")
-    im = np.array(im.getdata()).reshape(im.size)
+
+    # Extra[3] == True means what we are passing is a filename
+    # Extra[3] == False means what we are passing is an array
+    FILENAME = extra[3]
+    if(FILENAME):
+        im = Image.open(im)        
+        # Preprocessing: if IM is a color image convert it to a gray image 
+        im = im.convert("L")
+        im = np.array(im.getdata()).reshape(im.size)
 
     #Using [0..255] to denote the intensity profile of the image
     grayscale_box =[0, 255];
@@ -80,7 +81,7 @@ def mfs(im,extra):
     if(abs(im).max()< 1):
         im = im * grayscale_box[1];
     
-
+    
     #######################
 
     ### Estimating density function of the image

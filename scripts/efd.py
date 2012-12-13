@@ -12,18 +12,14 @@ ctx = cl.create_some_context()
 queue = cl.CommandQueue(ctx)
 mf = cl.mem_flags
 
-def efd(im,extra):
+def efd(filename,extra):
 
     cantFD = extra[1]
 
-    if(extra[3]):
-        a = Image.open(im)
-    else:
-        a = im
+    a = Image.open(filename)
 
     Nx, Ny = a.size
     L = Nx*Ny
-
     gray = a.convert('L') # rgb 2 gray
     arr = np.array(gray.getdata()).astype(np.int32)
 
@@ -51,7 +47,7 @@ def efd(im,extra):
          int s;
          float total = (yf-yi)*(xf-xi); // size of region
          for(s = 0; s <= 255; s++) {
-             float v = hist[s]/total+1; // probability
+             float v = hist[s]/total+0.0000001; // probability
              res += v*log2(v);
          }
 
@@ -64,13 +60,21 @@ def efd(im,extra):
     alphaIm_buf = cl.Buffer(ctx, mf.WRITE_ONLY, alphaIm.nbytes)
     sh = alphaIm.shape
 
-    size = 16 # Window size
+    size = 8 # Window size
     prg.measure(queue, sh, None, alphaIm_buf, img_buf, np.int32(Nx), np.int32(Ny), np.int32(size))
     cl.enqueue_read_buffer(queue,alphaIm_buf,alphaIm).wait()
 
     min_Im = np.min(alphaIm)
     max_Im = np.max(alphaIm)
     alphaIm = 255*(alphaIm-min_Im)/(max_Im - min_Im)
-   
-    res = mfs.mfs(alphaIm,[1,cantFD,3,False])
+    extra[3] = False
+
+    #import matplotlib
+    #from matplotlib import pyplot as plt
+
+    #print np.floor(alphaIm)
+    #plt.imshow(np.floor(alphaIm), cmap=matplotlib.cm.gray)
+    #plt.show()
+
+    res = mfs.mfs(np.floor(alphaIm),extra)
     return res

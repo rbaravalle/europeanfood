@@ -17,10 +17,11 @@ import mfs
 import efd
 import gradient
 import laplacian
+import singularityMFS as smfs
 
 SVM = 0
 RANDOM_FOREST = 1
-cantDF = 40
+cantDF = 30
 
 def callF(filename,which,extra):
     return features(filename,which,3,False,extra)
@@ -31,22 +32,26 @@ def features(filename,i,j,combine,extra):
     #farr = [cielab.lab]
     #farr = [lbp]
     #farr = [sg.spec]
+    #farr = [smfs.spec]
     #farr = [mfs.mfs]
-    farr = [mfs.mfs, gradient.main, laplacian.laplacian]
-    #farr = [efd.efd]
+    #farr = [mfs.mfs, gradient.main, laplacian.laplacian]
+    #farr = [mfs.mfs, laplacian.laplacian]
+    #farr = [gradient.main, laplacian.laplacian]
+    #farr = [gradient.main]
+    farr = [efd.efd]
     #farr = [haralick]
     #if(combine==True):
     #    return hstack((farr[1](filename),farr[2](filename),farr[3](filename),farr[4](filename),farr[5](filename)))
     t =  time.clock()
     # num of FDs , Open Image?,  convert to grayscale?, (cielab) use L,a,b?
-    extra = [1,cantDF*2,3,True]
+    extra = [1,cantDF*2,3,False]
     res = farr[0](filename,extra)
-    res2 = farr[1](filename,extra)
-    res3 = farr[2](filename,extra)
+    #res2 = farr[1](filename,extra)
+    #res3 = farr[2](filename,extra)
     t =  time.clock() - t
     #print "Time: ", t
-    #return res
-    return np.hstack([res,res2,res3])
+    return res
+    return np.hstack([res,res2])
 
 
 def ccv(filename):
@@ -97,7 +102,7 @@ def csvm(dtrain,labels,fileStxt, base):
 
 from sklearn.neighbors import KNeighborsClassifier
 def cnearestneighbors(data,labels,fileStxt,base):
-    cnn = KNeighborsClassifier(n_neighbors=5, weights='uniform', algorithm='auto', leaf_size=30, warn_on_equidistant=True)
+    cnn = KNeighborsClassifier(n_neighbors=1, weights='uniform', algorithm='auto', leaf_size=30, warn_on_equidistant=True)
 
     scores = cross_validation.cross_val_score(cnn, data, labels, cv=4)
     print scores
@@ -432,4 +437,4 @@ def localFeatures(subname,alg):
 # Multi Fractal Bag of Features
 #main('singularityBoF1000_5',2,True,RANDOM_FOREST)
 
-main('mfs+gradient+laplacian80_2',6,False,SVM)
+main('efd_x_60_2',6,False,SVM)

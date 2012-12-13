@@ -8,12 +8,15 @@ import colortransforms
 import numpy as np
 from featureTexture import *
 import singularityCL as sg
+import mfs
 import localmfrac
 import time
 import cielab
+import laplacian
+import mfs
+import singularityMFS
 
-SVM = 0
-RANDOM_FOREST = 1
+cantDF = 30
 
 def callF(filename,which,extra):
     return features(filename,which,3,False,extra)
@@ -22,17 +25,21 @@ def features(filename,i,j,combine,extra):
     #farr = [colorHistogram,ccv,haralick,lbp,tas,zernike, singularity.spec]
     #farr = [localmfrac.localMF]
     #farr = [cielab.lab]
-    farr = [lbp]
+    #farr = [mfs.mfs]
     #farr = [sg.spec]
+    #farr = [mfs.mfs, laplacian.laplacian]
+    farr = [singularityMFS.spec]
     if(combine==True):
         return hstack((farr[1](filename),farr[2](filename),farr[3](filename),farr[4](filename),farr[5](filename)))
     t =  time.clock()
     # num of FDs , Open Image?,  convert to grayscale?, (cielab) use L,a,b?
-    extra = [40,True, True,True]
-    res = farr[0](filename)
+    extra = [1,cantDF*2,3,True]
+    res = farr[0](filename,extra)
+    #res2 = farr[1](filename,extra)
     t =  time.clock() - t
     #print "Time: ", t
     return res
+    #return np.hstack([res,res2])
 
 
 def ccv(filename):
@@ -106,6 +113,15 @@ def csvm(dtrain,dtest,labels,fileStxt, fileCtxt, base):
 
     return testL
 
+from sklearn.neighbors import KNeighborsClassifier
+def cnearestneighbors(dtrain,dtest,labels,fileStxt, fileCtxt, base):
+    cnn = KNeighborsClassifier(n_neighbors=1, weights='uniform', algorithm='auto', leaf_size=30, warn_on_equidistant=True)
+
+    cnn.fit(dtrain,labels)
+    print "Nearest Neighbors: ", cnn.score(dtest,labels)
+    return np.array(cnn.predict(dtest)).astype(np.int32)
+
+
 def crandomforest(dtrain,dtest,labels,fileStxt, fileCtxt, base):
     from sklearn.ensemble import RandomForestClassifier
     clf = RandomForestClassifier(n_estimators=60)
@@ -115,11 +131,11 @@ def crandomforest(dtrain,dtest,labels,fileStxt, fileCtxt, base):
 
 
 def classifierPredict(dtrain,dtest,labels,fileStxt, fileCtxt, base, i):
-    pred = [csvm, crandomforest]
+    pred = [csvm, crandomforest,cnearestneighbors]
     return pred[i](dtrain,dtest,labels,fileStxt, fileCtxt, base)
 
 
-def test(dtrain,dtest,labels,fileStxt, fileCtxt, base, classifier):
+def test(dtrain,dtest,labels,fileStxt, fileCtxt, base):
 
     testL = classifierPredict(dtrain,dtest,labels,fileStxt, fileCtxt, base,0)
 
@@ -137,11 +153,20 @@ def test(dtrain,dtest,labels,fileStxt, fileCtxt, base, classifier):
     for row in b:
         print row
 
+    testL = classifierPredict(dtrain,dtest,labels,fileStxt, fileCtxt, base,2)
+
+    print "Test 2: ", testL
+
+    b = conf_mat(testL,labels)
+    for row in b:
+        print row
+
+
     return testL
 
 
 
-def main(subname,which,local,classifier):
+def main(subname,which,local):
     base = subname+'C.txt'
     fileStxt = '../exps/'+subname+'S.txt'
     fileScsv = '../exps/'+subname+'S.csv'
@@ -183,7 +208,7 @@ def main(subname,which,local,classifier):
         Popen(cmd, shell = True, stdout = PIPE).communicate()
         labels = [i for i in range(len(testingData))]
         labels = map(lambda i: i/20+1, labels)
-        test(trainingData, testingData, labels, fileStxt, fileCtxt, base,classifier)
+        test(trainingData, testingData, labels, fileStxt, fileCtxt, base)
         return
 
     else:    # else global
@@ -251,7 +276,7 @@ def main(subname,which,local,classifier):
     Popen(cmd, shell = True, stdout = PIPE).communicate()
     labels = [i for i in range(len(testingData))]
     labels = map(lambda i: i/20+1, labels)
-    test(trainingData, testingData, labels,fileStxt, fileCtxt, base,classifier)
+    test(trainingData, testingData, labels,fileStxt, fileCtxt, base)
 
 
 # SIFT BoW
@@ -264,7 +289,7 @@ PRE_ALLOCATION_BUFFER = 1000  # for sift
 K_THRESH = 1  # early stopping threshold for kmeans originally at 1e-5, increased for speedup
 CODEBOOK_FILE = 'codebook.file'
 DATASETPATH = 'dataset/'
-SIZE_LOCAL_FEATURE = 40 # 64: SURF, 128: SIFT, DF*2: MF
+SIZE_LOCAL_FEATURE = 128 # 64: SURF, 128: SIFT, DF*2: MF
 from cPickle import dump, HIGHEST_PROTOCOL, load
 from mahotas.features import surf
 from singularityBoF import featuresMF
@@ -458,9 +483,9 @@ def localFeatures(subname,alg):
 #main('lbp',3,0)
 #main('tas',4,0)
 #main('zernike',5,0)
-#main('surf',1,True, RANDOM_FOREST)
+main('sift',0,True)
 #main('singularity',6,False,SVM)
 #main('xxx3lbp',6,False,RANDOM_FOREST)
 # Multi Fractal Bag of Features
-main('singularityEntropy',2,True,RANDOM_FOREST)
+#main('difAbsCentralmfsRobustez60',2,False)
 

@@ -9,14 +9,13 @@ import numpy as np
 from featureTexture import *
 import singularityEntropyCL as sg
 import mfs
+import efd
 import localmfrac
 import time
 import cielab
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import cross_validation
 
-SVM = 0
-RANDOM_FOREST = 1
 cantDF = 16
 
 def callF(filename,which,extra):
@@ -27,12 +26,13 @@ def features(filename,i,j,combine,extra):
     #farr = [localmfrac.localMF]
     #farr = [cielab.lab]
     #farr = [lbp]
-    farr = [mfs.mfs]
+    #farr = [mfs.mfs]
+    farr = [efd.efd]
     #if(combine==True):
     #    return hstack((farr[1](filename),farr[2](filename),farr[3](filename),farr[4](filename),farr[5](filename)))
     t =  time.clock()
     # num of FDs , Open Image?,  convert to grayscale?, (cielab) use L,a,b?
-    extra = [5,32]
+    extra = [1,cantDF*2,3,True]
     res = farr[0](filename,extra)
     t =  time.clock() - t
     #print "Time: ", t
@@ -87,7 +87,7 @@ def csvm(dtrain,labels,fileStxt, base):
 
 from sklearn.neighbors import KNeighborsClassifier
 def cnearestneighbors(data,labels,fileStxt,base):
-    cnn = KNeighborsClassifier(n_neighbors=5, weights='uniform', algorithm='auto', leaf_size=30, warn_on_equidistant=True)
+    cnn = KNeighborsClassifier(n_neighbors=1, weights='uniform', algorithm='auto', leaf_size=30, warn_on_equidistant=True)
 
     scores = cross_validation.cross_val_score(cnn, data, labels, cv=4)
     print scores
@@ -184,7 +184,7 @@ def main(subname,which,local):
     Popen(cmd, shell = True, stdout = PIPE).communicate()
     labels = [i for i in range(len(brodatz))]
     labels = map(lambda i: i/((cant-1))+1, labels)
-    print labels
+    #print labels
     test(brodatz, labels, fileStxt, base)
 
 
@@ -347,4 +347,4 @@ def localFeatures(subname,alg):
 
 #main('singularityBoF1000_5',2,True,RANDOM_FOREST)
 
-main('mfsbrodatz',6,False)
+main('efd32brodatz',6,False)

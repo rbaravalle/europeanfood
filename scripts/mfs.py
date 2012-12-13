@@ -143,7 +143,7 @@ def mfs(im,extra):
         bin_max = k * gap - 1;
         center[k-1] = round((bin_min + bin_max) / 2);
         D = ((D <= bin_max) & (D >= bin_min)).choose(D,center[k-1])
-        
+
     D = ((D >= bin_max)).choose(D,0)
     D = ((D < 0)).choose(D,0)
     IM = D

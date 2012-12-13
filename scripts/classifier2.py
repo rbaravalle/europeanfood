@@ -16,10 +16,11 @@ from sklearn import cross_validation
 import mfs
 import efd
 import gradient
+import laplacian
 
 SVM = 0
 RANDOM_FOREST = 1
-cantDF = 30
+cantDF = 40
 
 def callF(filename,which,extra):
     return features(filename,which,3,False,extra)
@@ -31,7 +32,7 @@ def features(filename,i,j,combine,extra):
     #farr = [lbp]
     #farr = [sg.spec]
     #farr = [mfs.mfs]
-    farr = [mfs.mfs, gradient.main]
+    farr = [mfs.mfs, gradient.main, laplacian.laplacian]
     #farr = [efd.efd]
     #farr = [haralick]
     #if(combine==True):
@@ -41,10 +42,11 @@ def features(filename,i,j,combine,extra):
     extra = [1,cantDF*2,3,True]
     res = farr[0](filename,extra)
     res2 = farr[1](filename,extra)
+    res3 = farr[2](filename,extra)
     t =  time.clock() - t
     #print "Time: ", t
     #return res
-    return np.hstack([res,res2])
+    return np.hstack([res,res2,res3])
 
 
 def ccv(filename):
@@ -430,4 +432,4 @@ def localFeatures(subname,alg):
 # Multi Fractal Bag of Features
 #main('singularityBoF1000_5',2,True,RANDOM_FOREST)
 
-main('mfs+gradient60_2',6,False,SVM)
+main('mfs+gradient+laplacian80_2',6,False,SVM)

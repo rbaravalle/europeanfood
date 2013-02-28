@@ -1,0 +1,194 @@
+%%%%%%%%%%%%%%%%%%%%%%% file template.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This is a general template file for the LaTeX package SVJour3
+% for Springer journals.          Springer Heidelberg 2010/09/16
+%
+% Copy it to a new file with a new name and use it as the basis
+% for your article. Delete % signs as needed.
+%
+% This template includes a few options for different layouts and
+% content for various journals. Please consult a previous issue of
+% your journal as needed.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% First comes an example EPS file -- just ignore it and
+% proceed on the \documentclass line
+% your LaTeX will extract the file if required
+\begin{filecontents*}{example.eps}
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: 19 19 221 221
+%%CreationDate: Mon Sep 29 1997
+%%Creator: programmed by hand (JK)
+%%EndComments
+gsave
+newpath
+  20 20 moveto
+  20 220 lineto
+  220 220 lineto
+  220 20 lineto
+closepath
+2 setlinewidth
+gsave
+  .4 setgray fill
+grestore
+stroke
+grestore
+\end{filecontents*}
+%
+\RequirePackage{fix-cm}
+%
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+%\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+%
+\usepackage{graphicx}
+%
+% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+%\usepackage{latexsym}
+% etc.
+%
+% please place your own definitions here and don't use \def but
+% \newcommand{}{}
+%
+% Insert the name of "your journal" with
+% \journalname{myjournal}
+%
+\begin{document}
+
+\title{Multifractal characterization and classification of bread crumb digital images%\thanks{Grants or other notes
+%about the article that should go on the front page should be
+%placed here. General acknowledgments should be placed at the end of the article.}
+}
+%\subtitle{Do you have a subtitle?\\ If so, write it here}
+
+%\titlerunning{Short form of title}        % if too long for running head
+
+\author{Rodrigo Baravalle         \and
+        Claudio Delrieux \and
+        Juan Carlos G\'omez
+}
+
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{Rodrigo Baravalle and Juan Carlos G\'omez \at
+              Laboratorio de Sistemas Din\'amicos y Procesamiento de Informaci\'on \\
+              FCEIA, Universidad Nacional de Rosario, - CIFASIS - CONICET \\
+              Riobamba 250 bis, 2000, Rosario, Argentina. \\
+              Tel.: +54-341-4237248 int. 301\\
+              Fax: +54-341-4821772 int. 3\\
+              \email{baravalle@cifasis-conicet.gov.ar}
+           \and
+           Claudio Delrieux \at
+               DIEC, Universidad Nacional del Sur - IIIE-CONICET \\
+               Avenida Col\'on 80 - Bah\'ia Blanca (8000FTN) \\
+               Provincia de Buenos Aires - Rep\'ublica Argentina
+}
+
+\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+
+
+\maketitle
+
+\begin{abstract}
+Adequate image descriptors are fundamental in image classification and object recognition. Main requirements for image features are robustness and low dimensionality which would lead to low classification errors in a variety of situations and with a reasonable computational cost.
+
+In this context, the identification of materials poses a significant challenge, since typical (geometric and/or differential) feature extraction methods are not robust enough. Texture features based on Fourier or wavelet transforms, on the other hand, do withstand geometric and illumination variations, but tend to require a high amount of descriptors to perform adequately. 
+
+Recently, the theory of fractal sets has shown to provide local image features that are both robust and low-dimensional. In this work we apply fractal and multifractal feature extraction techniques for bread crumb classification based on colour scans of slices of different bread types. Preliminary results show that fractal based classification is able to distinguish different bread crumbs with very high accuracy.
+\keywords{Fractal \and Multifractal \and Classification \and Bread crumb}
+% \PACS{PACS code1 \and PACS code2 \and more}
+% \subclass{MSC code1 \and MSC code2 \and more}
+\end{abstract}
+
+\section{Introduction}
+\label{intro}
+Fractal and multifractal analysis of images have proved to capture useful properties of the underlying material being represented. Characterisation of images using these features have been successfully applied in different areas, such as medicine (\cite{Andjelkovic2008,Yu2011}) and texture classification (\cite{Wendt2009}). Through several procedures, it is possible to obtain different Fractal Dimensions (FD), each of them capturing a different property of the material ({\em e.g.}, void image fraction, rugosity).
+
+For each material, the results obtained in the classification process are useful in quality measurements of real samples and also in the validation of synthetic representations of them. In other words, the classification is useful to determine if a given image presents the observed features in that material, allowing to associate quality measure parameters to the material. In~\cite{Fan2006}, a quality bread crumb test based on Gabor filters was performed in that paper, obtaining good results. Nevertheless, a small database was used ($30$ images). In \cite{Gonzales2008} several fractal features were obtained for one type of bread, showing that a vector comprising them would be capable of obtaining key features of its crumb texture.
+
+In this work we propose the application of fractal and multifractal descriptors for the classification of different bread types and for the discrimination between bread and non-bread images. The proposed method is compared to a classifier that uses only mean colour information. The results of this feature extraction procedure show that the classifier is robust and presents good discrimination properties to distinguish between bread and non bread images. In section 2 we briefly introduce the theory underlying fractal sets. In section 3 we describe the materials and methods employed in the classification. In section 4 we show the results obtained in the classification and we perform a robustness analysis of the method. In section 5 we summarise the conclusions, and we pose some possible future works.
+\section{Section title}
+\label{sec:1}
+Text with citations \cite{RefB} and \cite{RefJ}.
+\subsection{Subsection title}
+\label{sec:2}
+as required. Don't forget to give each section
+and subsection a unique label (see Sect.~\ref{sec:1}).
+\paragraph{Paragraph headings} Use paragraph headings as needed.
+\begin{equation}
+a^2+b^2=c^2
+\end{equation}
+
+% For one-column wide figures use
+\begin{figure}
+% Use the relevant command to insert your figure file.
+% For example, with the graphicx package use
+  \includegraphics{example.eps}
+% figure caption is below the figure
+\caption{Please write your figure caption here}
+\label{fig:1}       % Give a unique label
+\end{figure}
+%
+% For two-column wide figures use
+\begin{figure*}
+% Use the relevant command to insert your figure file.
+% For example, with the graphicx package use
+  \includegraphics[width=0.75\textwidth]{example.eps}
+% figure caption is below the figure
+\caption{Please write your figure caption here}
+\label{fig:2}       % Give a unique label
+\end{figure*}
+%
+% For tables use
+\begin{table}
+% table caption is above the table
+\caption{Please write your table caption here}
+\label{tab:1}       % Give a unique label
+% For LaTeX tables use
+\begin{tabular}{lll}
+\hline\noalign{\smallskip}
+first & second & third  \\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+number & number & number \\
+number & number & number \\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{table}
+
+
+%\begin{acknowledgements}
+%If you'd like to thank anyone, place your comments here
+%and remove the percent signs.
+%\end{acknowledgements}
+
+% BibTeX users please use one of
+%\bibliographystyle{spbasic}      % basic style, author-year citations
+%\bibliographystyle{spmpsci}      % mathematics and physical sciences
+\bibliographystyle{spphys}       % APS-like style for physics
+\bibliography{bibliografia/bibliografia}   % name your BibTeX data base
+
+% Non-BibTeX users please use
+%\begin{thebibliography}{}
+%
+% and use \bibitem to create references. Consult the Instructions
+% for authors for reference list style.
+%
+%\bibitem{RefJ}
+% Format for Journal Reference
+%Author, Article title, Journal, Volume, page numbers (year)
+% Format for books
+%\bibitem{RefB}
+%Author, Book title, page numbers. Publisher, place (year)
+% etc
+%\end{thebibliography}
+
+\end{document}
+% end of file template.tex
+

@@ -10,20 +10,26 @@ from featureTexture import *
 #import singularityEntropyCL as sg
 #import localmfrac
 import time
-#import cielab
+import cielab
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import cross_validation
+from sklearn.cross_validation import StratifiedShuffleSplit
 import mfs
 #import efd
 import gradient
 import laplacian
 #import singularityMFS as smfs
-from matplotlib import pyplot as plt
-from vf import VF
 
 SVM = 0
 RANDOM_FOREST = 1
-cantDF = 10
+cantDF = 30
+tr_a = 14
+num_tests = 5
+tr_amount = np.float(tr_a*5)/200
+te_amount = np.float((40-tr_a)*5)/200
+print tr_amount
+print te_amount
+
 
 def callF(filename,which,extra):
     return features(filename,which,3,False,extra)
@@ -36,10 +42,9 @@ def features(filename,i,j,combine,extra):
     #farr = [sg.spec]
     #farr = [smfs.spec]
     farr = [mfs.mfs]
-    #farr = [mfs.mfs, gradient.main]
     #farr = [mfs.mfs, gradient.main, laplacian.laplacian]
     #farr = [mfs.mfs, laplacian.laplacian]
-    #farr = [mfs.mfs]
+    #farr = [gradient.main, laplacian.laplacian]
     #farr = [gradient.main]
     #farr = [efd.efd]
     #farr = [haralick]
@@ -47,7 +52,6 @@ def features(filename,i,j,combine,extra):
     #    return hstack((farr[1](filename),farr[2](filename),farr[3](filename),farr[4](filename),farr[5](filename)))
     t =  time.clock()
     # num of FDs , Open Image?,  convert to grayscale?, (cielab) use L,a,b?
-    cantDF = 10
     extra = [1,cantDF*2,3,True]
     res = farr[0](filename,extra)
     #res2 = farr[1](filename,extra)
@@ -56,7 +60,6 @@ def features(filename,i,j,combine,extra):
     #print "Time: ", t
     return res
     #return np.hstack([res,res2])
-    #return np.hstack([res,res2,res3])
 
 
 def ccv(filename):
@@ -127,12 +130,9 @@ def crandomforest(data,labels,fileStxt,base):
     results = []
     #data = np.array(data)
     #labels=np.array(labels)
+
     scores = cross_validation.cross_val_score(cfr, data, labels, cv=4)
     print scores
-#    for traincv, testcv in cv:
-#        print "T1, T2", traincv, testcv
-#        probas = cfr.fit(data[traincv], labels[traincv]).predict_proba(data[testcv])
-#        results.append( logloss.llfun(labels[testcv], [x[1] for x in probas]) )
 
     #print out the mean of the cross-validated results
     print "Random Forest: " + str( np.array(scores).mean() )
@@ -158,27 +158,15 @@ def main(subname,which,local,classifier):
     #fileCcsv = '../exps/'+subname+'C.csv'
     cant = 20+1
     dDFs  = 64
-    baguette = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-    salvado   = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-    lactal   = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-    sandwich = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
+    baguette = [['Df' for j in range(dDFs)] for i in range(cant)]
+    salvado   = [['Df' for j in range(dDFs)] for i in range(cant)]
+    lactal   = [['Df' for j in range(dDFs)] for i in range(cant)]
+    sandwich = [['Df' for j in range(dDFs)] for i in range(cant)]
 
-    baguetteC = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-    salvadoC   = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-    lactalC   = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-    sandwichC = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-
-    vfBaguette = [np.float32(0) for i in range(cant)]
-    vfBaguetteC = [np.float32(0) for i in range(cant)]
-
-    vfLactal = [np.float32(0) for i in range(cant)]
-    vfLactalC = [np.float32(0) for i in range(cant)]
-
-    vfSalvado = [np.float32(0) for i in range(cant)]
-    vfSalvadoC = [np.float32(0) for i in range(cant)]
-
-    vfSandwich = [np.float32(0) for i in range(cant)]
-    vfSandwichC = [np.float32(0) for i in range(cant)]
+    baguetteC = [['Df' for j in range(dDFs)] for i in range(cant)]
+    salvadoC   = [['Df' for j in range(dDFs)] for i in range(cant)]
+    lactalC   = [['Df' for j in range(dDFs)] for i in range(cant)]
+    sandwichC = [['Df' for j in range(dDFs)] for i in range(cant)]
 
     path = '../images/nonbread/res/'
     dirList=os.listdir(path)
@@ -197,11 +185,11 @@ def main(subname,which,local,classifier):
         Popen(cmd, shell = True, stdout = PIPE).communicate()	
         labels = [i for i in range(len(data))]
         labels = map(lambda i: i/(2*(cant-1))+1, labels)
-        print labels
         test(data, labels, fileStxt, base,classifier)
         return
 
     else:    # else global
+        cantDF = 40
         import Image
         j = 0
         extra = [cantDF,40,1.15]
@@ -216,116 +204,39 @@ def main(subname,which,local,classifier):
                 break
 
 
+
         for i in range(1,cant):
             extra = [cantDF,40,1.2]
             filename = '../images/scanner/baguette/baguette{}.tif'.format(i)
             print filename
             baguette[i] = callF(filename,which,extra)
-            vfBaguette[i] = VF(filename)
             filename = '../images/scanner/lactal/lactal{}.tif'.format(i)
             print filename
             lactal[i] = callF(filename,which,extra)
-            vfLactal[i] = VF(filename)
             filename = '../images/scanner/salvado/salvado{}.tif'.format(i)
             print filename
             salvado[i] = callF(filename,which,extra)
-            vfSalvado[i] = VF(filename)
             filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i)
             print filename
             sandwich[i] = callF(filename,which,extra)
-            vfSandwich[i] = VF(filename)
+
 
             extra = [cantDF,50,1.05]
             filename = '../images/camera/baguette/slicer/b{}.tif'.format(i)
             print filename
             baguetteC[i] = callF(filename,which,extra)
-            vfBaguetteC[i] = VF(filename)
             filename = '../images/camera/lactal/l{}.tif'.format(i)
             print filename
             lactalC[i] = callF(filename,which,extra)
-            vfLactalC[i] = VF(filename)
             filename = '../images/camera/salvado/s{}.tif'.format(i)
             print filename
             salvadoC[i] = callF(filename,which,extra)
-            vfSalvadoC[i] = VF(filename)
             filename = '../images/camera/sandwich/s{}.tif'.format(i)
             print filename
             sandwichC[i] = callF(filename,which,extra)
-            vfSandwichC[i] = VF(filename)
+   
 
     data = baguette[1:]+ baguetteC[1:]+lactal[1:]+lactalC[1:]+salvado[1:]+salvadoC[1:]+sandwich[1:]+sandwichC[1:]+nonbread[0:(2*(cant-1))]
-
-
-    dataB = np.array(baguette[1:]+ baguetteC[1:])
-    dataL = np.array(lactal[1:]+lactalC[1:])
-    dataSal = np.array(salvado[1:]+salvadoC[1:])
-    dataSan = np.array(sandwich[1:]+sandwichC[1:])
-
-    arrB = np.array(vfBaguette[1:]+vfBaguetteC[1:])
-    arrL = np.array(vfLactal[1:]+vfLactalC[1:])
-    arrSal = np.array(vfSalvado[1:]+vfSalvadoC[1:])
-    arrSan = np.array(vfSandwich[1:]+vfSandwichC[1:])
-    # correlation coefficients
-    cB = np.zeros(2*cantDF)
-    cL = np.zeros(2*cantDF)
-    cSal = np.zeros(2*cantDF)
-    cSan = np.zeros(2*cantDF)
-    for i in range(2*cantDF):
-        cB[i] = np.corrcoef(dataB[:,i],arrB)[0,1]
-        cL[i] = np.corrcoef(dataL[:,i],arrL)[0,1]
-        cSal[i] = np.corrcoef(dataSal[:,i],arrSal)[0,1]
-        cSan[i] = np.corrcoef(dataSan[:,i],arrSan)[0,1]
-
-    print "Coefficients"
-    print cB
-    print cL
-    print cSal
-    print cSan
-
-    x = np.arange(2*cantDF)
-    plt.plot(x, cB,'b',x, cL,'r',x,cSal,'g',x,cSan)
-    plt.show()
-
-    mean = np.zeros((4,2*cantDF))
-    std = np.zeros((4,2*cantDF))
-
-    dataB = np.array(baguette[1:]+ baguetteC[1:])
-    mean[0] = dataB.mean(axis=0)
-    std[0] = dataB.std(axis=0)
-
-    dataL = np.array(lactal[1:]+lactalC[1:])
-    mean[1] = dataL.mean(axis=0)
-    std[1] = dataL.std(axis=0)
-
-    dataSal = np.array(salvado[1:]+salvadoC[1:])
-    mean[2] = dataSal.mean(axis=0)
-    std[2] = dataSal.std(axis=0)
-
-    dataSan = np.array(sandwich[1:]+sandwichC[1:])
-    mean[3] = dataSan.mean(axis=0)
-    std[3] = dataSan.std(axis=0)
-
-    x = np.arange(2*cantDF)
-    #plt.plot(x, mean[0],'b',x, mean[1],'r',x,mean[2],'g',x,mean[3])
-    #plt.show()
-
-    print "Mean : ", mean[0]
-    print "Std : ", std[0]
-    print "Mean : ", mean[1]
-    print "Std : ", std[1]
-    print "Mean : ", mean[2]
-    print "Std : ", std[2]
-    print "Mean : ", mean[3]
-    print "Std : ", std[3]
-    with open('means.csv', 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(mean)
-
-    with open('stds.csv', 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(std)
-
-
     print "200?: ", len(data)
     with open(fileScsv, 'wb') as f:
         writer = csv.writer(f)
@@ -520,11 +431,6 @@ def localFeatures(subname,alg):
     return all_word_histgramsS
 
 
-#def coefCorr():
-    #x = columna
-    #y = void fraction
-    
-
 #main('gch',0,0)
 #main('ccv',1,0)
 #main('haralick',2,0)
@@ -537,4 +443,4 @@ def localFeatures(subname,alg):
 # Multi Fractal Bag of Features
 #main('singularityBoF1000_5',2,True,RANDOM_FOREST)
 
-main('efd_x_60_2',6,False,SVM)
+main('mfsLap4',6,False,SVM)

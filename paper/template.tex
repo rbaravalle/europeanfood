@@ -46,6 +46,7 @@ grestore
 \smartqed  % flush right qed marks, e.g. at end of proof
 %
 \usepackage{graphicx}
+\usepackage{amssymb}
 %
 % \usepackage{mathptmx}      % use Times fonts if available on your TeX system
 %
@@ -97,25 +98,35 @@ grestore
 \maketitle
 
 \begin{abstract}
-Adequate image descriptors are fundamental in image classification and object recognition. Main requirements for image features are robustness and low dimensionality which would lead to low classification errors in a variety of situations and with a reasonable computational cost.
 
-In this context, the identification of materials poses a significant challenge, since typical (geometric and/or differential) feature extraction methods are not robust enough. Texture features based on Fourier or wavelet transforms, on the other hand, do withstand geometric and illumination variations, but tend to require a high amount of descriptors to perform adequately. 
+An adequate model of bread crumb structure can be critical for understanding flow and transport
+processes in bread, and creating synthetic bread crumb images for photo-realistic rendering, and evaluating similarity of crumbs of different breads. 
 
-Recently, the theory of fractal sets has shown to provide local image features that are both robust and low-dimensional. In this work we apply fractal and multifractal feature extraction techniques for bread crumb classification based on colour scans of slices of different bread types. Preliminary results show that fractal based classification is able to distinguish different bread crumbs with very high accuracy.
-\keywords{Fractal \and Multifractal \and Classification \and Bread crumb}
+In this article multifractal analysis employing the multifractal spectrum (MFS) has been used to study the structure of the bread crumb for four varieties of breads ({\em baguette}, {\em lactal}, {\em bran}, and {\em sandwich}). The extracted dimensions could be used to discriminate among bread crumbs from different types. Also, high correlations were found between these parameters and the void fraction of the samples. These results demonstrate that the MFS is an appropriate tool for characterizing the internal structure of the bread crumb and thus may be used to establish important quality properties that it should have.
+
+
+The MFS has shown to provide local image features that are both robust and low-dimensional. In this work we also apply the MFS for bread crumb classification based on colour scans of slices of different bread types. Results show that MFS based classification is able to distinguish different bread crumbs with very high accuracy. The multifractal modeling of the bread crumb structure can be an efficient method for parameterizing and simulating the appearance of different bread crumbs.
+
+\keywords{Fractal \and Multifractal \and Image analysis \and Image classification \and Bread crumb}
 % \PACS{PACS code1 \and PACS code2 \and more}
 % \subclass{MSC code1 \and MSC code2 \and more}
 \end{abstract}
 
 \section{Introduction}
 \label{intro}
+Among other important factors, the quality of a bread loaf is related to its crumb structure. Close examination of different slices reveals considerable variation in the cell size even within a single sample of the same bread type. 
+
 Fractal and multifractal analysis of images have proved to capture useful properties of the underlying material being represented. Characterisation of images using these features have been successfully applied in different areas, such as medicine (\cite{Andjelkovic2008,Yu2011}) and texture classification (\cite{Wendt2009}). Through several procedures, it is possible to obtain different Fractal Dimensions (FD), each of them capturing a different property of the material ({\em e.g.}, void image fraction, rugosity).
 
 For each material, the results obtained in the classification process are useful in quality measurements of real samples and also in the validation of synthetic representations of them. In other words, the classification is useful to determine if a given image presents the observed features in that material, allowing to associate quality measure parameters to the material. In~\cite{Fan2006}, a quality bread crumb test based on Gabor filters was performed in that paper, obtaining good results. Nevertheless, a small database was used ($30$ images). In \cite{Gonzales2008} several fractal features were obtained for one type of bread, showing that a vector comprising them would be capable of obtaining key features of its crumb texture.
 
-In this work we propose the application of the MFS \cite{XX} to describe and discriminate among different bread types. **ILLUMINATION INVARIANCE**
+In this work we propose the application of the MFS \cite{XX} to describe and discriminate among different bread types. One of its main features is its bi-Lipschitz invariance \cite{bilipXXX}, which includes perspective transforms (viewpoint changes) and smooth texture surface deformations. It is shown that the MFS is also locally invariant to affine changes in illumination.
 
- fractal and multifractal descriptors for the classification of different bread types and for the discrimination between bread and non-bread images. The proposed method is compared to a classifier that uses only mean colour information. The results of this feature extraction procedure show that the classifier is robust and presents good discrimination properties to distinguish between different types of bread and also non bread images. In section 2 we briefly introduce the theory underlying fractal sets. In section 3 we describe the materials and methods employed in the classification. In section 4 we show the results obtained in the classification and we perform a robustness analysis of the method. In section 5 we summarise the conclusions, and we pose some possible future works.
+The proposed method is compared to others classifiers that uses state of the art features for texture classification. The results of this feature extraction procedure show that the classifier is robust and presents good discrimination properties to distinguish between different types of bread and also non bread images. The objectives of this study were: (1) to evaluate if the MFS can be applied to characterise and discriminate the bread crumb structure from different bread types from digital images, and (2) to investigate the efectiveness of the method in the classification of these structures.
+
+In section 2 we briefly introduce the theory underlying fractal sets. In section 3 we describe the materials and methods employed in the classification. In section 4 we show the results obtained in the classification and we perform a robustness analysis of the method. In section 5 we summarise the conclusions, and we pose some possible future works.
+
+
 
 \section{Materials and Methods}
 \label{sec:1}
@@ -254,7 +265,7 @@ where $\ast$ is the $2D$ convolution opeartor and $G_{r}$ is a Gaussian smoothin
 \subsection{Image acquisition}
 \label{sec:7}
 %(in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase).
-$20$ images of four different bread types ({\em lactal}, {\em baguette}, {\em salvado} and {\em sandwich}), counting $80$ images, were obtained using an electric slicer. The images were digitalised using an HP PSC 1210 scanner and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible area for the four bread types) and $350$ dpi ($1$ pixel $= 0.00527 mm^{2}$). Then the images were converted to grey scale ($8$ bits). In addition, $20$ images of each bread type were acquired with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig.~\ref{fig:camera} four examples of bread images from the camera are shown. We also employed one hundred randomly selected images from the CalTech101~(\cite{FeiFei04}) dataset in order to test the method's performance with non-bread images. In Fig.~\ref{fig:nonbread} four examples of non-bread images from this dataset are shown. 
+$20$ images of four different bread types ({\em lactal}, {\em baguette}, {\em bran} and {\em sandwich}), counting $80$ images, were obtained using an electric slicer. The images were digitalised using an HP PSC 1210 scanner and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible area for the four bread types) and $350$ dpi ($1$ pixel $= 0.00527 mm^{2}$). Then the images were converted to grey scale ($8$ bits). In addition, $20$ images of each bread type were acquired with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig.~\ref{fig:camera} four examples of bread images from the camera are shown. We also employed one hundred randomly selected images from the CalTech101~(\cite{FeiFei04}) dataset in order to test the method's performance with non-bread images. In Fig.~\ref{fig:nonbread} four examples of non-bread images from this dataset are shown. 
 
 To calculate the void fraction, mean cell area and standard deviation of mean cell area, the image should be binarized. The algorithm presented in \cite{White83} was used. This algorithm applies a local thresholding schema, which showed better results than using a global thresholding schema. Particularly, the algorithm presented in \cite{Huang95} and used in \cite{Gonzales2008}, showed poor results when the illumination conditions vary in the image. In Fig.~\ref{fig:bread} an image of each bread type used in this work (top row) and its resulting binarisation using the proposed algorithm (bottom row) is shown. Small elements of one and two pixels were eliminated by an opening operation (erosion and dilation) using a $2\times2$ structuring element. The method showed good results even for different illumination conditions varying in the image. 
 
@@ -262,34 +273,34 @@ In order to determine the result of the binarization at a pixel, the algorithm o
 
 \begin{figure*}[htb]
 \centering
-\includegraphics[scale=1.3]{imagenes/baguette20}
-\includegraphics[scale=1.3]{imagenes/lactal14}
-\includegraphics[scale=1.3]{imagenes/salvado43}
-\includegraphics[scale=1.3]{imagenes/sandwich43}
-%includegraphics[scale=0.265]{imagenes/baguette20bin}
-%\includegraphics[scale=0.333]{imagenes/lactal14bin}
-%\includegraphics[scale=0.333]{imagenes/salvado43bin}
-%\includegraphics[scale=0.333]{imagenes/sandwich43bin}
-\caption{Digitalised images of {\em baguette}, {\em lactal}, {\em salvado} and {\em sandwich} bread types}
+\includegraphics[scale=1.37]{../images/baguette20}
+\includegraphics[scale=1.37]{../images/lactal14}
+\includegraphics[scale=1.37]{../images/salvado43}
+\includegraphics[scale=1.37]{../images/sandwich43}
+\includegraphics[scale=0.281]{../images/baguette20bin}
+\includegraphics[scale=0.35]{../images/lactal14bin}
+\includegraphics[scale=0.35]{../images/salvado43bin}
+\includegraphics[scale=0.35]{../images/sandwich43bin}
+\caption{Digitalised images of {\em baguette}, {\em lactal}, {\em bran} and {\em sandwich} bread types with its binarisations}
 \label{fig:bread}
 \end{figure*}
 
 \begin{figure*}[htb]
 \centering
-\includegraphics[scale=0.28]{imagenes/caltech/image_0066}
-\includegraphics[scale=0.28]{imagenes/caltech/image_0083}
-\includegraphics[scale=0.28]{imagenes/caltech/image_0284}
-\includegraphics[scale=0.28]{imagenes/caltech/image_0300}
+\includegraphics[scale=0.28]{../images/caltech/image_0066}
+\includegraphics[scale=0.28]{../images/caltech/image_0083}
+\includegraphics[scale=0.28]{../images/caltech/image_0284}
+\includegraphics[scale=0.28]{../images/caltech/image_0300}
 \caption{Images from the dataset CalTech101}
 \label{fig:nonbread}
 \end{figure*}
 
 \begin{figure*}[htb]
 \centering
-\includegraphics[scale=0.28]{imagenes/camera/b}
-\includegraphics[scale=0.28]{imagenes/camera/l19}
-\includegraphics[scale=0.28]{imagenes/camera/s7}
-\includegraphics[scale=0.28]{imagenes/camera/Sa14}
+\includegraphics[scale=0.28]{../images/camera/b}
+\includegraphics[scale=0.28]{../images/camera/l19}
+\includegraphics[scale=0.28]{../images/camera/s7}
+\includegraphics[scale=0.28]{../images/camera/Sa14}
 \caption{Digitalised images from a digital camera}
 \label{fig:camera}
 \end{figure*}
@@ -300,9 +311,7 @@ Following the ideas presented in \cite{Gonzales2008}, the mentioned fractal and 
 
 Self-organizing maps (SOM)~(\cite{Kohonen2001}) of the vectorized images are useful to visualize these different representation of bread images into a lower dimensional view, in order to understand them better. A SOM maps high dimensional data into a (typically) two-dimensional representation, using neighbourhood information. Topological information of the original data is preserved.  
 
-Unsupervised SOM of the fractal and non fractal representations of scanned images are shown in Fig.~\ref{fig:somfractal} and Fig.~\ref{fig:somrgb} respectively. The fractal features SOM seems to show easily separable classes while the RGB features SOM appears to be more overlapped. It seems that a classifier could potentially obtain better classification results using the fractal features. %%Next sections will show that this hypothesis is true.
-%Also, in the latter, the non bread class seems to be spread over the rest of the classes, making it more difficult to distinguish between bread and non bread images. 
-
+Unsupervised SOM of the fractal and non fractal representations of scanned images are shown in Fig.~\ref{fig:somfractal} and Fig.~\ref{fig:somrgb} respectively. The fractal features SOM seems to show easily separable classes while the RGB features SOM appears to be more overlapped. It seems that a classifier could potentially obtain better classification results using the fractal features.
 %\begin{figure*}
 
 %\begin{centering}
@@ -325,7 +334,7 @@ Experiment explanation...
 % For LaTeX tables use
 \begin{tabular}{lllll}
 \hline\noalign{\smallskip}
-Classifier & MFS (20) & MFS+L (20) & MFS+G (20) & SIFT  \\
+Method & MFS (20) & MFS+L (20) & MFS+G (20) & SIFT  \\
 \noalign{\smallskip}\hline\noalign{\smallskip}
 SVM & 94.5 & 95.5 & 97.5 & 96.5 \\
 RF  & 93.5 & 96 & 95 & 92 \\
@@ -342,7 +351,7 @@ NN & 90.5 & 90 & 87 & 86 \\
 % For LaTeX tables use
 \begin{tabular}{lllll}
 \hline\noalign{\smallskip}
- & 10  & 20 & 30 \\
+Number of FDs & 10  & 20 & 30 \\
 \noalign{\smallskip}\hline\noalign{\smallskip}
 SVM & 96 & 94.5 & 95.5 \\
 RF  & 91.5 & 93.5 & 93 \\
@@ -358,24 +367,28 @@ NN & 88.5 & 90.5 & 90 \\
 % For LaTeX tables use
 \begin{tabular}{llllll}
 \hline\noalign{\smallskip}
-Classifier & Haralick & Lbp & CIELab (L) & CIELab (L+a+b)\\ % & Zernicke
+Method & Haralick & Lbp & CIELab (L) & CIELab (L+a+b)\\ % & Zernicke
 \noalign{\smallskip}\hline\noalign{\smallskip}
-SVM & 94 & 78.5 & 94.0 & 97.5 \\ % & 55 
-RF  & 91 & 71.5 & 93.5 & 96.0 \\ % & 58 
-NN & 79 & 70 & 86 & 92.0 \\ % & 48.5 
+SVM & 94 & 78.5 & 94 & 97.5 \\ % & 55 
+RF  & 91 & 71.5 & 93.5 & 96 \\ % & 58 
+NN & 79 & 70 & 86 & 92 \\ % & 48.5 
 \noalign{\smallskip}\hline
 \end{tabular}
 \end{table}
 
+In Figure \ref{fig:meansMFS}, the mean values for the MFS, using $20$ FDs, for the four different bread types are shown.
 
 \subsection{Bread Classification}
 \label{sec:10}
-In Figure \ref{fig:meansMFS}, the mean values for the MFS, using $20$ FDs, for the four different bread types are shown.
+
+In order to test the *** of the method, a classification experiment is made. Five classes are defined, {\emph e.g.}, {\emph baguette}, {\emph lactal}, {\emph bran}, {\emph sandwich} and {\emph non-bread}, assigning $40$ images to each class. A comparison is made between the MFS and state of the art features in the computer vision literature.
+
+K-fold cross validation is applied to the entire set (with $K=4$), employing three different classifiers: Support Vector Machines, Random Forests, and Nearest Neighbors. Results show that the MFS is independent of the classifier employed.
 
 \begin{figure*}[htb]
 \centering
-\includegraphics[scale=0.28]{../images/means}
-\caption{Mean MFS for the four different types}
+\includegraphics[scale=0.38]{../images/means}
+\caption{Mean MFS for the four different bread types}
 \label{fig:meansMFS}
 \end{figure*}
 
@@ -383,6 +396,8 @@ The image shows...
 
 The standard deviations for the four different bread types are shown in Table \ref{tab:4}. 
 
+
+The correlation coefficients for the four bread types related to the first $10$ FDs are shown in Table \ref{tab:5}. It is clear that the coefficients behave similarly for the firsts dimensions, but differently for the FD 10 and above, for each bread type, permitting to distinguish them.
 
 
 %\par\end{centering}
@@ -392,7 +407,7 @@ The standard deviations for the four different bread types are shown in Table \r
 %\includegraphics[width=0.6\textwidth]{exps/som/som\mydot rgb}
 %\label{fig:somrgb}
 %\par\end{centering}
-}
+%}
 %\par\end{centering}
 
 %\caption{SOM of the scanned bread images (classes $1$~--~$4$) and the non bread images (class $5$)}
@@ -417,10 +432,9 @@ The results found can be applied to validate synthetic samples, {\em i.e.}, the 
 %\label{fig:1}
 %\end{figure*}
 
-%\begin{acknowledgements}
-%If you'd like to thank anyone, place your comments here
-%and remove the percent signs.
-%\end{acknowledgements}
+\begin{acknowledgements}
+We would like to thank Gustavo Grieco and Pablo Speciale for technical discussions and for their support in the development of the present work. We would also like to thank Dra. Ursula Gonzales-Barron for the received images.
+\end{acknowledgements}
 
 % BibTeX users please use one of
 %\bibliographystyle{spbasic}      % basic style, author-year citations

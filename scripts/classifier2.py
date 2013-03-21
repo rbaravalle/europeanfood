@@ -40,7 +40,7 @@ def features(filename,i,j,combine,extra):
     #farr = [mfs.mfs, gradient.main]
     #farr = [mfs.mfs, gradient.main, laplacian.laplacian]
     #farr = [mfs.mfs, laplacian.laplacian]
-    #farr = [mfs.mfs]
+    farr = [mfs.mfs]
     #farr = [gradient.main]
     #farr = [efd.efd]
     #farr = [haralick]
@@ -50,7 +50,7 @@ def features(filename,i,j,combine,extra):
     t =  time.clock()
     # num of FDs , Open Image?,  convert to grayscale?, (cielab) use L,a,b?
     cantDF = 10
-    extra = [1,cantDF*2,3,False,True]
+    extra = [1,cantDF*2,3,True,True]
     res = farr[0](filename, extra)
     #res = farr[0](filename,extra)
     #res2 = farr[1](filename,extra)
@@ -154,50 +154,51 @@ def test(dtrain,labels,fileStxt, base, classifier):
 
 
 def main(subname,which,local,classifier):
+    fsize = 14
     base = subname+'C.txt'
     fileStxt = '../exps/'+subname+'S.txt'
     fileScsv = '../exps/'+subname+'S.csv'
     #fileCtxt = '../exps/'+base
     #fileCcsv = '../exps/'+subname+'C.csv'
-    cant = 20+1
-    dDFs  = 64
-    baguette = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-    salvado   = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-    lactal   = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-    sandwich = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
+    cant = 20
+    dDFs  = 20
+    baguette = np.zeros((cant, dDFs)).astype(np.float32)
+    salvado   = np.zeros((cant, dDFs)).astype(np.float32)
+    lactal   = np.zeros((cant, dDFs)).astype(np.float32)
+    sandwich = np.zeros((cant, dDFs)).astype(np.float32)
 
-    baguetteC = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-    salvadoC   = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-    lactalC   = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
-    sandwichC = [[np.float32(0) for j in range(dDFs)] for i in range(cant)]
+    baguetteC = np.zeros((cant, dDFs)).astype(np.float32)
+    salvadoC   = np.zeros((cant, dDFs)).astype(np.float32)
+    lactalC   = np.zeros((cant, dDFs)).astype(np.float32)
+    sandwichC = np.zeros((cant, dDFs)).astype(np.float32)
 
-    vfBaguette = [np.float32(0) for i in range(cant)]
-    vfBaguetteC = [np.float32(0) for i in range(cant)]
-    mcaBaguette = [np.float32(0) for i in range(cant)]
-    mcaBaguetteC = [np.float32(0) for i in range(cant)]
-    mcadvBaguette = [np.float32(0) for i in range(cant)]
-    mcadvBaguetteC = [np.float32(0) for i in range(cant)]
+    vfBaguette = np.zeros(cant).astype(np.float32)
+    vfBaguetteC = np.zeros(cant).astype(np.float32)
+    mcaBaguette = np.zeros(cant).astype(np.float32)
+    mcaBaguetteC = np.zeros(cant).astype(np.float32)
+    mcadvBaguette = np.zeros(cant).astype(np.float32)
+    mcadvBaguetteC = np.zeros(cant).astype(np.float32)
 
-    vfLactal = [np.float32(0) for i in range(cant)]
-    vfLactalC = [np.float32(0) for i in range(cant)]
-    mcaLactal = [np.float32(0) for i in range(cant)]
-    mcaLactalC = [np.float32(0) for i in range(cant)]
-    mcadvLactal = [np.float32(0) for i in range(cant)]
-    mcadvLactalC = [np.float32(0) for i in range(cant)]
+    vfLactal = np.zeros(cant).astype(np.float32)
+    vfLactalC = np.zeros(cant).astype(np.float32)
+    mcaLactal = np.zeros(cant).astype(np.float32)
+    mcaLactalC = np.zeros(cant).astype(np.float32)
+    mcadvLactal = np.zeros(cant).astype(np.float32)
+    mcadvLactalC = np.zeros(cant).astype(np.float32)
 
-    vfSalvado = [np.float32(0) for i in range(cant)]
-    vfSalvadoC = [np.float32(0) for i in range(cant)]
-    mcaSalvado = [np.float32(0) for i in range(cant)]
-    mcaSalvadoC = [np.float32(0) for i in range(cant)]
-    mcadvSalvado = [np.float32(0) for i in range(cant)]
-    mcadvSalvadoC = [np.float32(0) for i in range(cant)]
+    vfSalvado = np.zeros(cant).astype(np.float32)
+    vfSalvadoC = np.zeros(cant).astype(np.float32)
+    mcaSalvado = np.zeros(cant).astype(np.float32)
+    mcaSalvadoC = np.zeros(cant).astype(np.float32)
+    mcadvSalvado = np.zeros(cant).astype(np.float32)
+    mcadvSalvadoC = np.zeros(cant).astype(np.float32)
 
-    vfSandwich = [np.float32(0) for i in range(cant)]
-    vfSandwichC = [np.float32(0) for i in range(cant)]
-    mcaSandwich = [np.float32(0) for i in range(cant)]
-    mcaSandwichC = [np.float32(0) for i in range(cant)]
-    mcadvSandwich = [np.float32(0) for i in range(cant)]
-    mcadvSandwichC = [np.float32(0) for i in range(cant)]
+    vfSandwich = np.zeros(cant).astype(np.float32)
+    vfSandwichC = np.zeros(cant).astype(np.float32)
+    mcaSandwich = np.zeros(cant).astype(np.float32)
+    mcaSandwichC = np.zeros(cant).astype(np.float32)
+    mcadvSandwich = np.zeros(cant).astype(np.float32)
+    mcadvSandwichC = np.zeros(cant).astype(np.float32)
 
     path = '../images/nonbread/res/'
     dirList=os.listdir(path)
@@ -235,27 +236,27 @@ def main(subname,which,local,classifier):
                 break
 
 
-        for i in range(1,cant):
+        for i in range(cant):
             extra = [cantDF,40,1.15]
-            filename = '../images/scanner/baguette/baguette{}.tif'.format(i)
+            filename = '../images/scanner/baguette/baguette{}.tif'.format(i+1)
             print filename
             baguette[i] = callF(filename,which,extra)
             vfBaguette[i] = VF(filename,extra)
             mcaBaguette[i] = mca(filename,extra)[0]
             mcadvBaguette[i] = mca(filename,extra)[1]
-            filename = '../images/scanner/lactal/lactal{}.tif'.format(i)
+            filename = '../images/scanner/lactal/lactal{}.tif'.format(i+1)
             print filename
             lactal[i] = callF(filename,which,extra)
             vfLactal[i] = VF(filename,extra)
             mcaLactal[i] = mca(filename,extra)[0]
             mcadvLactal[i] = mca(filename,extra)[1]
-            filename = '../images/scanner/salvado/salvado{}.tif'.format(i)
+            filename = '../images/scanner/salvado/salvado{}.tif'.format(i+1)
             print filename
             salvado[i] = callF(filename,which,extra)
             vfSalvado[i] = VF(filename,extra)
             mcaSalvado[i] = mca(filename,extra)[0]
             mcadvSalvado[i] = mca(filename,extra)[1]
-            filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i)
+            filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i+1)
             print filename
             sandwich[i] = callF(filename,which,extra)
             vfSandwich[i] = VF(filename,extra)
@@ -263,56 +264,56 @@ def main(subname,which,local,classifier):
             mcadvSandwich[i] = mca(filename,extra)[1]
 
             extra = [cantDF,50,1]
-            filename = '../images/camera/baguette/slicer/b{}.tif'.format(i)
+            filename = '../images/camera/baguette/slicer/b{}.tif'.format(i+1)
             print filename
             baguetteC[i] = callF(filename,which,extra)
             vfBaguetteC[i] = VF(filename,extra)
             mcaBaguetteC[i] = mca(filename,extra)[0]
             mcadvBaguetteC[i] = mca(filename,extra)[1]
-            filename = '../images/camera/lactal/l{}.tif'.format(i)
+            filename = '../images/camera/lactal/l{}.tif'.format(i+1)
             print filename
             lactalC[i] = callF(filename,which,extra)
             vfLactalC[i] = VF(filename,extra)
             mcaLactalC[i] = mca(filename,extra)[0]
             mcadvLactalC[i] = mca(filename,extra)[1]
-            filename = '../images/camera/salvado/s{}.tif'.format(i)
+            filename = '../images/camera/salvado/s{}.tif'.format(i+1)
             print filename
             salvadoC[i] = callF(filename,which,extra)
             vfSalvadoC[i] = VF(filename,extra)
             mcaSalvadoC[i] = mca(filename,extra)[0]
             mcadvSalvadoC[i] = mca(filename,extra)[1]
-            filename = '../images/camera/sandwich/s{}.tif'.format(i)
+            filename = '../images/camera/sandwich/s{}.tif'.format(i+1)
             print filename
             sandwichC[i] = callF(filename,which,extra)
             vfSandwichC[i] = VF(filename,extra)
             mcaSandwichC[i] = mca(filename,extra)[0]
             mcadvSandwichC[i] = mca(filename,extra)[1]
 
-    data = baguette[1:]+ baguetteC[1:]+lactal[1:]+lactalC[1:]+salvado[1:]+salvadoC[1:]+sandwich[1:]+sandwichC[1:]+nonbread[0:(2*(cant-1))]
+    data = np.vstack((baguette, baguetteC,lactal,lactalC,salvado,salvadoC,sandwich,sandwichC,nonbread[0:(2*(cant))]))
 
 
-    dataB = np.array(baguette[1:]+ baguetteC[1:])
-    dataL = np.array(lactal[1:]+lactalC[1:])
-    dataSal = np.array(salvado[1:]+salvadoC[1:])
-    dataSan = np.array(sandwich[1:]+sandwichC[1:])
+    dataB = np.vstack((baguette, baguetteC))
+    dataL = np.vstack((lactal,lactalC))
+    dataSal = np.vstack((salvado,salvadoC))
+    dataSan = np.vstack((sandwich,sandwichC))
 
     # Void Fraction
-    arrB = np.array(vfBaguette[1:]+vfBaguetteC[1:])
-    arrL = np.array(vfLactal[1:]+vfLactalC[1:])
-    arrSal = np.array(vfSalvado[1:]+vfSalvadoC[1:])
-    arrSan = np.array(vfSandwich[1:]+vfSandwichC[1:])
+    arrB = np.hstack((vfBaguette,vfBaguetteC))
+    arrL = np.hstack((vfLactal,vfLactalC))
+    arrSal = np.hstack((vfSalvado,vfSalvadoC))
+    arrSan = np.hstack((vfSandwich,vfSandwichC))
 
     # Mean cell area
-    mcaB = np.array(mcaBaguette[1:]+mcaBaguetteC[1:])
-    mcaL = np.array(mcaLactal[1:]+mcaLactalC[1:])
-    mcaSal = np.array(mcaSalvado[1:]+mcaSalvadoC[1:])
-    mcaSan = np.array(mcaSandwich[1:]+mcaSandwichC[1:])
+    mcaB = np.hstack((mcaBaguette,mcaBaguetteC))
+    mcaL = np.hstack((mcaLactal,mcaLactalC))
+    mcaSal = np.hstack((mcaSalvado,mcaSalvadoC))
+    mcaSan = np.hstack((mcaSandwich,mcaSandwichC))
 
-    # Mean cell area
-    mcadvB = np.array(mcadvBaguette[1:]+mcadvBaguetteC[1:])
-    mcadvL = np.array(mcadvLactal[1:]+mcadvLactalC[1:])
-    mcadvSal = np.array(mcadvSalvado[1:]+mcadvSalvadoC[1:])
-    mcadvSan = np.array(mcadvSandwich[1:]+mcadvSandwichC[1:])
+    # stdev of Mean cell area
+    mcadvB = np.hstack((mcadvBaguette,mcadvBaguetteC))
+    mcadvL = np.hstack((mcadvLactal,mcadvLactalC))
+    mcadvSal = np.hstack((mcadvSalvado,mcadvSalvadoC))
+    mcadvSan = np.hstack((mcadvSandwich,mcadvSandwichC))
 
     # correlation coefficients
     cfeat = len(dataB[0])
@@ -330,10 +331,10 @@ def main(subname,which,local,classifier):
     cmcadvSal = np.zeros(cfeat)
     cmcadvSan = np.zeros(cfeat)
     print "Shapes:"
-    print cB.shape
+    print arrB.shape
     print dataB.shape
     for i in range(cfeat):
-        print i
+        #print i
         cB[i] = np.corrcoef(dataB[:,i],arrB)[0,1]
         cmcaB[i] = np.corrcoef(dataB[:,i],mcaB)[0,1]
         cmcadvB[i] = np.corrcoef(dataB[:,i],mcadvB)[0,1]
@@ -347,15 +348,6 @@ def main(subname,which,local,classifier):
         cmcaSan[i] = np.corrcoef(dataSan[:,i],mcaSan)[0,1]
         cmcadvSan[i] = np.corrcoef(dataSan[:,i],mcadvSan)[0,1]
 
-
-    #print "LO IMPORTANTE"
-    #print "FD 0: Baguette"
-    #print dataB[:,0]
-    #print "Void Fraction Baguette"
-    #print arrB
-    #x = np.arange(arrB.shape[0])
-    #plt.plot(x, dataB[:,0],'r',x,arrB)
-    #plt.show()
 
     print "Coefficients"
     print "VF Baguette"
@@ -384,31 +376,57 @@ def main(subname,which,local,classifier):
     print cmcadvSan
 
     x = np.arange(cfeat)
-    plt.plot(x, cB,'b',x, cL,'r',x,cSal,'g',x,cSan)
+    plt.ylabel(r'$R$',fontsize=fsize)
+    plt.xlabel('FD',fontsize=fsize)
+    plt.plot(x, cB, 'ko--', label='baguette')
+    plt.plot(x, cL, 'ro--',  label='lactal')
+    plt.plot(x, cSal, 'bo--',  label='bran')
+    plt.plot(x, cSan, 'go--',  label='sandwich')
+    plt.legend(loc = 4) # loc 4: bottom, right
+    plt.show()
+
+    plt.ylabel('MCA',fontsize=fsize)
+    plt.xlabel('FD',fontsize=fsize)
+    plt.plot(x, cmcaB, 'ko--', label='baguette')
+    plt.plot(x, cmcaL, 'ro--',  label='lactal')
+    plt.plot(x, cmcaSal, 'bo--',  label='bran')
+    plt.plot(x, cmcaSan, 'go--',  label='sandwich')
+    plt.legend(loc = 4) # loc 4: bottom, right
+    plt.show()
+
+    plt.ylabel('MCA stdev',fontsize=fsize)
+    plt.xlabel('FD',fontsize=fsize)
+    plt.plot(x, cmcadvB, 'ko--', label='baguette')
+    plt.plot(x, cmcadvL, 'ro--',  label='lactal')
+    plt.plot(x, cmcadvSal, 'bo--',  label='bran')
+    plt.plot(x, cmcadvSan, 'go--',  label='sandwich')
+    plt.legend(loc = 4) # loc 4: bottom, right
     plt.show()
 
     mean = np.zeros((4,cfeat))
     std = np.zeros((4,cfeat))
 
-    dataB = np.array(baguette[1:]+ baguetteC[1:])
     mean[0] = dataB.mean(axis=0)
     std[0] = dataB.std(axis=0)
 
-    dataL = np.array(lactal[1:]+lactalC[1:])
     mean[1] = dataL.mean(axis=0)
     std[1] = dataL.std(axis=0)
 
-    dataSal = np.array(salvado[1:]+salvadoC[1:])
     mean[2] = dataSal.mean(axis=0)
     std[2] = dataSal.std(axis=0)
 
-    dataSan = np.array(sandwich[1:]+sandwichC[1:])
     mean[3] = dataSan.mean(axis=0)
     std[3] = dataSan.std(axis=0)
 
     x = np.arange(cfeat)
-    #plt.plot(x, mean[0],'b',x, mean[1],'r',x,mean[2],'g',x,mean[3])
-    #plt.show()
+    plt.ylabel(r'$f(\alpha)$',fontsize=fsize)
+    plt.xlabel(r'$\alpha$',fontsize=fsize)
+    plt.plot(x, mean[0], 'ko--', label='baguette')
+    plt.plot(x, mean[1], 'ro--',  label='lactal')
+    plt.plot(x, mean[2], 'bo--',  label='salvado')
+    plt.plot(x, mean[3], 'go--',  label='sandwich')
+    plt.legend(loc = 4)
+    plt.show()
 
     print "Mean : ", mean[0]
     print "Std : ", std[0]
@@ -436,7 +454,7 @@ def main(subname,which,local,classifier):
     cmd = '{0} "{1}" > "{2}"'.format(prog, fileScsv, fileStxt)
     Popen(cmd, shell = True, stdout = PIPE).communicate()
     labels = [i for i in range(len(data))]
-    labels = map(lambda i: i/(2*(cant-1))+1, labels)
+    labels = map(lambda i: i/(2*(cant))+1, labels)
     test(data, labels, fileStxt, base,classifier)
 
 

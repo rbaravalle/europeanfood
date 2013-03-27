@@ -289,7 +289,6 @@ def rgb_to_cielab_i(I):
 
 # I: image
 # returns "L" data in the CIELab space from the image (tuple)
-import numpy as np
 def rgb_to_cielab_i_X(I,X):
     I2 = map(lambda i: i[0:3],I.getdata()) # rgb tuples
     return np.array(map(lambda i: np.uint32(i[X]),I2)).reshape(I.size)

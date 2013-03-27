@@ -263,7 +263,7 @@ def main(subname,which,local,classifier):
             mcaSandwich[i] = mca(filename,extra)[0]
             mcadvSandwich[i] = mca(filename,extra)[1]
 
-            extra = [cantDF,50,1]
+            extra = [cantDF,40,1]
             filename = '../images/camera/baguette/slicer/b{}.tif'.format(i+1)
             print filename
             baguetteC[i] = callF(filename,which,extra)
@@ -296,24 +296,28 @@ def main(subname,which,local,classifier):
     dataL = np.vstack((lactal,lactalC))
     dataSal = np.vstack((salvado,salvadoC))
     dataSan = np.vstack((sandwich,sandwichC))
+    dataTodos = np.vstack((dataB,dataL,dataSal,dataSan))
 
     # Void Fraction
     arrB = np.hstack((vfBaguette,vfBaguetteC))
     arrL = np.hstack((vfLactal,vfLactalC))
     arrSal = np.hstack((vfSalvado,vfSalvadoC))
     arrSan = np.hstack((vfSandwich,vfSandwichC))
+    arrTodos = np.hstack((arrB,arrL,arrSal,arrSan))
 
     # Mean cell area
     mcaB = np.hstack((mcaBaguette,mcaBaguetteC))
     mcaL = np.hstack((mcaLactal,mcaLactalC))
     mcaSal = np.hstack((mcaSalvado,mcaSalvadoC))
     mcaSan = np.hstack((mcaSandwich,mcaSandwichC))
+    mcaTodos = np.hstack((mcaB,mcaL,mcaSal,mcaSan))
 
     # stdev of Mean cell area
     mcadvB = np.hstack((mcadvBaguette,mcadvBaguetteC))
     mcadvL = np.hstack((mcadvLactal,mcadvLactalC))
     mcadvSal = np.hstack((mcadvSalvado,mcadvSalvadoC))
     mcadvSan = np.hstack((mcadvSandwich,mcadvSandwichC))
+    mcadvTodos = np.hstack((mcadvB,mcadvL,mcadvSal,mcadvSan))
 
     # correlation coefficients
     cfeat = len(dataB[0])
@@ -322,17 +326,20 @@ def main(subname,which,local,classifier):
     cL = np.zeros(cfeat)
     cSal = np.zeros(cfeat)
     cSan = np.zeros(cfeat)
+    cTodos = np.zeros(cfeat)
     cmcaB = np.zeros(cfeat)
     cmcaL = np.zeros(cfeat)
     cmcaSal = np.zeros(cfeat)
     cmcaSan = np.zeros(cfeat)
+    cmcaTodos = np.zeros(cfeat)
     cmcadvB = np.zeros(cfeat)
     cmcadvL = np.zeros(cfeat)
     cmcadvSal = np.zeros(cfeat)
     cmcadvSan = np.zeros(cfeat)
+    cmcadvTodos = np.zeros(cfeat)
     print "Shapes:"
-    print arrB.shape
-    print dataB.shape
+    print arrTodos.shape
+    print dataTodos.shape
     for i in range(cfeat):
         #print i
         cB[i] = np.corrcoef(dataB[:,i],arrB)[0,1]
@@ -347,6 +354,9 @@ def main(subname,which,local,classifier):
         cSan[i] = np.corrcoef(dataSan[:,i],arrSan)[0,1]
         cmcaSan[i] = np.corrcoef(dataSan[:,i],mcaSan)[0,1]
         cmcadvSan[i] = np.corrcoef(dataSan[:,i],mcadvSan)[0,1]
+        cTodos[i] = np.corrcoef(dataTodos[:,i],arrTodos)[0,1]
+        cmcaTodos[i] = np.corrcoef(dataTodos[:,i],mcaTodos)[0,1]
+        cmcadvTodos[i] = np.corrcoef(dataTodos[:,i],mcadvTodos)[0,1]
 
 
     print "Coefficients"
@@ -374,37 +384,16 @@ def main(subname,which,local,classifier):
     print cmcaSan
     print "stdev MCA Sandwich"
     print cmcadvSan
+    print "VF Todos"
+    print cTodos
+    print "MCA Todos"
+    print cmcaTodos
+    print "stdev MCA Todos"
+    print cmcadvTodos
 
-    x = np.arange(cfeat)
-    plt.ylabel(r'$R$',fontsize=fsize)
-    plt.xlabel('FD',fontsize=fsize)
-    plt.plot(x, cB, 'ko--', label='baguette')
-    plt.plot(x, cL, 'ro--',  label='lactal')
-    plt.plot(x, cSal, 'bo--',  label='bran')
-    plt.plot(x, cSan, 'go--',  label='sandwich')
-    plt.legend(loc = 4) # loc 4: bottom, right
-    plt.show()
 
-    plt.ylabel('MCA',fontsize=fsize)
-    plt.xlabel('FD',fontsize=fsize)
-    plt.plot(x, cmcaB, 'ko--', label='baguette')
-    plt.plot(x, cmcaL, 'ro--',  label='lactal')
-    plt.plot(x, cmcaSal, 'bo--',  label='bran')
-    plt.plot(x, cmcaSan, 'go--',  label='sandwich')
-    plt.legend(loc = 4) # loc 4: bottom, right
-    plt.show()
-
-    plt.ylabel('MCA stdev',fontsize=fsize)
-    plt.xlabel('FD',fontsize=fsize)
-    plt.plot(x, cmcadvB, 'ko--', label='baguette')
-    plt.plot(x, cmcadvL, 'ro--',  label='lactal')
-    plt.plot(x, cmcadvSal, 'bo--',  label='bran')
-    plt.plot(x, cmcadvSan, 'go--',  label='sandwich')
-    plt.legend(loc = 4) # loc 4: bottom, right
-    plt.show()
-
-    mean = np.zeros((4,cfeat))
-    std = np.zeros((4,cfeat))
+    mean = np.zeros((5,cfeat))
+    std = np.zeros((5,cfeat))
 
     mean[0] = dataB.mean(axis=0)
     std[0] = dataB.std(axis=0)
@@ -418,15 +407,9 @@ def main(subname,which,local,classifier):
     mean[3] = dataSan.mean(axis=0)
     std[3] = dataSan.std(axis=0)
 
-    x = np.arange(cfeat)
-    plt.ylabel(r'$f(\alpha)$',fontsize=fsize)
-    plt.xlabel(r'$\alpha$',fontsize=fsize)
-    plt.plot(x, mean[0], 'ko--', label='baguette')
-    plt.plot(x, mean[1], 'ro--',  label='lactal')
-    plt.plot(x, mean[2], 'bo--',  label='salvado')
-    plt.plot(x, mean[3], 'go--',  label='sandwich')
-    plt.legend(loc = 4)
-    plt.show()
+    mean[4] = dataTodos.mean(axis=0)
+    std[4] = dataTodos.std(axis=0)
+
 
     print "Mean : ", mean[0]
     print "Std : ", std[0]
@@ -436,6 +419,51 @@ def main(subname,which,local,classifier):
     print "Std : ", std[2]
     print "Mean : ", mean[3]
     print "Std : ", std[3]
+    print "Mean : ", mean[4]
+    print "Std : ", std[4]
+
+    x = np.arange(cfeat)
+    plt.ylabel(r'$R$',fontsize=fsize)
+    plt.xlabel('FD',fontsize=fsize)
+    plt.plot(x, cB, 'k+--', label='baguette',linewidth=2.0)
+    plt.plot(x, cL, 'r*--',  label='lactal',linewidth=2.0)
+    plt.plot(x, cSal, 'bx--',  label='bran',linewidth=2.0)
+    plt.plot(x, cSan, 'go--',  label='sandwich',linewidth=2.0)
+    plt.plot(x, cTodos, 'mo--',  label='todos',linewidth=2.0)
+    plt.legend(loc = 2) # loc 4: bottom, right
+    plt.show()
+
+    plt.ylabel(r'$R$',fontsize=fsize)
+    plt.xlabel('FD',fontsize=fsize)
+    plt.plot(x, cmcaB, 'k+--', label='baguette',linewidth=2.0)
+    plt.plot(x, cmcaL, 'r*--',  label='lactal',linewidth=2.0)
+    plt.plot(x, cmcaSal, 'bx--',  label='bran',linewidth=2.0)
+    plt.plot(x, cmcaSan, 'go--',  label='sandwich',linewidth=2.0)
+    plt.plot(x, cmcaTodos, 'mo--',  label='todos',linewidth=2.0)
+    plt.legend(loc = 2) # loc 4: bottom, right
+    plt.show()
+
+    plt.ylabel(r'$R$',fontsize=fsize)
+    plt.xlabel('FD',fontsize=fsize)
+    plt.plot(x, cmcadvB, 'k+--', label='baguette',linewidth=2.0)
+    plt.plot(x, cmcadvL, 'r*--',  label='lactal',linewidth=2.0)
+    plt.plot(x, cmcadvSal, 'bx--',  label='bran',linewidth=2.0)
+    plt.plot(x, cmcadvSan, 'go--',  label='sandwich',linewidth=2.0)
+    plt.plot(x, cmcadvTodos, 'mo--',  label='todos',linewidth=2.0)
+    plt.legend(loc = 2) # loc 4: bottom, right
+    plt.show()
+
+    x = np.arange(cfeat)
+    plt.ylabel(r'$f(\alpha)$',fontsize=fsize)
+    plt.xlabel('FD',fontsize=fsize)
+    plt.plot(x, mean[0], 'k+--', label='baguette',linewidth=2.0)
+    plt.plot(x, mean[1], 'r*--',  label='lactal',linewidth=2.0)
+    plt.plot(x, mean[2], 'bx--',  label='bran',linewidth=2.0)
+    plt.plot(x, mean[3], 'go--',  label='sandwich',linewidth=2.0)
+    plt.plot(x, mean[4], 'mo--',  label='todos',linewidth=2.0)
+    plt.legend(loc = 2)
+    plt.show()
+
     with open('means.csv', 'wb') as f:
         writer = csv.writer(f)
         writer.writerows(mean)
@@ -445,17 +473,27 @@ def main(subname,which,local,classifier):
         writer.writerows(std)
 
 
-    print "200?: ", len(data)
-    with open(fileScsv, 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(data)
-
     prog = './clas2' # convert.c
     cmd = '{0} "{1}" > "{2}"'.format(prog, fileScsv, fileStxt)
     Popen(cmd, shell = True, stdout = PIPE).communicate()
-    labels = [i for i in range(len(data))]
+    #labels = [i for i in range(len(data))]
+    labels = np.zeros((len(data),1))
+    for i in range(len(data)):
+        labels[i] = i
     labels = map(lambda i: i/(2*(cant))+1, labels)
-    test(data, labels, fileStxt, base,classifier)
+
+    print "200?: ", len(data)
+    print labels
+    labels = np.array(labels)
+    print data
+    #print "Labels shape: ", labels.shape
+    #print "data shape: ", data.shape
+    data2 = np.hstack((labels,data))
+    with open(fileScsv, 'wb') as f:
+        writer = csv.writer(f)
+        writer.writerows(data2)
+
+    #test(data, labels, fileStxt, base,classifier)
 
 
 # SIFT BoW

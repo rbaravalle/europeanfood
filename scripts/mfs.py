@@ -69,10 +69,11 @@ def mfs(im,extra):
     # Extra[3] == False means what we are passing is an array
     FILENAME = extra[3]
     if(FILENAME):
-        im = Image.open(im)        
+        im = Image.open(im)
         # Preprocessing: if IM is a color image convert it to a gray image 
         im = im.convert("L")
         im = np.array(im.getdata()).reshape(im.size)
+
 
     #Using [0..255] to denote the intensity profile of the image
     grayscale_box =[0, 255];
@@ -80,7 +81,6 @@ def mfs(im,extra):
     #Preprocessing: default intensity value of image ranges from 0 to 255
     if(abs(im).max()< 1):
         im = im * grayscale_box[1];
-    
     
     #######################
 
@@ -128,8 +128,6 @@ def mfs(im,extra):
         D = grayscale_box[1]*(D-min_D)/(max_D - min_D)+grayscale_box[0]
     else:
         D = im
-
-
 
     #Partition the density
     # throw away the boundary

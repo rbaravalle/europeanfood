@@ -1,0 +1,63 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{DOI \discretionary{}{}{}#1}\else
+  \providecommand{\doi}{DOI \discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+
+\bibitem{Andjelkovic2008}
+J.~Andjelkovic, N.~Zivic, B.~Reljin, V.~Celebic, I.~Salom, in \emph{Proceedings
+  of the 8th conference on Signal, Speech and image processing} (World
+  Scientific and Engineering Academy and Society (WSEAS), Stevens Point,
+  Wisconsin, USA, 2008), SSIP'08, pp. 88--92
+
+\bibitem{Yu2011}
+L.~Yu, D.~Qi, in \emph{Control and Decision Conference (CCDC), 2011 Chinese}
+  (2011), pp. 2040 --2045
+
+\bibitem{Wendt2009}
+H.~Wendt, P.~Abry, S.~Jaffard, H.~Ji, Z.~Shen, in \emph{16th IEEE International
+  Conference Image Processing (ICIP)} (2009), pp. 3829 --3832
+
+\bibitem{Fan2006}
+Y.~Fan, H.~Zhang, in \emph{Mechatronics and Automation, Proceedings of the 2006
+  IEEE International Conference on} (2006), pp. 1498 --1502
+
+\bibitem{Gonzales2008}
+U.~Gonzales-Barron, F.~Butler, European Food Research and Technology
+  \textbf{226}, 721 (2008).
+\newblock 10.1007/s00217-007-0582-3
+
+\bibitem{Xu2006}
+Y.~Xu, H.~Ji, C.~Fermuller, in \emph{Computer Vision and Pattern Recognition,
+  2006 IEEE Computer Society Conference on}, vol.~2. vol.~2, pp. 1932--1939
+
+\bibitem{Peitgen2004}
+H.O. Peitgen, H.~J\"{u}rgens, D.~Saupe,   (2004)
+
+\bibitem{Mandelbrot89}
+B.B. {Mandelbrot}, Pure and Applied Geophysics \textbf{131}, 5 (1989)
+
+\bibitem{Silvetti2010}
+S.~A., D.~C.,  (2010), Actas de la trig\'esimo novena Jornada Argentina de
+  Inform\'atica e Investigaci\'on Operativa (JAIIO), pp. 1575 -- 1581
+
+\bibitem{Falconer97}
+K.J. Falconer, \emph{Techniques in Fractal Geometry} (John Wiley, 1997)
+
+\bibitem{FeiFei04}
+L.~Fei-Fei, R.~Fergus, P.~Perona, in \emph{Proceedings of the Workshop on
+  Generative-Model Based Vision} (Washington, DC, 2004)
+
+\bibitem{White83}
+J.M. White, G.D. Rohrer, IBM J. Res. Dev. \textbf{27}(4), 400 (1983)
+
+\bibitem{Huang95}
+L.K. Huang, M.J.J. Wang, Pattern Recognition \textbf{28}(1), 41  (1995)
+
+\bibitem{Chang2011}
+C.C. Chang, C.J. Lin, ACM Transactions on Intelligent Systems and Technology
+  \textbf{2}, 27:1 (2011)
+
+\end{thebibliography}

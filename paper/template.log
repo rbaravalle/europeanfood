@@ -1,0 +1,396 @@
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.3.4)  27 MAR 2013 15:15
+entering extended mode
+ %&-line parsing enabled.
+**template.tex
+(./template.tex
+LaTeX2e <2009/09/24>
+Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, loaded.
+
+LaTeX Warning: File `example.eps' already exists on the system.
+               Not generating it from this source.
+
+(/usr/share/texmf-texlive/tex/latex/base/fix-cm.sty
+Package: fix-cm 2006/09/13 v1.1m fixes to LaTeX
+
+(/usr/share/texmf-texlive/tex/latex/base/ts1enc.def
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+)) (./svjour3.cls
+Document Class: svjour3 2007/05/08 v3.2 
+LaTeX document class for Springer journals
+(/usr/share/texmf-texlive/tex/latex/base/fleqn.clo
+File: fleqn.clo 1998/08/17 v1.1c Standard LaTeX option (flush left equations)
+\mathindent=\dimen102
+)
+Class Springer-SVJour3 Info: extra/valid Springer sub-package (-> *.clo) 
+(Springer-SVJour3)           not found in option list of \documentclass
+(Springer-SVJour3)           - autoactivating "global" style.
+ (./svglov3.clo
+File: svglov3.clo 2009/12/18 v3.2 style option for standardised journals
+
+SVJour Class option: svglov3.clo for standardised journals
+)
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 147.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 148.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 149.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 150.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 151.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 152.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 153.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 154.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 155.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 156.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 157.
+\logodepth=\dimen103
+\headerboxheight=\dimen104
+\betweenumberspace=\dimen105
+\aftertext=\dimen106
+\headlineindent=\dimen107
+\c@inst=\count79
+\c@auth=\count80
+\instindent=\dimen108
+\authrun=\box26
+\authorrunning=\toks14
+\titrun=\box27
+\titlerunning=\toks15
+\combirun=\box28
+\c@lastpage=\count81
+\rubricwidth=\dimen109
+\c@section=\count82
+\c@subsection=\count83
+\c@subsubsection=\count84
+\c@paragraph=\count85
+\c@subparagraph=\count86
+\spthmsep=\dimen110
+\c@theorem=\count87
+\c@case=\count88
+\c@conjecture=\count89
+\c@corollary=\count90
+\c@definition=\count91
+\c@example=\count92
+\c@exercise=\count93
+\c@lemma=\count94
+\c@note=\count95
+\c@problem=\count96
+\c@property=\count97
+\c@proposition=\count98
+\c@question=\count99
+\c@solution=\count100
+\c@remark=\count101
+\c@figure=\count102
+\c@table=\count103
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\figcapgap=\dimen111
+\tabcapgap=\dimen112
+\figgap=\dimen113
+\bibindent=\dimen114
+\@tempcntc=\count104
+) (/usr/share/texmf-texlive/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-texlive/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks16
+)
+(/usr/share/texmf-texlive/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-texlive/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/etc/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2009/08/28 v1.8 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/usr/share/texmf-texlive/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2010/03/12 v0.04p Graphics/color for pdfTeX
+\Gread@gobject=\count105
+))
+\Gin@req@height=\dimen115
+\Gin@req@width=\dimen116
+)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2009/06/22 v3.00
+
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2009/06/22 v3.00 Basic AMSFonts support
+\@emptytoks=\toks17
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 96.
+)) (./template.aux
+
+LaTeX Warning: Label `sec:11' multiply defined.
+
+)
+\openout1 = `template.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+
+Unknown journal: specify \journalname{<name of your journal>} in preambel
+
+(/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count106
+\scratchdimen=\dimen117
+\scratchbox=\box29
+\nofMPsegments=\count107
+\nofMParguments=\count108
+\everyMPshowfont=\toks18
+\MPscratchCnt=\count109
+\MPscratchDim=\dimen118
+\MPnumerator=\count110
+\everyMPtoPDFconversion=\toks19
+)
+SVJour3 warning: Missing \journalname
+LaTeX Font Info:    Try loading font information for U+msa on input line 98.
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2009/06/22 v3.00 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 98.
+
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2009/06/22 v3.00 AMS symbols B
+)
+LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 98.
+
+Overfull \hbox (1.31407pt too wide) in paragraph at lines 102--104
+\OT1/cmr/m/n/10 im-ages for photo-realistic ren-der-ing, and eval-u-at-ing sim-
+
+ []
+
+
+Overfull \hbox (10.31407pt too wide) in paragraph at lines 119--120
+[]\OT1/cmr/m/n/10 Fractal and mul-ti-frac-tal anal-y-sis of im-ages have proved
+
+ []
+
+[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+
+
+]
+
+LaTeX Warning: Citation `bilipXXX' on page 2 undefined on input line 123.
+
+
+Overfull \hbox (6.3556pt too wide) in paragraph at lines 123--124
+\OT1/cmr/m/n/10 Lipschitz in-vari-ance [\OT1/cmr/bx/n/10 ?\OT1/cmr/m/n/10 ], wh
+ich in-cludes per-spec-tive trans-
+ []
+
+[2]
+Missing character: There is no Î in font cmr10!
+Missing character: There is no ¼ in font cmr10!
+ <../images/baguette20.jpg, id=21, 78.46457pt x 78.46457pt>
+File: ../images/baguette20.jpg Graphic file (type jpg)
+
+<use ../images/baguette20.jpg>
+<../images/lactal14.jpg, id=22, 78.46457pt x 78.46457pt>
+File: ../images/lactal14.jpg Graphic file (type jpg)
+
+<use ../images/lactal14.jpg>
+<../images/salvado43.jpg, id=23, 78.46457pt x 78.46457pt>
+File: ../images/salvado43.jpg Graphic file (type jpg)
+
+<use ../images/salvado43.jpg>
+<../images/sandwich43.jpg, id=24, 78.46457pt x 78.46457pt>
+File: ../images/sandwich43.jpg Graphic file (type jpg)
+
+<use ../images/sandwich43.jpg>
+<../images/baguette20bin.jpg, id=25, 382.42876pt x 382.42876pt>
+File: ../images/baguette20bin.jpg Graphic file (type jpg)
+
+<use ../images/baguette20bin.jpg>
+<../images/lactal14bin.png, id=26, 305.14pt x 305.14pt>
+File: ../images/lactal14bin.png Graphic file (type png)
+
+<use ../images/lactal14bin.png>
+<../images/salvado43bin.png, id=27, 305.14pt x 305.14pt>
+File: ../images/salvado43bin.png Graphic file (type png)
+
+<use ../images/salvado43bin.png>
+<../images/sandwich43bin.png, id=28, 305.14pt x 305.14pt>
+File: ../images/sandwich43bin.png Graphic file (type png)
+
+<use ../images/sandwich43bin.png>
+<../images/caltech/image_0066.jpg, id=29, 381.425pt x 381.425pt>
+File: ../images/caltech/image_0066.jpg Graphic file (type jpg)
+
+<use ../images/caltech/image_0066.jpg>
+<../images/caltech/image_0083.jpg, id=30, 381.425pt x 381.425pt>
+File: ../images/caltech/image_0083.jpg Graphic file (type jpg)
+
+<use ../images/caltech/image_0083.jpg>
+<../images/caltech/image_0284.jpg, id=31, 381.425pt x 381.425pt>
+File: ../images/caltech/image_0284.jpg Graphic file (type jpg)
+
+<use ../images/caltech/image_0284.jpg>
+<../images/caltech/image_0300.jpg, id=32, 381.425pt x 381.425pt>
+File: ../images/caltech/image_0300.jpg Graphic file (type jpg)
+
+<use ../images/caltech/image_0300.jpg>
+<../images/camera/b16.png, id=33, 78.46457pt x 78.46457pt>
+File: ../images/camera/b16.png Graphic file (type png)
+
+<use ../images/camera/b16.png>
+<../images/camera/l19.png, id=35, 381.425pt x 381.425pt>
+File: ../images/camera/l19.png Graphic file (type png)
+
+<use ../images/camera/l19.png>
+<../images/camera/s7.png, id=36, 381.425pt x 381.425pt>
+File: ../images/camera/s7.png Graphic file (type png)
+
+<use ../images/camera/s7.png>
+<../images/camera/Sa14.png, id=37, 381.425pt x 381.425pt>
+File: ../images/camera/Sa14.png Graphic file (type png)
+
+<use ../images/camera/Sa14.png>
+Underfull \vbox (badness 1297) has occurred while \output is active []
+
+ [3]
+Overfull \hbox (1.25845pt too wide) in paragraph at lines 342--343
+\OT1/cmr/m/n/10 method, a clas-si-fi-ca-tion ex-per-i-ment is made. Five classe
+s
+ []
+
+[4 <../images/baguette20.jpg> <../images/lactal14.jpg> <../images/salvado43.jpg
+> <../images/sandwich43.jpg> <../images/baguette20bin.jpg> <../images/lactal14b
+in.png (PNG copy)> <../images/salvado43bin.png (PNG copy)> <../images/sandwich4
+3bin.png (PNG copy)> <../images/caltech/image_0066.jpg> <../images/caltech/imag
+e_0083.jpg> <../images/caltech/image_0284.jpg> <../images/caltech/image_0300.jp
+g> <../images/camera/b16.png> <../images/camera/l19.png> <../images/camera/s7.p
+ng> <../images/camera/Sa14.png>]
+<../images/means.png, id=50, 586.8324pt x 442.2924pt>
+File: ../images/means.png Graphic file (type png)
+
+<use ../images/means.png>
+
+LaTeX Warning: Reference `tab:4' on page 5 undefined on input line 415.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+<../images/vf.png, id=51, 586.8324pt x 442.2924pt>
+File: ../images/vf.png Graphic file (type png)
+ <use ../images/vf.png>
+<../images/vf105.png, id=52, 586.8324pt x 442.2924pt>
+File: ../images/vf105.png Graphic file (type png)
+
+<use ../images/vf105.png>
+<../images/vf40_105.png, id=53, 586.8324pt x 442.2924pt>
+File: ../images/vf40_105.png Graphic file (type png)
+
+<use ../images/vf40_105.png>
+<../images/vf40_110.png, id=54, 586.8324pt x 442.2924pt>
+File: ../images/vf40_110.png Graphic file (type png)
+
+<use ../images/vf40_110.png>
+<../images/mca.png, id=55, 586.8324pt x 442.2924pt>
+File: ../images/mca.png Graphic file (type png)
+ <use ../images/mca.png>
+<../images/mca105.png, id=56, 586.8324pt x 442.2924pt>
+File: ../images/mca105.png Graphic file (type png)
+
+<use ../images/mca105.png>
+<../images/mca40_105.png, id=57, 586.8324pt x 442.2924pt>
+File: ../images/mca40_105.png Graphic file (type png)
+
+<use ../images/mca40_105.png>
+<../images/mca40_110.png, id=58, 586.8324pt x 442.2924pt>
+File: ../images/mca40_110.png Graphic file (type png)
+
+<use ../images/mca40_110.png>
+<../images/mcastdev.png, id=59, 586.8324pt x 442.2924pt>
+File: ../images/mcastdev.png Graphic file (type png)
+
+<use ../images/mcastdev.png>
+<../images/mcastdev105.png, id=60, 586.8324pt x 442.2924pt>
+File: ../images/mcastdev105.png Graphic file (type png)
+
+<use ../images/mcastdev105.png>
+<../images/mcastdev40_105.png, id=61, 586.8324pt x 442.2924pt>
+File: ../images/mcastdev40_105.png Graphic file (type png)
+
+<use ../images/mcastdev40_105.png>
+<../images/mcastdev40_110.png, id=62, 586.8324pt x 442.2924pt>
+File: ../images/mcastdev40_110.png Graphic file (type png)
+
+<use ../images/mcastdev40_110.png>
+Overfull \hbox (1.86958pt too wide) in paragraph at lines 469--470
+\OT1/cmr/m/n/10 The vi-sual ap-pear-ance of dif-fer-ent types of bread crumbs
+ []
+
+
+Overfull \hbox (1.20192pt too wide) in paragraph at lines 469--470
+\OT1/cmr/m/n/10 ob-tained from the MFS method method neg-a-tively mea-
+ []
+
+[5]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (2.89339pt too wide) in paragraph at lines 484--485
+[]\OT1/cmr/m/n/8.5 We would like to thank Gus-tavo Grieco
+ []
+
+(./template.bbl
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [6 <../images/means.png> <../images/vf.png> <../images/vf105.png> <../images/v
+f40_105.png> <../images/vf40_110.png>]) [7 <../images/mca.png> <../images/mca10
+5.png> <../images/mca40_105.png> <../images/mca40_110.png>] [8 <../images/mcast
+dev.png> <../images/mcastdev105.png> <../images/mcastdev40_105.png> <../images/
+mcastdev40_110.png>] (./template.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 2122 strings out of 495061
+ 30551 string characters out of 1182622
+ 79383 words of memory out of 3000000
+ 5274 multiletter control sequences out of 15000+50000
+ 14321 words of font info for 54 fonts, out of 3000000 for 9000
+ 28 hyphenation exceptions out of 8191
+ 27i,8n,33p,1110b,295s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/sh
+are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-t
+exlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/font
+s/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-texlive/fonts/type1/publ
+ic/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
+/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.p
+fb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/sha
+re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-tex
+live/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-texlive/fonts/ty
+pe1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/am
+sfonts/cm/cmr8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cms
+y10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pfb></us
+r/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/tex
+mf-texlive/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/share/texmf-texlive/f
+onts/type1/public/amsfonts/symbols/msam10.pfb>
+Output written on template.pdf (8 pages, 2620267 bytes).
+PDF statistics:
+ 144 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 146 words of extra memory for PDF output out of 10000 (max. 10000000)
+

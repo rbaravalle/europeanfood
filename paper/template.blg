@@ -1,0 +1,55 @@
+This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+The top-level auxiliary file: template.aux
+The style file: spphys.bst
+Database file #1: bibliografia/bibliografia.bib
+You're missing a field name---line 333 of file bibliografia/bibliografia.bib
+ :   
+ :   %pages = {21 -- 26},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Warning--I didn't find a database entry for "bilipXXX"
+Warning--empty year in Xu2006
+Warning--empty journal in Peitgen2004
+Warning--empty booktitle in Silvetti2010
+You've used 14 entries,
+            2812 wiz_defined-function locations,
+            699 strings with 7087 characters,
+and the built_in function-call counts, 8993 in all, are:
+= -- 1024
+> -- 119
+< -- 8
++ -- 93
+- -- 35
+* -- 367
+:= -- 709
+add.period$ -- 2
+call.type$ -- 14
+change.case$ -- 1
+chr.to.int$ -- 0
+cite$ -- 17
+duplicate$ -- 1083
+empty$ -- 679
+format.name$ -- 47
+if$ -- 2015
+int.to.chr$ -- 0
+int.to.str$ -- 14
+missing$ -- 133
+newline$ -- 51
+num.names$ -- 14
+pop$ -- 447
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 587
+stack$ -- 0
+substring$ -- 451
+swap$ -- 898
+text.length$ -- 8
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 3
+while$ -- 39
+width$ -- 16
+write$ -- 118
+(There was 1 error message)

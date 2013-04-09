@@ -132,7 +132,7 @@ In section 2 the theory underlying fractal sets is introduced, and the materials
 \subsection{Fractals and Multifractals}
 \label{sec:2}
 
-Fractal objects have the property of self-similarity (the appearance is independent of scale), and are characterized by a non-integer dimension. Multifractal formalisms decompose structures into fractal sets, each of them characterized by a different FD. The result is a vector containing several FDs. The multifractal approach characterizes better the objects than the fractal one, since it captures variations in local regions.
+The term {\em Fractal} was first employed by the mathematician Mandelbrot in \cite{Mandelbrot83}. Fractal objects have the property of self-similarity (the structure is repeated at different scales), and they are characterized by a non-integer dimension. Multifractal formalisms decompose structures into fractal sets, each of them characterized by a different FD. The result is a vector containing several FDs. The multifractal approach characterizes better the objects than the fractal one, since it captures more accurately variations in local regions.
 
 %as required. Don't forget to give each section
 %and subsection a unique label (see Sect.~\ref{sec:1}).
@@ -179,21 +179,21 @@ Fractal objects have the property of self-similarity (the appearance is independ
 
 \subsubsection{Box dimension}
 \label{sec:3}
-Box FD is a simplification of the Hausdorff (originally Minkowski - Bouligand) dimension for non strictly self-similar objects \cite{Peitgen2004}. Given a binarised image, it is subdivided in a grid of size $M\times M$ where the side of each box formed is $\epsilon$. If $N_{\epsilon}$ represents the amount of boxes that contains at least one pixel in the binarisation of the set for that $\epsilon$, then the box dimension  $D_{b}$ is defined as
+Mathematical objects such as the Koch curve and the Sierpinsky triangle have exact self-similarity. Natural phenomena, on the other hand, is better described by statistical self-similarity. Box FD is a simplification of the Hausdorff (originally Minkowski - Bouligand) dimension for non strictly self-similar objects \cite{Peitgen2004}. Given a binarised image, it is subdivided in a grid of size $M\times M$ where the side of each box formed is $\epsilon$. If $N_{\epsilon}$ represents the amount of boxes that contains at least one pixel in the binarisation of the set for that $\epsilon$, then the box dimension  $D_{b}$ is defined as
 
 \begin{equation}
 D_{b} \triangleq \displaystyle\lim_{\epsilon \to 0}{\frac{\log(N_{\epsilon})}{\log (1/\epsilon)}}.
 \label{eqn:1}
 \end{equation}
 
-The algorithm computes a binarised image from the original one and then selects different values of $\epsilon$ in it, making a count of the boxes that contains pixels in each case (to avoid numerical instabilities, a mean of cases is computed, establishing different positions in the grid over the image). Finally, a linear regression adjustment is made with the obtained data, in the $\log-\log$ space, and the slope of the straight line is by definition the box dimension of the image. %In Fig. \ref{fig:1} an image of the bread type {\em salvado} is shown with its corresponding box dimension computation.
+The algorithm uses a binarised image and selects different values of $\epsilon$ in it, making a count of the boxes that contains pixels in each case (to avoid numerical instabilities, a mean of cases is computed, establishing different positions in the grid over the image). Finally, a linear regression adjustment is made with the obtained data, in the $\log-\log$ space, and the slope of the straight line is by definition the box dimension of the image. %In Fig. \ref{fig:1} an image of the bread type {\em salvado} is shown with its corresponding box dimension computation.
 
 
 \subsection{Multifractal analysis}
 \label{sec:4}
-Some elements in nature show fractal features or auto similarity. The fractal dimension is an exponent which relates the statistical auto similarity of the object at different scales. On the one hand, deterministic fractals are characterized by the same FD at all scales. They are called {\em monofractals} (for instance, Koch Curve, Sierpinsky triangle). On the other hand, {\em multifractals} \cite{Mandelbrot89} are characterized by a set of FDs depending on the scale. It is assumed that these structures are composed by different fractals coexisting simultaneously.
+The fractal dimension is an exponent which relates the statistical self similarity of the object at different scales. On the one hand, deterministic fractals are characterized by one FD. They are called {\em monofractals} (for instance, Koch Curve, Sierpinsky triangle). On the other hand, {\em multifractals} \cite{Mandelbrot89} are characterized by a set of FDs. It is assumed that these structures are composed by different fractals coexisting simultaneously.
 
-\subsubsection{H\"older exponent}
+\subsubsection{MFS and the H\"older exponent}
 \label{sec:5}
 Informally, the way to proceed with multifractal analysis is to examine, in the limit, the local behavior of a measure $\mu$ at each point of the set under study. This means, to find the H\"older exponent $\alpha$ in that point. The {\em multifractal spectrum} $f(\alpha)$ is obtained applying this procedure to the entire set, in this case, an image.
 
@@ -253,11 +253,11 @@ where
 \label{eqn:eqn10}
 \end{equation}
 
-Using equations \ref{eqn:eqn7} and \ref{eqn:eqn8} the MFS is estimated. In this paper, the author's implementation, with the default parameters (except for the number of FDs) is used.
+The $f(\alpha)$ spectrum (MFS) and the generalized dimensions $\beta(q)$ contains the same information, so in this work the first is employed, since it also has a better performance in classification tasks. Using equations \ref{eqn:eqn9} and \ref{eqn:eqn10} the MFS is estimated. In this paper, the implementation developed in \cite{Xu2006} is employed, with the default parameters (except for the number of FDs, since they are chosen based on its classification accuracy).
 
 
 \subsubsection{Multifractal Measures}
-Defining different $\mu$ functions led to different image features. The first approach is to define $\mu$ in the intensity domain, {\em i.e.}
+Defining different $\mu$ functions counts for different image features. The first approach is to define $\mu$ in the intensity domain, {\em i.e.}
 
 \begin{equation}
 \mu(B(x,r)) = \int_{B(x,r)}{(G_{r} \ast I)} dx,
@@ -338,7 +338,7 @@ Unsupervised SOM of the multifractal representation of bread and non-bread image
 \begin{centering}
 \includegraphics[width=0.45\textwidth]{../exps/som/sommultifractal}
 \includegraphics[width=0.45\textwidth]{../exps/som/sombreadmultifractal}
-\caption{SOM of the bread and non-bread images (left) and SOM of the bread types only (right)}
+\caption{SOM of the bread and non-bread images (left) and SOM of the bread types only (right). $1$: {\em baguette}, $2$: {\em lactal}, $3$: {\em brun}, $4$: {\em sandwich}, $5$: {\em nonbread} }
 \label{fig:somfractal}
 \end{centering}
 \end{figure*}
@@ -416,7 +416,7 @@ To summarise, the first half of the spectrum is useful to measure the porosity, 
 \subsection{Bread Classification}
 \label{sec:10}
 
-In order to test the discriminative capability of the method, a classification experiment is made. Five classes are defined, {\emph e.g.}, {\emph baguette}, {\emph lactal}, {\emph bran}, {\emph sandwich} and {\emph non-bread}, assigning $40$ images to each class. A comparison is made between the MFS and state of the art features in the computer vision literature. This classification scheme is an intra-class one, and it is harder to solve than an ordinary inter-class one. 
+In order to test for the discriminative capability of the method, a classification experiment is made. Five classes are defined, {\emph e.g.}, {\emph baguette}, {\emph lactal}, {\emph bran}, {\emph sandwich} and {\emph non-bread}, assigning $40$ images to each class. A comparison is made between the MFS and state of the art features in the computer vision literature. This classification scheme is an intra-class one, and it is harder to solve than an ordinary inter-class one. 
 
 K-fold cross validation is applied to the entire set (with $K=4$), employing three different classifiers: Support Vector Machines (SVM), Random Forests (RF), and Nearest Neighbors (NN). Results show that the MFS presents good classification performance regardless of the classifier employed. The libsvm implementation \cite{Chang2011} was used for the SVM classifier. In the case of the RF ($100$ trees) and the NN ($1$ neighbor) classifiers, the scikit-learn python library was employed.
 
@@ -424,7 +424,7 @@ In Table \ref{tab:number}, the classification performance of the method is teste
 
 In Table \ref{tab:mfs}, several combinations of different MFS obtained from the images, and their classification performance are shown. The MFS used in the study were the density of the intensity (MFS in the table), the Laplacian of the intensity (L), and the gradient of the intensity (G). In addition, another test is made, using the CIELab color space. The key advantage of this color space is that it tends to reduce the dependency of the resulting image color on the dispositive used in the capture. The intensity of the images is transformed to the CIELab space, and the MFS of the three separated channels are combined together, obtaining a vector of $60$ FDs. This combination showed the best performance for the three classifiers. It means that adding color information in the $a$ and $b$ channels is useful for better classification of different types of bread crumbs, when different capturing dispositives are used (in this case, a scanner and a digital camera).
 
-In Table \ref{tab:other}, state-of-the-art features (Haralick, Local Binary Pattern and SIFT features) are computed for the images. The best classification performance is obtained using the SIFT features, but it requires a $128$ feature length vector per image, and, in addition, it requires computational space and time to build internal structures. The classification performance of the MFS for the bread crumb database is the highest among the algorithms studied. The MFS captures robust and useful information for classification in low dimensional features.
+In Table \ref{tab:other}, state-of-the-art features (Haralick, Local Binary Pattern and SIFT features) are computed for the images. The best classification performance is obtained using the SIFT features, but it requires a $128$ feature length vector per image, and, in addition, it requires computational space and time to build internal structures. The classification performance of the MFS for the bread crumb database is the highest among the algorithms studied. The MFS captures robust and useful information for classification in low dimensional features. These results also agree with results obtained in \cite{Bosch2011} for the classification of other food products.
 
 \begin{table}
 % table caption is above the table
@@ -481,7 +481,7 @@ NN & 79\% & 70\% & \textbf{86\%} \\ % & 48.5
 
 \section{Conclusions}
 \label{sec:11}
-The visual appearance of different types of bread crumbs can be successfully characterized by the fractal dimensions of its digital image. The first fractal dimensions obtained from the MFS method negatively measured bread crumb coarseness, porosity and heterogeneity. 
+The visual appearance of different types of bread crumbs can be successfully characterized by the fractal dimensions of its digital image. The first fractal dimensions obtained from the MFS method negatively measured bread crumb coarseness, porosity and heterogeneity, meaning that the lower the FD, the higher the measure. 
 
 
 The use of multifractal features in bread crumb texture classification showed good performance. The MFS demonstrated to be accurate enough to perform a classification of different bread types and also to discriminate non bread from bread images. The classification performance of the MFS for the bread crumb database outperforms other state-of-the-art techniques employed in the computer vision literature. The information present in the MFS of the $a$ and $b$ channels of the CIElab space color provided the method with higher classification capabilities and obtained the best classification performance in all the developed tests. This result appear as a consequence of the different capturing dispositives used in this work. Also, it was shown that the MFS is sensitive to changes in the illumination conditions present in this work.

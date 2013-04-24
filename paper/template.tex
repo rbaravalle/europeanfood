@@ -188,10 +188,10 @@ D_{b} \triangleq \displaystyle\lim_{\epsilon \to 0}{\frac{\log(N_{\epsilon})}{\l
 The algorithm uses a binarised image and selects different values of $\epsilon$ in it, making a count of the boxes that contains pixels in each case (to avoid numerical instabilities, a mean of cases is computed, establishing different positions in the grid over the image). Finally, a linear regression adjustment is made with the obtained data, in the $\log-\log$ space, and the slope of the straight line is by definition the box dimension of the image. %In Fig. \ref{fig:1} an image of the bread type {\em salvado} is shown with its corresponding box dimension computation.
 
 
-\subsection{Multifractal analysis}
+\subsection{Theory behind Multifractal Analysis}
 \label{sec:4}
 
-Informally, the way to proceed with multifractal analysis is to examine, in the limit, the local behavior of a measure $\mu$ at each point of the set under study. This means, to find the H\"older exponent $\alpha$ in that point. The {\em multifractal spectrum} $f(\alpha)$ is obtained applying this procedure to the entire set, in this case, an image.
+In \cite{Gonzales2008}, several procedures were applied to the bread crumb structure. In that paper, it was depicted that a vector of FDs could better characterize that structures. Based on that assumption, in this work multifractal analysis of the bread crumb is analysed. The intuition behind multifractal analysis is to examine, in the limit, the local behavior of a measure $\mu$ at each point of the set under study. This means, to find the H\"older exponent $\alpha$ in that point. The {\em multifractal spectrum} $f(\alpha)$ (MFS) is obtained applying this procedure to the entire set, in this case, an image.
 
 Let $E$ be an structure divided in disjoint substructures $E_{i}$ of size $\epsilon$ in such a way that 
 
@@ -203,7 +203,7 @@ Each substructure $E_{i}$ is characterized by a measure $\mu(E_{i})$. From the p
 
 
 \begin{equation}
-\alpha_{i} = \frac{ln(\mu(E_{i}))}{ln(\epsilon)},
+\alpha_{i} \triangleq \frac{ln(\mu(E_{i}))}{ln(\epsilon)},
 \label{eqn:eqn4}
 \end{equation}
 \noindent
@@ -214,22 +214,22 @@ and to take the limit when $\epsilon$ tends to $0$. The limit represents the val
 \label{eqn:eqn5}
 \end{equation}
 
-The exponent characterizes the local regularity of the structure at a point. To obtain a global characterization of its regularity it is necessary to obtain the distribution of $\alpha$ in $E$. For this, a counting $N_{\epsilon}$ must be done for each $\alpha_{i}$, related to the value of $\epsilon$, {\em i.e.}
+The exponent characterizes the local regularity of the structure at a point. To obtain a global characterization of the regularity of the structure it is necessary to obtain the distribution of $\alpha$ in $E$. The range of H\"older exponent values found in the image is partitioned in $M$ sub-ranges (in practice, $M$ is a parameter: the number of FDs). Each $\alpha_{i}$ defines one sub-range. Then a counting $N_{\epsilon}$ of boxes characterized by $\alpha_{i}$ must be done for each of them, related to the value of $\epsilon$, {\em i.e.}
 
 \begin{equation}
 f_{\epsilon}(\alpha_{i}) = - \frac{ln(N_{\epsilon}(\alpha_{i}))}{ln(\epsilon)}.
 \label{eqn:eqn6}
 \end{equation}
 
-When $\epsilon$ tends to $0$, the limiting value is the FD of the structure $E$ characterized by $\alpha$, the Hausdorff dimension (which is calculated by using the Box procedure described) of the $\alpha$ distribution, also known as the {\em multifractal spectrum} $f(\alpha)$ \cite{Silvetti2010}, {\em i.e.}
+When $\epsilon$ tends to $0$, the limiting value is the FD of the structure $E$ characterized by $\alpha$, the Hausdorff dimension (which is calculated by using the Box procedure described) of the $\alpha$ distribution, also known as the {\em multifractal spectrum} $f(\alpha)$ (MFS) \cite{Silvetti2010}, {\em i.e.}
 
 \begin{equation}
 f(\alpha) = \lim_{\epsilon\to0}{f_{\epsilon}(\alpha)}.
 \label{eqn:eqn7}
 \end{equation}
 
-\subsubsection{Procedure for the MFS}
-As illustrated in \cite{Xu2006}, the domain is partitioned into non-overlapping boxes of length $r$. The $q$-th moment of a measure $\mu$ is defined as
+\subsubsection{Practical procedure for the MFS}
+There are several techniques described in the literature to obtain the MFS, which led to different representations of the multifractal information present in the structure. Usually, the method of moments is used \cite{Mendoza2010,Serrano2012}, but it produces a feature vector which is not always suitable for classification tasks. In this work, the implementation presented in \cite{Xu2006} is employed, due to its better classification performance. The implementation first calculates the method of moments and then uses a Legendre transform to obtain the MFS. The procedure consists in partitioning the domain into non-overlapping boxes of length $r$. The $q$-th moment of a measure $\mu$ is defined as
 \begin{equation}
 M_{r}(q) = \sum{\mu(B(x,r))^{q}},
 \label{eqn:eqn8}
@@ -249,7 +249,7 @@ where
 \label{eqn:eqn10}
 \end{equation}
 
-The $f(\alpha)$ spectrum (MFS) and the generalized dimensions $\beta(q)$ contains the same information, so in this work the first is employed, since it also has a better performance in classification tasks. Using equations \ref{eqn:eqn9} and \ref{eqn:eqn10} the MFS is estimated. In this paper, the implementation developed in \cite{Xu2006} is employed, with the default parameters (except for the number of FDs, since they are chosen based on its classification performance).
+As previously stated, the $f(\alpha)$ spectrum (MFS) and the generalized dimensions $\beta(q)$ contains the same information, but in this work the first is employed, since it also outperforms the method of moments in classification tasks. Using equations \ref{eqn:eqn9} and \ref{eqn:eqn10} the MFS is estimated. The implementation is set with the default parameters (except for the number of FDs, since they are chosen based on its classification performance).
 
 
 \subsubsection{Multifractal Measures}
@@ -276,7 +276,7 @@ Another choice is to define $μ(B(x, r))$ as the sum of the Laplacians of the im
 \label{eqn:laplacian}
 \end{equation}
 
-\subsection{Image acquisition}
+\subsection{Image Acquisition}
 \label{sec:7}
 %(in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase).
 $20$ images of four different commercial bread types ({\em sliced}, {\em baguette}, {\em bran} and {\em sandwich}), counting $80$ images, were obtained using an electric slicer. The images were taken in the same day of purchase and were digitalised using an HP PSC 1210 scanner with the following settings: highlight 190, shadows 40, and midtones 1, and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible area for the four bread types) and $350$ dpi ($1$ pixel $= 0.00527 mm^{2}$). Then the images were converted to gray scale ($8$ bits). In addition, $20$ images of each bread type were acquired with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig.~\ref{fig:camera} four examples of bread images obtained with the camera are shown. We also employed one hundred randomly selected images from the CalTech101~\cite{FeiFei04} dataset in order to test the method's performance with non-bread images. In Fig.~\ref{fig:nonbread} four examples of non-bread images from this dataset are shown. 

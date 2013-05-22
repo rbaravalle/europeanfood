@@ -32,27 +32,27 @@ def callF(filename,which,extra):
 def features(filename,i,j,combine,extra):
     #farr = [colorHistogram,ccv,haralick,lbp,tas,zernike, singularity.spec]
     #farr = [localmfrac.localMF]
-    farr = [cielab.lab]
+    #farr = [cielab.lab]
     #farr = [lbp]
     #farr = [sg.spec]
     #farr = [smfs.spec]
     #farr = [mfs.mfs]
-    #farr = [mfs.mfs, gradient.main]
+    farr = [mfs.mfs, gradient.main]
     #farr = [mfs.mfs, gradient.main, laplacian.laplacian]
     #farr = [mfs.mfs, laplacian.laplacian]
-    farr = [mfs.mfs]
+    #farr = [mfs.mfs]
     #farr = [gradient.main]
     #farr = [efd.efd]
     #farr = [haralick]
-    #farr = [lbp]
+    farr = [lbp]
     #if(combine==True):
     #    return hstack((farr[1](filename),farr[2](filename),farr[3](filename),farr[4](filename),farr[5](filename)))
     t =  time.clock()
     # num of FDs , Open Image?,  convert to grayscale?, (cielab) use L,a,b?
     cantDF = 10
     extra = [1,cantDF*2,3,True,True]
-    res = farr[0](filename, extra)
-    #res = farr[0](filename,extra)
+    res = farr[0](filename)#, extra)
+    #res2 = farr[1](filename,extra)
     #res2 = farr[1](filename,extra)
     #res3 = farr[2](filename,extra)
     t =  time.clock() - t
@@ -143,6 +143,7 @@ def crandomforest(data,labels,fileStxt,base):
 
 def classifierPredict(dtrain,labels,fileStxt, base, i):
     pred = [csvm, crandomforest, cnearestneighbors]
+    print labels
     return pred[i](dtrain,labels,fileStxt, base)
 
 
@@ -161,7 +162,7 @@ def main(subname,which,local,classifier):
     #fileCtxt = '../exps/'+base
     #fileCcsv = '../exps/'+subname+'C.csv'
     cant = 20
-    dDFs  = 20
+    dDFs  = 40
     baguette = np.zeros((cant, dDFs)).astype(np.float32)
     salvado   = np.zeros((cant, dDFs)).astype(np.float32)
     lactal   = np.zeros((cant, dDFs)).astype(np.float32)
@@ -204,7 +205,7 @@ def main(subname,which,local,classifier):
     dirList=os.listdir(path)
     #print len(dirList)
     
-    nonbread = [['Df' for j in range(dDFs)] for i in range(len(dirList))]
+    nonbread = np.zeros((len(dirList), dDFs)).astype(np.float32)
 
     if(local == True):
         data = localFeatures(subname,which)
@@ -453,6 +454,7 @@ def main(subname,which,local,classifier):
     plt.legend(loc = 2) # loc 4: bottom, right
     plt.show()
 
+    # Graph for means
     x = np.arange(cfeat)
     plt.ylabel(r'$f(\alpha)$',fontsize=fsize)
     plt.xlabel('FD',fontsize=fsize)
@@ -461,6 +463,18 @@ def main(subname,which,local,classifier):
     plt.plot(x, mean[2], 'bx--',  label='bran',linewidth=2.0)
     plt.plot(x, mean[3], 'go--',  label='sandwich',linewidth=2.0)
     plt.plot(x, mean[4], 'mo--',  label='todos',linewidth=2.0)
+    plt.legend(loc = 2)
+    plt.show()
+
+    # Graph for standard deviations
+    x = np.arange(cfeat)
+    plt.ylabel(r'$f(\alpha)$',fontsize=fsize)
+    plt.xlabel('FD',fontsize=fsize)
+    plt.plot(x, std[0], 'k+--', label='baguette',linewidth=2.0)
+    plt.plot(x, std[1], 'r*--',  label='lactal',linewidth=2.0)
+    plt.plot(x, std[2], 'bx--',  label='bran',linewidth=2.0)
+    plt.plot(x, std[3], 'go--',  label='sandwich',linewidth=2.0)
+    plt.plot(x, std[4], 'mo--',  label='todos',linewidth=2.0)
     plt.legend(loc = 2)
     plt.show()
 
@@ -473,27 +487,29 @@ def main(subname,which,local,classifier):
         writer.writerows(std)
 
 
-    prog = './clas2' # convert.c
-    cmd = '{0} "{1}" > "{2}"'.format(prog, fileScsv, fileStxt)
-    Popen(cmd, shell = True, stdout = PIPE).communicate()
     #labels = [i for i in range(len(data))]
-    labels = np.zeros((len(data),1))
+    labels = np.zeros((len(data),1)) # FIX ME
     for i in range(len(data)):
         labels[i] = i
-    labels = map(lambda i: i/(2*(cant))+1, labels)
+    labels = map(lambda i: np.floor(i/(2*(cant)))+1, labels)
 
     print "200?: ", len(data)
-    print labels
+
     labels = np.array(labels)
     print data
     #print "Labels shape: ", labels.shape
     #print "data shape: ", data.shape
-    data2 = np.hstack((labels,data))
+    #data2 = np.hstack((labels,data))
     with open(fileScsv, 'wb') as f:
         writer = csv.writer(f)
-        writer.writerows(data2)
+        writer.writerows(data)
 
-    #test(data, labels, fileStxt, base,classifier)
+    prog = './clas2' # convert.c (here labels are added for the svm)
+    cmd = '{0} "{1}" > "{2}"'.format(prog, fileScsv, fileStxt)
+    Popen(cmd, shell = True, stdout = PIPE).communicate()
+
+    lab = np.transpose(labels)[0]   # FIX ME
+    test(data, lab, fileStxt, base,classifier)
 
 
 # SIFT BoW
@@ -694,4 +710,4 @@ def localFeatures(subname,alg):
 # Multi Fractal Bag of Features
 #main('singularityBoF1000_5',2,True,RANDOM_FOREST)
 
-main('efd_x_60_2',6,False,SVM)
+main('mfs20',6,False,SVM)

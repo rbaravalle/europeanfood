@@ -101,11 +101,11 @@ grestore
 \begin{abstract}
 
 Adequate models of the bread crumb structure can be critical for understanding flow and transport
-processes in bread, creating synthetic bread crumb images for photo-realistic rendering, evaluating similarities and establishing quality features of different bread crumbs types.
+processes in bread, creating synthetic bread crumb images for photo-realistic rendering, evaluating similarities, and establishing quality features of different bread crumbs types.
 
-In this article multifractal analysis, employing the multifractal spectrum (MFS), has been applied to study the structure of the bread crumb in four varieties of breads ({\em baguette}, {\em sliced}, {\em bran}, and {\em sandwich}). The extracted dimensions can be used to discriminate among bread crumbs from different types. Also, high correlations were found between some of these parameters and the porosity, coarseness, and heterogeneity of the samples. These results demonstrate that the MFS is an appropriate tool for characterizing the internal structure of the bread crumb and thus it may be used to establish important quality properties it should have.
+In this article multifractal analysis, employing the multifractal spectrum (MFS), has been applied to study the structure of the bread crumb in four varieties of bread ({\em baguette}, {\em sliced}, {\em bran}, and {\em sandwich}). The extracted dimensions can be used to discriminate among bread crumbs from different types. Also, high correlations were found between some of these parameters and the porosity, coarseness, and heterogeneity of the samples. These results demonstrate that the MFS is an appropriate tool for characterizing the internal structure of the bread crumb and thus it may be used to establish important quality properties it should have.
 
-The MFS has shown to provide local and global image features that are both robust and low-dimensional, leading to feature vectors that capture essential information for classification tasks. Based on this, in this work we also apply the MFS for bread crumb classification of slices of different bread types. Results show that the MFS based classification is able to distinguish different bread crumbs with very high accuracy. The multifractal modeling of the bread crumb structure can be an appropriate method for parameterizing and simulating the appearance of different bread crumbs.
+The MFS has shown to provide local and global image features that are both robust and low-dimensional, leading to feature vectors that capture essential information for classification tasks. Based on this, in this work we also apply the MFS for bread crumb classification of slices of different bread types. Results show that the MFS based classification is able to distinguish different bread crumbs with very high accuracy. Multifractal modeling of the bread crumb structure can be an appropriate method for parameterizing and simulating the appearance of different bread crumbs.
 
 \keywords{Fractal \and Multifractal \and Image analysis \and Image classification \and Bread crumb}
 % \PACS{PACS code1 \and PACS code2 \and more}
@@ -116,7 +116,7 @@ The MFS has shown to provide local and global image features that are both robus
 \label{intro}
 One of the most important factors to evaluate the quality of a bread loaf is related to its crumb structure. Close examination of different slices reveals considerable variation in the cell (air bubble) size even within a single sample of the same bread type. 
 
-Fractal methods could be appropriate to characterize this structure. Fractal and multifractal analysis of images have proved to be able to capture useful properties of the underlying material being represented. These features have been successfully applied in different areas, such as medicine \cite{Andjelkovic2008,Yu2011} and texture classification \cite{Wendt2009}. In food research, fractal and multifractal analysis has been applied in the study of apple tissues \cite{Mendoza2010}, pork sirloins \cite{Serrano2012}, and also in chocolate, potato and pumpkin surfaces \cite{Quevedo2002}. Through several procedures \cite{Peitgen2004,Gonzales2008}, it is possible to obtain different Fractal Dimensions (FD), each of them capturing a different property of the material ({\em e.g.}, porosity, rugosity).
+Fractal and multifractal analysis of images have pro\-ved to be able to capture useful properties of the underlying material being represented. These features have been successfully applied in different areas, such as medi\-cine \cite{Andjelkovic2008,Yu2011} and texture classification \cite{Wendt2009}. In food research, fractal and multifractal analysis has been applied in the study of apple tissues \cite{Mendoza2010}, pork sirloins \cite{Serrano2012}, and also in chocolate, potato and pumpkin surfaces \cite{Quevedo2002}. Through several procedures \cite{Peitgen2004,Gonzales2008}, it is possible to obtain different Fractal Dimensions (FD), each of them capturing a different property of the material ({\em e.g.}, porosity, rugosity).
 
 Data analysis of the results of the feature extraction process is useful for obtaining key properties of materials. This information could then be used in quality measurements of real samples and in the validation of synthetic representations of them. In other words, these processes are useful to determine if a given image presents the observed features in that material, allowing to associate quality measure parameters to it. In~\cite{Fan2006}, a bread crumb quality test based on Gabor filters was performed, obtaining good results. Nevertheless, a small database was used ($30$ images). In \cite{Gonzales2008} several fractal features were obtained for one type of bread, demonstrating that a vector of FDs would be capable of obtaining key features of the crumb texture more accurately than using a single FD.
 
@@ -132,7 +132,7 @@ This paper is organized as follows. In section 2 the theory underlying fractal s
 \subsection{Fractals and Multifractals}
 \label{sec:2}
 
-The term {\em fractal} was first employed by the mathematician Mandelbrot in \cite{Mandelbrot83}. Fractal objects have the property of self-similarity ({\em i.e.}, the structure is repeated at different scales), and they are characterized by a non-integer dimension. The fractal dimension is an exponent which relates the statistical self-similarity of the object at different scales. Fractal objects can have one FD or a vector of them. On the one hand, deterministic fractals are characterized by one FD. They are called {\em monofractals} (for instance, Koch Curve, Sierpinsky triangle). On the other hand, {\em multifractals} \cite{Mandelbrot89} are characterized by a set of FDs. It is assumed that these structures are composed by different fractals coexisting simultaneously. The result is a vector containing several FDs. The multifractal approach characterizes better the objects than the fractal one, since it captures more accurately variations in local regions.
+The term {\em fractal} was first employed by the mathematician B. Mandelbrot in \cite{Mandelbrot83}. Fractal objects have the property of self-similarity ({\em i.e.}, the geometrical or topological properties are invariant at different scales), and they are characterized by a non-integer dimension. Fractal objects can have one or more FDs. Most of the famous fractal sets ({\em i.e.}, the Cantor set, the Von Koch curve, and the Sierpinsky gasket) can be characterized by a single exponent that relates how their geometrical properties vary under scale changes. On the other hand, there are cases where the fractal object exhibits different exponents under different scales. Those are called {\it multifractals} \cite{Mandelbrot89}, and are characterized by a sequence of FDs, or even a function that establishes how is the local variance of the geometrical properties under scale changes. It is assumed that these structures are composed by different fractals coexisting simultaneously. The result is a vector containing several FDs. The multifractal approach characterizes better the objects than the fractal one, since variations in local regions are captured in a more accurate manner. The following definition is used in fractal and multifractal measurements.
 
 %as required. Don't forget to give each section
 %and subsection a unique label (see Sect.~\ref{sec:1}).
@@ -186,22 +186,21 @@ D_{b} \triangleq \displaystyle\lim_{\epsilon \to 0}{\frac{\log(N_{\epsilon})}{\l
 \label{eqn:1}
 \end{equation}
 
-The algorithm uses a binarised image and selects different values of $\epsilon$ in it, making a count of the boxes that contains pixels in each case (to avoid numerical instabilities, a mean of cases is computed, establishing different positions in the grid over the image). Finally, a linear regression adjustment is made with the obtained data, in the $\log-\log$ space, and the slope of the straight line is by definition the box dimension of the image. In Fig. \ref{fig:1} an image of the bread type {\em bran} is shown with its corresponding box dimension computation.
+The algorithm uses a binarised image and selects different values of $\epsilon$ in it, making a count of the boxes that contains pixels in each case (to avoid numerical instabilities, a mean of cases is computed, establishing different positions in the grid over the image). Finally, a linear regression adjustment is made with the obtained data, in the $\log-\log$ space, and the slope of the straight line is by definition the box dimension of the image. In Fig. \ref{fig:fitbox} an image of the bread type {\em bran} is shown (left) with its corresponding box dimension computation (right).
 
 \begin{figure*}[htb]
 \centering
-$\vcenter{\hbox{\includegraphics[scale=1.3]{images/salvado19}}}$
-$\vcenter{\hbox{\includegraphics[scale = 0.4]{images/fitbox}}}$
-\caption{An image and its computed box dimension}
+$\vcenter{\hbox{\includegraphics[scale=1.8]{images/salvado19}}}$
+$\vcenter{\hbox{\includegraphics[scale = 0.4]{images/fitbox2}}}$
+\caption{A bread image (left) and its computed box dimension (right)}
 \label{fig:fitbox}
 \end{figure*}
 
 
-
-\subsection{Theory behind Multifractal Analysis}
+\subsection{The Theory behind Multifractal Analysis}
 \label{sec:4}
 
-In \cite{Gonzales2008}, several procedures were applied to the bread crumb structure. In that paper, it was shown that a vector of FDs could better characterize that structures. Based on that assumption, in this work multifractal analysis of the bread crumb is carried out. The idea behind multifractal analysis is to examine, in the limit, the local behavior of a measure $\mu$ at each point of the set under study. This means, to find the H\"older exponent $\alpha$ in that point. The {\em multifractal spectrum} $f(\alpha)$ (MFS) is obtained applying this procedure to the entire set, in this case, an image.
+In \cite{Gonzales2008}, several procedures were applied to analyze the bread crumb structure. In that paper, it was shown that a vector of FDs could better characterize those structures. Based on that assumption, in this work multifractal analysis of the bread crumb is carried out. The idea behind multifractal analysis is to examine, in the limit, the local behavior of a measure $\mu$ at each point of the set under study. This means, to find the H\"older exponent $\alpha$ in that point (see below). The {\em multifractal spectrum} $f(\alpha)$ (MFS) is obtained by applying this procedure to the entire set, in this case, an image.
 
 Let $E$ be an structure divided in disjoint substructures $E_{i}$ of size $\epsilon$ in such a way that 
 
@@ -224,7 +223,7 @@ and to take the limit when $\epsilon$ tends to $0$. The limit represents the val
 \label{eqn:eqn5}
 \end{equation}
 
-The exponent characterizes the local regularity of the structure at a point. To obtain a global characterization of the regularity of the structure it is necessary to obtain the distribution of $\alpha$ in $E$. The range of H\"older exponent values found in the image is partitioned in $M$ sub-ranges (in practice, $M$ is a parameter: the number of FDs). Each $\alpha_{i}$ defines one sub-range. Then a counting $N_{\epsilon}$ of boxes characterized by $\alpha_{i}$ must be done for each of them, related to the value of $\epsilon$, {\em i.e.}
+The exponent characterizes the local regularity of the structure at a point. To obtain a global characterization of the regularity of the structure it is necessary to obtain the distribution of $\alpha$ in $E$. The range of H\"older exponent values found in the image is partitioned in $M$ sub-ranges (in practice, $M$ is a parameter: the number of FDs). Each $\alpha_{i}$ defines one sub-range. Then, the multifractal spectrum related to the value of $\epsilon$, $f_{\epsilon}(\alpha_{i})$, is obtained by counting the $N_{\epsilon}$ boxes characterized by $\alpha_{i}$, in the form:
 
 \begin{equation}
 f_{\epsilon}(\alpha_{i}) = - \frac{ln(N_{\epsilon}(\alpha_{i}))}{ln(\epsilon)}.
@@ -239,7 +238,7 @@ f(\alpha) = \lim_{\epsilon\to0}{f_{\epsilon}(\alpha)}.
 \end{equation}
 
 \subsubsection{Practical procedure for the MFS}
-There are several techniques described in the literature to obtain the MFS, which laed to different representations of the multifractal information present in the structure. Usually, the method of moments is used \cite{Mendoza2010,Serrano2012}, but it produces a feature vector which is not always suitable for classification tasks. In this work, the implementation presented in \cite{Xu2006} is employed, due to its better classification performance. The implementation first calculates the method of moments and then uses a Legendre transform to obtain the MFS. The procedure consists in partitioning the domain into non-overlapping boxes of length $r$. The $q$-th moment of a measure $\mu$ is defined as
+There are several techniques described in the literature to obtain the MFS, which lead to different representations of the multifractal information present in the structure. Usually, the method of moments is used \cite{Mendoza2010,Serrano2012}, but it produces a feature vector which is not always suitable for classification tasks. In this work, the implementation presented in \cite{Xu2006} is employed, due to its better classification performance. The implementation first calculates the method of moments and then uses a Legendre transform to obtain the MFS. The procedure consists in partitioning the domain into non-overlapping boxes of length $r$. The $q$-th moment of a measure $\mu$ is defined as
 \begin{equation}
 M_{r}(q) = \sum{\mu(B(x,r))^{q}},
 \label{eqn:eqn8}
@@ -257,7 +256,7 @@ where
 \label{eqn:eqn10}
 \end{equation}
 
-As previously stated, the $f(\alpha)$ spectrum (MFS) and the generalized dimensions $\beta(q)$ contains the same information, but in this work the first is employed, since it also outperforms the method of moments in classification tasks. Using equations (\ref{eqn:eqn9}) and (\ref{eqn:eqn10}) the MFS is estimated. The implementation is set with the default parameters (except for the number of FDs, since they are chosen based on its classification performance).
+As previously stated, the $f(\alpha)$ spectrum (MFS) and the generalized dimensions $\beta(q)$ contain the same information, but in this work the first is employed, since it also outperforms the method of moments in classification tasks. Using (\ref{eqn:eqn9}) and (\ref{eqn:eqn10}) the MFS is estimated. As previously said, in this work the implementation in \cite{Xu2006} is used and the parameters of the algorithm are set to default (except for the number of FDs, since they are chosen based on its classification performance).
 
 
 \subsubsection{Multifractal Measures}
@@ -267,7 +266,7 @@ Defining different $\mu$ functions counts for different image features. The firs
 \mu(B(x,r)) = \int_{B(x,r)}{(G_{r} \ast I)} dx,
 \label{eqn:eqn11}
 \end{equation}
-where $\ast$ is the $2D$ convolution operator and $G_{r}$ is a Gaussian smoothing kernel with variance $r$, {\em i.e., } $\mu$ is the average intensity value in the disk of radius $r$ centered at $x$ ($B(x,r)$). This is the density of the intensity function, and it describes how the intensity at a point changes over scale.
+where $\ast$ is the $2D$ convolution operator and $G_{r}$ is a Gaussian smoothing kernel with variance $r$, {\em i.e., } $\mu$ is the weighted average intensity value in the disk of radius $r$ centered at $x$ ($B(x,r)$). This is the density of the intensity function, and it describes how the intensity at a point changes over scale.
 
 The definition of $\mu$ could serve to specific purposes. For instance, if robustness to illumination changes is needed, one choice is to define $\mu(B(x,r))$ on the domain of the energy of the gradients. Let ${ f_{k} , k = 1, 2, 3, 4}$ be four directional differential operators along the vertical, horizontal, diagonal and anti-diagonal directions. Then we define the measurement function $\mu(B(x,r))$ for the image $I$ as follows:
 
@@ -353,6 +352,17 @@ Unsupervised SOM of the multifractal representation of bread and non-bread image
 \end{centering}
 \end{figure*}
 
+
+\begin{figure*}[htb]
+\centering
+\includegraphics[scale=0.4]{../images/boxpBaguetteM}
+\includegraphics[scale=0.4]{../images/boxpLactalM}
+\includegraphics[scale=0.4]{../images/boxpSalvadoM}
+\includegraphics[scale=0.4]{../images/boxpSandwichM}
+\caption{Boxplot of the four different bread types with the medians joined by a line. Top: {\em baguette} (left), {\em sliced} (right), bottom: {\em bran} (left), {\em sandwich} (right)}
+\label{fig:boxplotsMFS}
+\end{figure*}
+
 \begin{figure*}[htb]
 \centering
 \includegraphics[scale=0.4]{../images/means}
@@ -361,8 +371,10 @@ Unsupervised SOM of the multifractal representation of bread and non-bread image
 \label{fig:meansMFS}
 \end{figure*}
 
+In Figure \ref{fig:boxplotsMFS}, boxplots of the four different bread types are shown with the medians of each FD (in red) joined by a dashed line. From the plot, it could also been pointed out that in the first half of the MFS (first $10$ FDs), the dispersion of the FDs are higher than in the second half of the spectrum (last $10$ FDs). The spectrum in the last FDs tends to have a shape that identifies better a particular type of image. Usually, the spectra of the same class and the same capturing method have, in this part of the spectrum, a shape that is useful to characterize the class. Nevertheless the capturing method and the illumination conditions of the image influences this shape, {\em i.e.} these two factors alters the MFS of the image. In other words, there is not a unique shape for each class of bread type.
 
-In Figure \ref{fig:meansMFS}, the mean values and the standard deviations of the MFS for the four different bread types are shown. This image shows, similarly to the SOM maps, that the MFS could potentially characterize and classify the different bread crumb types, since the mean values are different for each class. From the plot, it could also been pointed out that in the first half of the MFS (first $10$ FDs), the standard deviations of the FDs are higher than in the second half of the spectrum (last $10$ FDs). The spectrum in the last FDs tends to have a shape that identifies better a particular type of image. Usually, the spectrums of the same class and the same capturing method have, in this part of the spectrum, a shape that is useful to characterize the class. Nevertheless the capturing method and the illumination conditions of the image influences this shape, {\em i.e.} these two factors alters the MFS of the image. In other words, there is not a unique shape for each class of bread type.
+
+For the sake of completion, in Figure \ref{fig:meansMFS}, the mean values and the standard deviations of the MFS for the four different bread types are shown. This image shows, similarly to the SOM maps, that the MFS could potentially characterize and classify the different bread crumb types, since the mean values are different for each class. The standard deviations are also consistent with the results found in the boxplots. 
 
 
 The Pearson coefficient ($R$) for the four bread types with the void fraction, mean cell area and standard deviation of mean cell area (in $mm^{2}$) are shown in Figures \ref{fig:corrVF}, \ref{fig:corrMCA} and \ref{fig:corrMCAstdev}, respectively. It becomes clear that the coefficients behave similarly for the first $8$ dimensions in all the bread types, but differently for the FD around $9$ and above. It could be concluded that the first $8$ dimensions are highly (inversely) correlated with the void fraction (porosity), mean cell area (coarseness) and the standard deviation of mean cell area (heterogeneity) of the bread types. It means that the first FDs increase when the mentioned features decrease. Other FDs also have a high (positive or negative) correlation, but it depends on the bread type which dimension is correlated.

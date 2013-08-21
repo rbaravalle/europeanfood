@@ -223,10 +223,10 @@ and to take the limit when $\epsilon$ tends to $0$. The limit represents the val
 \label{eqn:eqn5}
 \end{equation}
 
-The exponent characterizes the local regularity of the structure at a point. To obtain a global characterization of the regularity of the structure it is necessary to obtain the distribution of $\alpha$ in $E$. The range of H\"older exponent values found in the image is partitioned in $M$ sub-ranges (in practice, $M$ is a parameter: the number of FDs). Each $\alpha_{i}$ defines one sub-range. Then, the multifractal spectrum related to the value of $\epsilon$, $f_{\epsilon}(\alpha_{i})$, is obtained by counting the $N_{\epsilon}$ boxes characterized by $\alpha_{i}$, in the form:
+The exponent characterizes the local regularity of the structure at a point. To obtain a global characterization of the regularity of the structure it is necessary to obtain the distribution of $\alpha$ in $E$. The range of H\"older exponent values found in the image is partitioned in $M$ sub-ranges (in practice, $M$ is a parameter: the number of FDs). Each $\alpha_{j}$ defines one sub-range. Then, the multifractal spectrum related to the value of $\epsilon$, $f_{\epsilon}(\alpha_{j})$, is obtained by counting the $N_{\epsilon}$ boxes characterized by $\alpha_{j}$, in the form:
 
 \begin{equation}
-f_{\epsilon}(\alpha_{i}) = - \frac{ln(N_{\epsilon}(\alpha_{i}))}{ln(\epsilon)}.
+f_{\epsilon}(\alpha_{j}) = - \frac{ln(N_{\epsilon}(\alpha_{j}))}{ln(\epsilon)}.
 \label{eqn:eqn6}
 \end{equation}
 
@@ -238,12 +238,12 @@ f(\alpha) = \lim_{\epsilon\to0}{f_{\epsilon}(\alpha)}.
 \end{equation}
 
 \subsubsection{Practical procedure for the MFS}
-There are several techniques described in the literature to obtain the MFS, which lead to different representations of the multifractal information present in the structure. Usually, the method of moments is used \cite{Mendoza2010,Serrano2012}, but it produces a feature vector which is not always suitable for classification tasks. In this work, the implementation presented in \cite{Xu2006} is employed, due to its better classification performance. The implementation first calculates the method of moments and then uses a Legendre transform to obtain the MFS. The procedure consists in partitioning the domain into non-overlapping boxes of length $r$. The $q$-th moment of a measure $\mu$ is defined as
+There are several techniques described in the literature to obtain the MFS, which lead to different representations of the multifractal information present in the structure. Usually, the method of moments is used \cite{Mendoza2010,Serrano2012}, but it produces a feature vector which is not always suitable for classification tasks. In this work, the implementation presented in \cite{Xu2006} is employed, due to its better classification performance. The implementation first calculates the method of moments and then uses a Legendre transform to obtain the MFS. The procedure consists in partitioning the domain into non-overlapping boxes of length $r$. For $x \in \mathbb{R}^{2}$, denote $B(x,r)$ the closed disk of radius $r > 0$ centered at $x$. The $q$-th moment of a measure $\mu$ is defined as
 \begin{equation}
 M_{r}(q) = \sum{\mu(B(x,r))^{q}},
 \label{eqn:eqn8}
 \end{equation}
-where the sum is over the $r$ mesh squares for which $\mu(B(x,r)) > 0$. To denote the power law behavior of $M_{r}(q)$, $\beta(q)$ is defined as a straight line fit of the values $M_{r}(q)$ with respect to $r$, for $r$ in $1,..,n$. It is shown in \cite{Falconer97}, that the MFS and $\beta(q)$ are related to each other by a Legendre transform as
+where the sum is over the $r$-mesh squares for which $\mu(B(x,r)) > 0$. To denote the power law behavior of $M_{r}(q)$, $\beta(q)$ is defined as a straight line fit of the values $M_{r}(q)$ with respect to $r$, for $r$ in $1,..,n$. It is shown in \cite{Falconer97}, that the MFS (see (\ref{eqn:eqn7})) and $\beta(q)$ are related to each other by a Legendre transform as
 
 \begin{equation}
 f(\alpha(q)) = q \alpha(q) - \beta(q),
@@ -352,6 +352,8 @@ Unsupervised SOM of the multifractal representation of bread and non-bread image
 \end{centering}
 \end{figure*}
 
+In Figure \ref{fig:boxplotsMFS}, boxplots of the four different bread types are shown with the medians of each FD (in red) joined by a dashed line. From the plot, it could also been pointed out that in the first half of the MFS (first $10$ FDs), the dispersion of the FDs are higher than in the second half of the spectrum (last $10$ FDs). The spectrum in the last FDs tends to have a shape that identifies better a particular type of image. Usually, the spectra of the same class and the same capturing method have, in this part of the spectrum, a shape that is useful to characterize the class. Nevertheless the capturing method and the illumination conditions of the image influences this shape, {\em i.e.} these two factors alters the MFS of the image. In other words, there is not a unique shape for each class of bread type.
+
 
 \begin{figure*}[htb]
 \centering
@@ -359,22 +361,20 @@ Unsupervised SOM of the multifractal representation of bread and non-bread image
 \includegraphics[scale=0.4]{../images/boxpLactalM}
 \includegraphics[scale=0.4]{../images/boxpSalvadoM}
 \includegraphics[scale=0.4]{../images/boxpSandwichM}
-\caption{Boxplot of the four different bread types with the medians joined by a line. Top: {\em baguette} (left), {\em sliced} (right), bottom: {\em bran} (left), {\em sandwich} (right)}
+\caption{Boxplots of the four different bread types with the FD medians joined by a dashed line. Top: {\em baguette} (left), {\em sliced} (right), bottom: {\em bran} (left), {\em sandwich} (right)}
 \label{fig:boxplotsMFS}
 \end{figure*}
+
+
+For the sake of completion, in Figure \ref{fig:meansMFS}, the mean values and the standard deviations of the MFS for the four different bread types are shown. This image shows, similarly to the SOM maps, that the MFS could potentially characterize and classify the different bread crumb types, since the mean values are different for each class. The standard deviations are also consistent with the results found in the boxplots. 
 
 \begin{figure*}[htb]
 \centering
 \includegraphics[scale=0.4]{../images/means}
-\includegraphics[scale=0.4]{../images/stdevTodos}
+\includegraphics[scale=0.4]{../images/stdev}
 \caption{Mean MFS (left) and standard deviations (right) of the FDs for the four different bread types}
 \label{fig:meansMFS}
 \end{figure*}
-
-In Figure \ref{fig:boxplotsMFS}, boxplots of the four different bread types are shown with the medians of each FD (in red) joined by a dashed line. From the plot, it could also been pointed out that in the first half of the MFS (first $10$ FDs), the dispersion of the FDs are higher than in the second half of the spectrum (last $10$ FDs). The spectrum in the last FDs tends to have a shape that identifies better a particular type of image. Usually, the spectra of the same class and the same capturing method have, in this part of the spectrum, a shape that is useful to characterize the class. Nevertheless the capturing method and the illumination conditions of the image influences this shape, {\em i.e.} these two factors alters the MFS of the image. In other words, there is not a unique shape for each class of bread type.
-
-
-For the sake of completion, in Figure \ref{fig:meansMFS}, the mean values and the standard deviations of the MFS for the four different bread types are shown. This image shows, similarly to the SOM maps, that the MFS could potentially characterize and classify the different bread crumb types, since the mean values are different for each class. The standard deviations are also consistent with the results found in the boxplots. 
 
 
 The Pearson coefficient ($R$) for the four bread types with the void fraction, mean cell area and standard deviation of mean cell area (in $mm^{2}$) are shown in Figures \ref{fig:corrVF}, \ref{fig:corrMCA} and \ref{fig:corrMCAstdev}, respectively. It becomes clear that the coefficients behave similarly for the first $8$ dimensions in all the bread types, but differently for the FD around $9$ and above. It could be concluded that the first $8$ dimensions are highly (inversely) correlated with the void fraction (porosity), mean cell area (coarseness) and the standard deviation of mean cell area (heterogeneity) of the bread types. It means that the first FDs increase when the mentioned features decrease. Other FDs also have a high (positive or negative) correlation, but it depends on the bread type which dimension is correlated.
@@ -391,7 +391,7 @@ To summarise, the first half of the spectrum is useful to measure the porosity, 
 %\includegraphics[scale=0.3]{../images/vf105}
 %\includegraphics[scale=0.3]{../images/vf40_105}
 %\includegraphics[scale=0.3]{../images/vf40_110}
-\caption{Correlation coefficients for the FDs and the void fraction of the samples}
+\caption{Correlation coefficients for the FDs and the void fraction of the scanned samples}
 \label{fig:corrVF}
 \end{figure}
 
@@ -401,7 +401,7 @@ To summarise, the first half of the spectrum is useful to measure the porosity, 
 %\includegraphics[scale=0.3]{../images/mca105}
 %\includegraphics[scale=0.3]{../images/mca40_105}
 %\includegraphics[scale=0.3]{../images/mca40_110}
-\caption{Correlation coefficients for the FDs and the mean cell area (in $mm^{2}$) of the samples}
+\caption{Correlation coefficients for the FDs and the mean cell area (in $mm^{2}$) of the scanned samples}
 \label{fig:corrMCA}
 \end{figure}
 
@@ -411,7 +411,7 @@ To summarise, the first half of the spectrum is useful to measure the porosity, 
 %\includegraphics[scale=0.3]{../images/mcastdev105}
 %\includegraphics[scale=0.3]{../images/mcastdev40_105}
 %\includegraphics[scale=0.3]{../images/mcastdev40_110}
-\caption{Correlation coefficients for the FDs and the standard deviation of the mean cell area (in $mm^{2}$) of the samples}
+\caption{Correlation coefficients for the FDs and the standard deviation of the mean cell area (in $mm^{2}$) of the scanned samples}
 \label{fig:corrMCAstdev}
 \end{figure}
 
@@ -439,7 +439,7 @@ In Table \ref{tab:number}, the classification performance of the method is teste
 
 In Table \ref{tab:mfs}, several combinations of different MFS obtained from the images, and their classification performance are shown. The MFS used in the study were the density of the intensity (MFS in the table), the Laplacian of the intensity (L), and the gradient of the intensity (G). In addition, another test is made, using the CIELab color space. The key advantage of this color space is that it tends to reduce the dependency of the resulting image color on the device used in the capture. The intensity of the images is transformed to the CIELab space, and the MFS of the three separated channels ({\em L}, {\em a}, and {\em b}) are combined together, obtaining a vector of $60$ FDs. This combination showed the best classification performance. It means that adding color information in the $a$ and $b$ channels is useful for better classification of different types of bread crumbs, when different capturing devices are used (in this case, a scanner and a digital camera).
 
-In Table \ref{tab:other}, state-of-the-art features (Haralick, Local Binary Pattern and SIFT features) are computed for the images. The best classification performance is obtained using the SIFT features, but a $128$ feature length vector is obtained per image, and, in addition, computational space and time is needed to build internal structures ({\em e.g.} a {\em codebook}). The classification performance of the MFS for the bread crumb database is the highest among the algorithms studied. The MFS captures robust and useful information for classification in low dimensional features. These results also agree with results obtained in \cite{Bosch2011} for the classification of other food products.
+In Table \ref{tab:other}, state-of-the-art features (Haralick \cite{Haralick73}, Local Binary Pattern \cite{Ojala96} and SIFT \cite{Lowe2004} features) are computed for the images. The best classification performance is obtained using the SIFT features, but a $128$ feature length vector is obtained per image, and, in addition, computational space and time is needed to build internal structures ({\em e.g.} a {\em codebook}). The classification performance of the MFS for the bread crumb database is the highest among the algorithms studied. The MFS captures robust and useful information for classification in low dimensional features. These results also agree with results obtained in \cite{Bosch2011} for the classification of other food products.
 
 \begin{table}
 % table caption is above the table

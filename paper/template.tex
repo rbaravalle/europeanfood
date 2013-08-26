@@ -101,7 +101,7 @@ grestore
 \begin{abstract}
 
 Adequate models of the bread crumb structure can be critical for understanding flow and transport
-processes in bread, creating synthetic bread crumb images for photo-realistic rendering, evaluating similarities, and establishing quality features of different bread crumbs types.
+processes in bread, creating synthetic bread crumb images for photo-realistic rendering, evaluating similarities, and establishing quality features of different bread crumb types.
 
 In this article multifractal analysis, employing the multifractal spectrum (MFS), has been applied to study the structure of the bread crumb in four varieties of bread ({\em baguette}, {\em sliced}, {\em bran}, and {\em sandwich}). The extracted dimensions can be used to discriminate among bread crumbs from different types. Also, high correlations were found between some of these parameters and the porosity, coarseness, and heterogeneity of the samples. These results demonstrate that the MFS is an appropriate tool for characterizing the internal structure of the bread crumb and thus it may be used to establish important quality properties it should have.
 
@@ -132,7 +132,7 @@ This paper is organized as follows. In section 2 the theory underlying fractal s
 \subsection{Fractals and Multifractals}
 \label{sec:2}
 
-The term {\em fractal} was first employed by the mathematician B. Mandelbrot in \cite{Mandelbrot83}. Fractal objects have the property of self-similarity ({\em i.e.}, the geometrical or topological properties are invariant at different scales), and they are characterized by a non-integer dimension. Fractal objects can have one or more FDs. Most of the famous fractal sets ({\em i.e.}, the Cantor set, the Von Koch curve, and the Sierpinsky gasket) can be characterized by a single exponent that relates how their geometrical properties vary under scale changes. On the other hand, there are cases where the fractal object exhibits different exponents under different scales. Those are called {\it multifractals} \cite{Mandelbrot89}, and are characterized by a sequence of FDs, or even a function that establishes how is the local variance of the geometrical properties under scale changes. It is assumed that these structures are composed by different fractals coexisting simultaneously. The result is a vector containing several FDs. The multifractal approach characterizes better the objects than the fractal one, since variations in local regions are captured in a more accurate manner. The following definition is used in fractal and multifractal measurements.
+The term {\em fractal} was first employed by the mathematician B. Mandelbrot in \cite{Mandelbrot83}. Fractal objects have the property of self-similarity ({\em i.e.}, the geometrical or topological properties are invariant at different scales), and they are characterized by a non-integer dimension. Fractal objects can have one or more FDs. Most of the famous fractal sets ({\em i.e.}, the Cantor set, the Von Koch curve, and the Sierpinski gasket) can be characterized by a single exponent that relates how their geometrical properties vary under scale changes. On the other hand, there are cases where the fractal object exhibits different exponents under different scales. Those are called {\it multifractals} \cite{Mandelbrot89}, and are characterized by a sequence of FDs, or even a function that establishes how is the local variance of the geometrical properties under scale changes. It is assumed that these structures are composed by different fractals coexisting simultaneously. The result is a vector containing several FDs. The multifractal approach characterizes better the objects than the fractal one, since variations in local regions are captured in a more accurate manner. The following definition is used in fractal and multifractal measurements.
 
 %as required. Don't forget to give each section
 %and subsection a unique label (see Sect.~\ref{sec:1}).
@@ -179,7 +179,7 @@ The term {\em fractal} was first employed by the mathematician B. Mandelbrot in 
 
 \subsubsection{Box Dimension}
 \label{sec:3}
-On the one hand, mathematical objects such as the Koch curve and the Sierpinsky triangle have exact self-similarity. Natural phenomena, on the other hand, are better described by statistical self-similarity. In such cases, the Box FD is used. Box FD is a simplification of the Hausdorff (originally Minkowski - Bouligand) dimension for non strictly self-similar objects \cite{Peitgen2004}. Given a binarised image, it is subdivided in a grid of size $M\times M$ where the side of each box formed is $\epsilon$. If $N_{\epsilon}$ represents the amount of boxes that contains at least one pixel in the binarisation of the set for that $\epsilon$, then the box dimension  $D_{b}$ is defined as
+On the one hand, mathematical objects such as the Koch curve and the Sierpinski triangle have exact self-similarity. Natural phenomena, on the other hand, are better described by statistical self-similarity. In such cases, the Box FD is used. Box FD is a simplification of the Hausdorff (originally Minkowski - Bouligand) dimension for non strictly self-similar objects \cite{Peitgen2004}. Given a binarised image, it is subdivided in a grid of size $M\times M$ where the side of each box formed is $\epsilon$. If $N_{\epsilon}$ represents the amount of boxes that contains at least one pixel in the binarisation of the set for that $\epsilon$, then the box dimension  $D_{b}$ is defined as
 
 \begin{equation}
 D_{b} \triangleq \displaystyle\lim_{\epsilon \to 0}{\frac{\log(N_{\epsilon})}{\log (1/\epsilon)}}.
@@ -223,14 +223,14 @@ and to take the limit when $\epsilon$ tends to $0$. The limit represents the val
 \label{eqn:eqn5}
 \end{equation}
 
-The exponent characterizes the local regularity of the structure at a point. To obtain a global characterization of the regularity of the structure it is necessary to obtain the distribution of $\alpha$ in $E$. The range of H\"older exponent values found in the image is partitioned in $M$ sub-ranges (in practice, $M$ is a parameter: the number of FDs). Each $\alpha_{j}$ defines one sub-range. Then, the multifractal spectrum related to the value of $\epsilon$, $f_{\epsilon}(\alpha_{j})$, is obtained by counting the $N_{\epsilon}$ boxes characterized by $\alpha_{j}$, in the form:
+The exponent characterizes the local regularity of the structure at a point. To obtain a global characterization of the regularity of the structure it is necessary to obtain the distribution of $\alpha$ in $E$. Then, the multifractal spectrum related to the value of $\epsilon$, $f_{\epsilon}(\alpha_{i})$, is obtained by counting the $N_{\epsilon}$ boxes characterized by $\alpha_{i}$, in the form:
 
 \begin{equation}
-f_{\epsilon}(\alpha_{j}) = - \frac{ln(N_{\epsilon}(\alpha_{j}))}{ln(\epsilon)}.
+f_{\epsilon}(\alpha_{i}) = - \frac{ln(N_{\epsilon}(\alpha_{i}))}{ln(\epsilon)}.
 \label{eqn:eqn6}
 \end{equation}
 
-When $\epsilon$ tends to $0$, the limiting value is the FD of the structure $E$ characterized by $\alpha$, the Hausdorff dimension (which is calculated by using the Box procedure described) of the $\alpha$ distribution, also known as the {\em multifractal spectrum} $f(\alpha)$ (MFS) \cite{Silvetti2010}, {\em i.e.}
+When $\epsilon$ tends to $0$, the limiting value is the FD of the structure $E$ characterized by $\alpha$, the Hausdorff dimension of the $\alpha$ distribution, also known as the {\em multifractal spectrum} $f(\alpha)$ (MFS) \cite{Silvetti2010}, {\em i.e.}
 
 \begin{equation}
 f(\alpha) = \lim_{\epsilon\to0}{f_{\epsilon}(\alpha)}.
@@ -285,11 +285,11 @@ Another choice is to define $\mu(B(x, r))$ as the sum of the Laplacians of the i
 \subsection{Image Acquisition}
 \label{sec:7}
 %(in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase).
-Twenty images of $4$ different commercial bread types ({\em sliced}, {\em baguette}, {\em bran} and {\em sandwich}), counting $80$ images, were obtained in the same day of purchase using an HP PSC 1210 scanner with the following settings: highlight 190, shadows 40, and midtones 1, and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible area for the four bread types) and $350$ dpi ($1$ pixel $= 0.00527 mm^{2}$). Then the images were converted to gray scale ($8$ bits). In addition, $20$ images of each bread type were acquired with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig.~\ref{fig:camera} four examples of bread images obtained with the camera are shown. We also employed one hundred randomly selected images from the CalTech101~\cite{FeiFei04} dataset in order to test the method's performance with non-bread images.
+Twenty images of $4$ different commercial bread types ({\em baguette}, {\em sliced}, {\em bran} and {\em sandwich}), counting $80$ images, were obtained in the same day of purchase using an HP PSC 1210 scanner with the following settings: highlight 190, shadows 40, and midtones 1, and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible area for the four bread types) and $350$ dpi ($1$ pixel $= 0.00527 mm^{2}$). Then the images were converted to gray scale ($8$ bits). In addition, $20$ images of each bread type were acquired with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig.~\ref{fig:camera} four examples of bread images obtained with the camera are shown. We also employed one hundred randomly selected images from the CalTech101~\cite{FeiFei04} dataset in order to test the method's performance with non-bread images.
 
-The void fraction (VF), mean cell area (MCA) and standard deviation of mean cell area (stCA), were calculated in order to study the relationship of the MFS with the porosity, coarseness and heterogeneity of the different bread crumbs. For this purpose, the image should be binarized. The algorithm presented in \cite{White83} was used. This algorithm applies a local thresholding schema, which showed better results than using a global thresholding schema. Particularly, the algorithm presented in \cite{Huang95} and used in \cite{Gonzales2008}, showed poor results when the illumination conditions vary in the image. In Fig.~\ref{fig:bread} an image of each bread type used in this work (top row) and its resulting binarisation using the proposed algorithm (bottom row) are shown. Small elements of $1$ and $2$ pixels were eliminated by an opening operation (erosion and dilation) using a $2\times2$ structuring element. The method showed good results even for different illumination conditions varying in the same image. 
+The void fraction (VF), mean cell area (MCA) and standard deviation of mean cell area (stCA), were calculated in order to study the relationship of the MFS with the porosity, coarseness and heterogeneity of the different bread crumbs. For this purpose, the image should be binarised. The algorithm presented in \cite{White83} was used. This algorithm applies a local thresholding schema, which showed better results than using a global thresholding schema. Particularly, the algorithm presented in \cite{Huang95} and used in \cite{Gonzales2008}, showed poor results when the illumination conditions vary in the image. In Fig.~\ref{fig:bread} an image of each bread type used in this work (top row) and its resulting binarisation using the proposed algorithm (bottom row) are shown. Small elements of $1$ and $2$ pixels were eliminated by an opening operation (erosion and dilation) using a $2\times2$ structuring element. The method showed good results even for different illumination conditions varying in the same image. 
 
-In order to determine the result of the binarization at a given pixel, the algorithm obtains some average from the gray levels in a window surrounding the pixel, and compares it to a threshold determined by the actual gray level of the pixel and a bias which is multiplied by this value, {\em i.e.}
+In order to determine the result of the binarisation at a given pixel, the algorithm obtains some average from the gray levels in a window surrounding the pixel, and compares it to a threshold determined by the actual gray level of the pixel and a bias which is multiplied by this value, {\em i.e.}
 
 \begin{equation}
 \frac{\sum_{x,y \in W} f(x,y) }{W_{size}} \geq f(x_{c},y_{c}) \times bias,
@@ -342,7 +342,7 @@ The MFS, using $20$ FDs, was applied for each of the $200$ images ({\em i.e.,} $
 
 Self-organizing maps (SOM)~\cite{Kohonen2001} of the vectorized images are useful to visualize these different representation of bread images into a lower dimensional view, in order to understand them better. A SOM map high dimensional data into a (typically) two-dimensional representation, using neighborhood information. Topological information of the original data is preserved.  
 
-Unsupervised SOM of the multifractal representation of bread and non-bread images are shown in Fig.~\ref{fig:somfractal} in a grid of $10\times10$ cells. In the left image, the $5$ classes ({\emph e.g.}: {\emph baguette}, {\emph sliced}, {\emph bran}, {\em sandwich} and {\em nonbread}) are shown, while in the right image, the {\em nonbread} class has been removed, and then the SOM was recomputed for the remaining four classes, in order to highlight details among the MFS of the different bread types. The multifractal features SOM appears to show easily separable classes. It seems that a classifier could potentially obtain low classification errors using the multifractal features.
+Unsupervised SOM of the multifractal representation of bread and non-bread images are shown in Fig.~\ref{fig:somfractal} in a grid of $10\times10$ cells. In the left image, the $5$ classes ({\emph e.g.}: {\emph baguette}, {\emph sliced}, {\emph bran}, {\em sandwich} and {\em nonbread}) are shown, while in the right image, the {\em nonbread} class has been removed, and then the SOM was recomputed for the remaining $4$ classes, in order to highlight details among the MFS of the different bread types. The multifractal features SOM appears to show easily separable classes. It seems that a classifier could potentially obtain low classification errors using the multifractal features.
 \begin{figure*}
 \begin{centering}
 \includegraphics[width=0.45\textwidth]{../exps/som/sommultifractal}
@@ -352,10 +352,10 @@ Unsupervised SOM of the multifractal representation of bread and non-bread image
 \end{centering}
 \end{figure*}
 
-In Figure \ref{fig:boxplotsMFS}, boxplots of the four different bread types are shown with the medians of each FD (in red) joined by a dashed line. From the plot, it could also been pointed out that in the first half of the MFS (first $10$ FDs), the dispersion of the FDs are higher than in the second half of the spectrum (last $10$ FDs). The spectrum in the last FDs tends to have a shape that identifies better a particular type of image. Usually, the spectra of the same class and the same capturing method have, in this part of the spectrum, a shape that is useful to characterize the class. Nevertheless the capturing method and the illumination conditions of the image influences this shape, {\em i.e.} these two factors alters the MFS of the image. In other words, there is not a unique shape for each class of bread type.
+In Figure \ref{fig:boxplotsMFS}, boxplots of the four different bread types are shown with the medians of each FD (in red) joined by a dashed line. From the plot, it could be pointed out that in the first half of the MFS (first $10$ FDs), the dispersion of the FDs are higher than in the second half of the spectrum (last $10$ FDs). The spectrum in the last FDs tends to have a shape that identifies better a particular type of image. Usually, the spectra of the same class and the same capturing method have, in this part of the spectrum, a shape that is useful to characterize the class. Nevertheless the capturing method and the illumination conditions of the image influences this shape, {\em i.e.} these two factors alters the MFS of the image. In other words, there is not a unique shape for each class of bread type.
 
 
-\begin{figure*}[htb]
+\begin{figure*}
 \centering
 \includegraphics[scale=0.4]{../images/boxpBaguetteM}
 \includegraphics[scale=0.4]{../images/boxpLactalM}
@@ -368,7 +368,7 @@ In Figure \ref{fig:boxplotsMFS}, boxplots of the four different bread types are 
 
 For the sake of completion, in Figure \ref{fig:meansMFS}, the mean values and the standard deviations of the MFS for the four different bread types are shown. This image shows, similarly to the SOM maps, that the MFS could potentially characterize and classify the different bread crumb types, since the mean values are different for each class. The standard deviations are also consistent with the results found in the boxplots. 
 
-\begin{figure*}[htb]
+\begin{figure*}
 \centering
 \includegraphics[scale=0.4]{../images/means}
 \includegraphics[scale=0.4]{../images/stdev}
@@ -376,42 +376,49 @@ For the sake of completion, in Figure \ref{fig:meansMFS}, the mean values and th
 \label{fig:meansMFS}
 \end{figure*}
 
+The Spearman correlation coefficient ($R$) for the four bread types between the fractal dimensions and the void fraction, mean cell area and standard deviation of mean cell area (in $mm^{2}$) are shown in Figures \ref{fig:corrVF}, \ref{fig:corrMCA} and \ref{fig:corrMCAstdev}, respectively, as a function of fractal dimension. In order to better describe the results, only the scanned samples were employed to analyse these correlations. This correlation coefficient is preferred since it does not assume a linear distribution of the underlying data.
 
-The Pearson coefficient ($R$) for the four bread types with the void fraction, mean cell area and standard deviation of mean cell area (in $mm^{2}$) are shown in Figures \ref{fig:corrVF}, \ref{fig:corrMCA} and \ref{fig:corrMCAstdev}, respectively. It becomes clear that the coefficients behave similarly for the first $8$ dimensions in all the bread types, but differently for the FD around $9$ and above. It could be concluded that the first $8$ dimensions are highly (inversely) correlated with the void fraction (porosity), mean cell area (coarseness) and the standard deviation of mean cell area (heterogeneity) of the bread types. It means that the first FDs increase when the mentioned features decrease. Other FDs also have a high (positive or negative) correlation, but it depends on the bread type which dimension is correlated.
+In Fig. \ref{fig:corrVF}, it becomes clear that the coefficients behave similarly for the first $5$ dimensions in all the bread types, but differently for the FD around $5$ and above. It could be concluded that the first $5$ dimensions are highly correlated with the void fraction (porosity) of the scanned samples. It means that the first FDs increase when the void fraction increase. Other FDs also have a high (positive or negative) correlation, but it depends on the bread type which dimension is correlated.
 
-From the plots of the correlation coefficients of the VF, MCA and stCA, in Figures \ref{fig:corrVF}, \ref{fig:corrMCA} and \ref{fig:corrMCAstdev} respectively, it could also be pointed out that the VF and the MCA have a higher correlation than the stCA with the FDs of the MFS. It means that the coarseness and the porosity of the bread crumb structure could be better characterized by the features than its heterogeneity, using the MFS.
+From the plots of the correlation coefficients of the MCA and stCA, in Figures \ref{fig:corrMCA} and \ref{fig:corrMCAstdev} respectively, it could also be pointed out that the MCA has a higher correlation than the stCA with the FDs of the MFS. It means that the coarseness of the bread crumb structure could be better characterized by the features than its heterogeneity, using the MFS. In addition, the last $5$ fractal dimensions of the spectra are highly (inversely) correlated with the MCA of the scanned samples. It means that the last FDs increase when the MCA decrease. The same observation could be mentioned for the stCA of the samples, but the correlations are lower. In both cases, the correlation coefficients of the {\em sandwich} class are the lower among the bread types.
 
-To summarise, the first half of the spectrum is useful to measure the porosity, coarseness and heterogeneity of the sample, while the second half of the MFS is useful to characterize the class of the image.
+To summarise, the first $5$ dimensions of the MFS are useful to measure the porosity of the scanned samples. Also, coarseness and heterogeneity could be measured by the last $5$ dimensions of the MFS. As was suggested in a previous work \cite{Gonzales2008}, the bread crumb structure is better characterized by the use of a vector of fractal dimensions, since the three properties could be measured by the MFS, employing different sections of this feature vector.
+
+%It becomes clear that the coefficients behave similarly for the first $8$ dimensions in all the bread types, but differently for the FD around $9$ and above. It could be concluded that the first $8$ dimensions are highly (inversely) correlated with the void fraction (porosity), mean cell area (coarseness) and the standard deviation of mean cell area (heterogeneity) of the bread types. It means that the first FDs increase when the mentioned features decrease. Other FDs also have a high (positive or negative) correlation, but it depends on the bread type which dimension is correlated.
+
+%From the plots of the correlation coefficients of the VF, MCA and stCA, in Figures \ref{fig:corrVF}, \ref{fig:corrMCA} and \ref{fig:corrMCAstdev} respectively, it could also be pointed out that the VF and the MCA have a higher correlation than the stCA with the FDs of the MFS. It means that the coarseness and the porosity of the bread crumb structure could be better characterized by the features than its heterogeneity, using the MFS.
+
+%To summarise, the first half of the spectrum is useful to measure the porosity, coarseness and heterogeneity of the sample, while the second half of the MFS is useful to characterize the class of the image.
 
 
 
 \begin{figure}[htb]
 \centering
-\includegraphics[scale=0.4]{../images/vf}
+\includegraphics[scale=0.4]{../images/vfsp}
 %\includegraphics[scale=0.3]{../images/vf105}
 %\includegraphics[scale=0.3]{../images/vf40_105}
 %\includegraphics[scale=0.3]{../images/vf40_110}
-\caption{Correlation coefficients for the FDs and the void fraction of the scanned samples}
+\caption{Spearman correlation coefficients for the FDs and the void fraction of the scanned samples}
 \label{fig:corrVF}
 \end{figure}
 
 \begin{figure}[htb]
 \centering
-\includegraphics[scale=0.4]{../images/mca}
+\includegraphics[scale=0.4]{../images/mcasp}
 %\includegraphics[scale=0.3]{../images/mca105}
 %\includegraphics[scale=0.3]{../images/mca40_105}
 %\includegraphics[scale=0.3]{../images/mca40_110}
-\caption{Correlation coefficients for the FDs and the mean cell area (in $mm^{2}$) of the scanned samples}
+\caption{Spearman correlation coefficients for the FDs and the mean cell area (in $mm^{2}$) of the scanned samples}
 \label{fig:corrMCA}
 \end{figure}
 
 \begin{figure}[htb]
 \centering
-\includegraphics[scale=0.4]{../images/mcastdev}
+\includegraphics[scale=0.4]{../images/mcastdevsp}
 %\includegraphics[scale=0.3]{../images/mcastdev105}
 %\includegraphics[scale=0.3]{../images/mcastdev40_105}
 %\includegraphics[scale=0.3]{../images/mcastdev40_110}
-\caption{Correlation coefficients for the FDs and the standard deviation of the mean cell area (in $mm^{2}$) of the scanned samples}
+\caption{Spearman correlation coefficients for the FDs and the standard deviation of the mean cell area (in $mm^{2}$) of the scanned samples}
 \label{fig:corrMCAstdev}
 \end{figure}
 
@@ -431,9 +438,9 @@ To summarise, the first half of the spectrum is useful to measure the porosity, 
 \subsection{Bread Classification}
 \label{sec:10}
 
-In order to test for the discriminative capability of the method, a classification experiment is made. Five classes are defined, {\emph e.g.}, {\emph baguette}, {\emph sliced}, {\emph bran}, {\emph sandwich} and {\emph non-bread}, assigning $40$ images to each class. A comparison is made between the MFS and state-of-the-art features in the computer vision literature. This classification scheme corresponds to an intra-class problem, which is harder to solve than an ordinary inter-class one. 
+In order to test for the discriminative capability of the method, a classification experiment is made. Five classes are defined, {\em e.g.}, {\em baguette}, {\em sliced}, {\em bran}, {\em sandwich} and {\em non-bread}, assigning $40$ images to each class. A comparison is made between the MFS and state-of-the-art features in the computer vision literature. This classification scheme corresponds to an intra-class problem, which is harder to solve than an ordinary inter-class one. 
 
-K-fold cross validation is applied to the entire set (with $K=4$), employing three different classifiers: Support Vector Machines (SVM), Random Forests (RF), and Nearest Neighbors (NN). Results show that the MFS presents good classification performance regardless of the classifier employed. The \textsf{libsvm} implementation \cite{Chang2011} was used for the SVM classifier (with RBF kernel). In the case of the RF ($100$ trees) and the NN ($1$ neighbor) classifiers, the \textsf{scikit-learn} python library was employed.
+K-fold cross validation is applied to the entire set (with $K=4$), employing three different classifiers: Support Vector Machines (SVM), Random Forests (RF) \cite{Breiman2001}, and Nearest Neighbors (NN). Results show that the MFS presents good classification performance regardless of the classifier employed. The \textsf{libsvm} implementation \cite{Chang2011} was used for the SVM classifier (with RBF kernel). In the case of the RF ($100$ trees) and the NN ($1$ neighbor) classifiers, the \textsf{scikit-learn} python library was employed.
 
 In Table \ref{tab:number}, the classification performance of the method is tested using different numbers of FDs. When $20$ FDs are used, an useful combination of performance and low-dimensionality is achieved, so this number of FDs is used in the following calculations. The goal of this work is to show the impact of the features, rather than that of the classifier. The Nearest Neighbor results are considered the most relevant among the three classifiers, since it presents the simplest classification rules.
 
@@ -477,7 +484,7 @@ NN & 90.5\% & 90\% & 87\% & \textbf{92\%} \\
 
 \begin{table}
 % table caption is above the table
-\caption{classification results for different features}
+\caption{classification results for different state-of-the-art features}
 \label{tab:other}       % Give a unique label
 % For LaTeX tables use
 \begin{tabular}{llllll}
@@ -496,7 +503,7 @@ NN & 79\% & 70\% & \textbf{86\%} \\ % & 48.5
 
 \section{Conclusions}
 \label{sec:11}
-The visual appearance of different types of bread crumbs can be successfully characterized by the fractal dimensions of their digital images. The first fractal dimensions obtained from the MFS method inversely measured bread crumb coarseness, porosity and heterogeneity, meaning that the lower the FD, the higher the measure. 
+The visual appearance of different types of bread crumbs can be successfully characterized by the fractal dimensions of their digital images. The first fractal dimensions obtained from the MFS method measured bread crumb porosity, meaning that the higher the FD, the higher the measure.  In additon, the last fractal dimensions are useful to measure coarseness and heterogeneity of bread crumb. The MFS contains useful data to characterize the three measures, combining the information in one feature vector.
 
 
 The use of multifractal features in bread crumb texture classification showed excellent performance. The MFS demonstrated to be accurate enough to perform a classification of different bread types and also to discriminate non bread from bread images. The classification performance of the MFS for the bread crumb database outperforms other state-of-the-art techniques employed in the computer vision literature. The information present in the MFS of the $L$, $a$ and $b$ channels of the CIElab space color obtained the best classification performance in all the developed tests. This result appears to be a consequence of the different capturing devices used in this work. Also, it was shown that the MFS is sensitive to changes in the illumination conditions during image acquisition.

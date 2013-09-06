@@ -23,6 +23,7 @@ from vf import VF
 from mca import mca
 import matplotlib.pyplot as plt
 from pylab import *
+import scipy
 
 SVM = 0
 RANDOM_FOREST = 1
@@ -43,7 +44,7 @@ def features(filename,i,j,combine,extra):
     #farr = [mfs.mfs, gradient.main, laplacian.laplacian]
     #farr = [mfs.mfs, laplacian.laplacian]
     farr = [mfs.mfs]
-    #farr = [laplacian.laplacian]
+    #farr = [gradient.main]
     #farr = [efd.efd]
     #farr = [haralick]
     #farr = [lbp]
@@ -157,7 +158,7 @@ def test(dtrain,labels,fileStxt, base, classifier):
 
 
 def main(subname,which,local,classifier):
-    fsize = 14
+    fsize = 15
     base = subname+'C.txt'
     fileStxt = '../exps/'+subname+'S.txt'
     fileScsv = '../exps/'+subname+'S.csv'
@@ -165,12 +166,12 @@ def main(subname,which,local,classifier):
     #fileCcsv = '../exps/'+subname+'C.csv'
     cant = 20
     dDFs  = 20
-    doves = np.zeros((cant, dDFs)).astype(np.float32)
-    allied = np.zeros((cant, dDFs)).astype(np.float32)
     baguette = np.zeros((cant, dDFs)).astype(np.float32)
     salvado   = np.zeros((cant, dDFs)).astype(np.float32)
     lactal   = np.zeros((cant, dDFs)).astype(np.float32)
     sandwich = np.zeros((cant, dDFs)).astype(np.float32)
+    allied = np.zeros((cant, dDFs)).astype(np.float32)
+    doves = np.zeros((cant, dDFs)).astype(np.float32)
 
     dovesC = np.zeros((cant, dDFs)).astype(np.float32)
     alliedC = np.zeros((cant, dDFs)).astype(np.float32)
@@ -178,20 +179,6 @@ def main(subname,which,local,classifier):
     salvadoC   = np.zeros((cant, dDFs)).astype(np.float32)
     lactalC   = np.zeros((cant, dDFs)).astype(np.float32)
     sandwichC = np.zeros((cant, dDFs)).astype(np.float32)
-
-    vfAllied = np.zeros(cant).astype(np.float32)
-    vfAlliedC = np.zeros(cant).astype(np.float32)
-    mcaAllied = np.zeros(cant).astype(np.float32)
-    mcaAlliedC = np.zeros(cant).astype(np.float32)
-    mcadvAllied = np.zeros(cant).astype(np.float32)
-    mcadvAlliedC = np.zeros(cant).astype(np.float32)
-
-    vfDoves = np.zeros(cant).astype(np.float32)
-    vfDovesC = np.zeros(cant).astype(np.float32)
-    mcaDoves = np.zeros(cant).astype(np.float32)
-    mcaDovesC = np.zeros(cant).astype(np.float32)
-    mcadvDoves = np.zeros(cant).astype(np.float32)
-    mcadvDovesC = np.zeros(cant).astype(np.float32)
 
     vfBaguette = np.zeros(cant).astype(np.float32)
     vfBaguetteC = np.zeros(cant).astype(np.float32)
@@ -221,243 +208,210 @@ def main(subname,which,local,classifier):
     mcadvSandwich = np.zeros(cant).astype(np.float32)
     mcadvSandwichC = np.zeros(cant).astype(np.float32)
 
+    vfAllied = np.zeros(cant).astype(np.float32)
+    vfAlliedC = np.zeros(cant).astype(np.float32)
+    mcaAllied = np.zeros(cant).astype(np.float32)
+    mcaAlliedC = np.zeros(cant).astype(np.float32)
+    mcadvAllied = np.zeros(cant).astype(np.float32)
+    mcadvAlliedC = np.zeros(cant).astype(np.float32)
+
+    vfDoves = np.zeros(cant).astype(np.float32)
+    vfDovesC = np.zeros(cant).astype(np.float32)
+    mcaDoves = np.zeros(cant).astype(np.float32)
+    mcaDovesC = np.zeros(cant).astype(np.float32)
+    mcadvDoves = np.zeros(cant).astype(np.float32)
+    mcadvDovesC = np.zeros(cant).astype(np.float32)
+
+
+
     path = '../images/nonbread/res/'
     dirList=os.listdir(path)
-    #print len(dirList)
-    
+        
     nonbread = np.zeros((len(dirList), dDFs)).astype(np.float32)
 
-    if(local == True):
-        data = localFeatures(subname,which)
-        with open(fileScsv, 'wb') as f:
-            writer = csv.writer(f)
-            writer.writerows(data)
+    #read from csv
 
-        prog = './clas2' # convert.c
-        cmd = '{0} "{1}" > "{2}"'.format(prog, fileScsv, fileStxt)
-        Popen(cmd, shell = True, stdout = PIPE).communicate()	
-        labels = [i for i in range(len(data))]
-        labels = map(lambda i: i/(2*(cant-1))+1, labels)
-        print labels
-        test(data, labels, fileStxt, base,classifier)
-        return
+    with open('../exps/baguetteS.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            baguette[i] = row
+            i = i+1
 
-    else:    # else global
-        import Image
+    with open('../exps/baguetteC.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            baguetteC[i] = row
+            i = i+1
 
-        for i in range(cant):
-            extra = [cantDF,40,1.15]
-            #filename = '../images/scanner/gonzales/allied{}a.tif'.format(i+1)
-            #print filename
-            #allied[i] = callF(filename,which,extra)
-            filename = '../images/scanner/gonzales/doves{}a.tif'.format(i+1)
-            print filename
-            doves[i] = callF(filename,which,extra)
-            print doves[i]
-            #vfAllied[i] = VF(filename,extra)
-            #mcaAllied[i] = mca(filename,extra)[0]
-            #mcadvAllied[i] = mca(filename,extra)[1]
+    with open('../exps/lactalS.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            lactal[i] = row
+            i = i+1
 
-            vfDoves[i] = VF(filename,extra)
-            mcaDoves[i] = mca(filename,extra)[0]
-            mcadvDoves[i] = mca(filename,extra)[1]
+    with open('../exps/lactalC.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            lactalC[i] = row
+            i = i+1
 
-            extra = [cantDF,40,1.05]
-            #filename = '../images/camera/gonzales/allied{}c.tif'.format(i+1)
-            #print filename
-            #alliedC[i] = callF(filename,which,extra)
-            filename = '../images/camera/gonzales/doves{}ca.tif'.format(i+1)
-            print filename
-            dovesC[i] = callF(filename,which,extra)
-            #vfAlliedC[i] = VF(filename,extra)
-            #mcaAlliedC[i] = mca(filename,extra)[0]
-            #mcadvAlliedC[i] = mca(filename,extra)[1]
+    with open('../exps/salvadoS.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            salvado[i] = row
+            i = i+1
 
-            vfDovesC[i] = VF(filename,extra)
-            mcaDovesC[i] = mca(filename,extra)[0]
-            mcadvDovesC[i] = mca(filename,extra)[1]
+    with open('../exps/salvadoC.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            salvadoC[i] = row
+            i = i+1
 
-            #alliedData = np.vstack((vfAllied,mcaAllied,mcadvAllied))
-            #alliedDataC = np.vstack((vfAlliedC,mcaAlliedC,mcadvAlliedC))
-            dovesData = np.vstack((vfDoves,mcaDoves,mcadvDoves))
-            dovesDataC = np.vstack((vfDovesC,mcaDovesC,mcadvDovesC))
+    with open('../exps/sandwichS.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            sandwich[i] = row
+            i = i+1
 
-            #filec = '../exps/alliedData.csv'
-            #with open(filec, 'wb') as f:
-            #    writer = csv.writer(f)
-            #    writer.writerows(alliedData)
+    with open('../exps/sandwichC.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            sandwichC[i] = row
+            i = i+1
 
-            #filec = '../exps/alliedDataC.csv'
-            #with open(filec, 'wb') as f:
-            #    writer = csv.writer(f)
-            #    writer.writerows(alliedDataC)
+    with open('../exps/nonbread.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            nonbread[i] = row
+            i = i+1
+            if(i > 40): break
 
-            #filec = '../exps/allied.csv'
-            #with open(filec, 'wb') as f:
-            #    writer = csv.writer(f)
-            #    writer.writerows(allied)
+    with open('../exps/alliedC.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            alliedC[i] = row
+            i = i+1
 
-            #filec = '../exps/alliedC.csv'
-            #with open(filec, 'wb') as f:
-            #    writer = csv.writer(f)
-            #    writer.writerows(alliedC)
+    with open('../exps/allied.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            allied[i] = row
+            i = i+1
 
-            filec = '../exps/doves.csv'
-            with open(filec, 'wb') as f:
-                writer = csv.writer(f)
-                writer.writerows(doves)
+    with open('../exps/dovesC.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            dovesC[i] = row
+            i = i+1
 
-            filec = '../exps/dovesC.csv'
-            with open(filec, 'wb') as f:
-                writer = csv.writer(f)
-                writer.writerows(dovesC)
+    with open('../exps/doves.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        for row in spamreader:
+            doves[i] = row
+            i = i+1
 
-            filec = '../exps/dovesData.csv'
-            with open(filec, 'wb') as f:
-                writer = csv.writer(f)
-                writer.writerows(dovesData)
 
-            filec = '../exps/dovesDataC.csv'
-            with open(filec, 'wb') as f:
-                writer = csv.writer(f)
-                writer.writerows(dovesDataC)
+    with open('../exps/vfs.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        vfBaguette = np.array(spamreader.next()).astype(np.float32)
+        vfBaguetteC = np.array(spamreader.next()).astype(np.float32)
+        vfLactal = np.array(spamreader.next()).astype(np.float32)
+        vfLactalC = np.array(spamreader.next()).astype(np.float32)
+        vfSalvado = np.array(spamreader.next()).astype(np.float32)
+        vfSalvadoC = np.array(spamreader.next()).astype(np.float32)
+        vfSandwich = np.array(spamreader.next()).astype(np.float32)
+        vfSandwichC = np.array(spamreader.next()).astype(np.float32)
 
-        #exit()
+    with open('../exps/mcas.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        mcaBaguette = np.array(spamreader.next()).astype(np.float32)
+        mcaBaguetteC = np.array(spamreader.next()).astype(np.float32)
+        mcaLactal = np.array(spamreader.next()).astype(np.float32)
+        mcaLactalC = np.array(spamreader.next()).astype(np.float32)
+        mcaSalvado = np.array(spamreader.next()).astype(np.float32)
+        mcaSalvadoC = np.array(spamreader.next()).astype(np.float32)
+        mcaSandwich = np.array(spamreader.next()).astype(np.float32)
+        mcaSandwichC = np.array(spamreader.next()).astype(np.float32)
 
-        j = 0
-        extra = [cantDF,40,1.15]
-        for i in range(len(dirList)):
-            filename = path+dirList[i]
-            I = Image.open(filename)
-            if(I.mode == 'RGB'):
-                print filename
-                nonbread[j] = callF(filename,which,extra)
-                j = j+1
-            if (j > cant*2+1):
-                break
+    with open('../exps/mcadvs.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        mcadvBaguette = np.array(spamreader.next()).astype(np.float32)
+        mcadvBaguetteC = np.array(spamreader.next()).astype(np.float32)
+        mcadvLactal = np.array(spamreader.next()).astype(np.float32)
+        mcadvLactalC = np.array(spamreader.next()).astype(np.float32)
+        mcadvSalvado = np.array(spamreader.next()).astype(np.float32)
+        mcadvSalvadoC = np.array(spamreader.next()).astype(np.float32)
+        mcadvSandwich = np.array(spamreader.next()).astype(np.float32)
+        mcadvSandwichC = np.array(spamreader.next()).astype(np.float32)
 
-        filec = '../exps/nonbread.csv'
-        with open(filec, 'wb') as f:
-            writer = csv.writer(f)
-            writer.writerows(nonbread)
 
-        for i in range(cant):
-            extra = [cantDF,40,1.15]
-            filename = '../images/scanner/baguette/baguette{}.tif'.format(i+1)
-            print filename
-            baguette[i] = callF(filename,which,extra)
-            vfBaguette[i] = VF(filename,extra)
-            mcaBaguette[i] = mca(filename,extra)[0]
-            mcadvBaguette[i] = mca(filename,extra)[1]
-            filename = '../images/scanner/lactal/lactal{}.tif'.format(i+1)
-            print filename
-            lactal[i] = callF(filename,which,extra)
-            vfLactal[i] = VF(filename,extra)
-            mcaLactal[i] = mca(filename,extra)[0]
-            mcadvLactal[i] = mca(filename,extra)[1]
-            filename = '../images/scanner/salvado/salvado{}.tif'.format(i+1)
-            print filename
-            salvado[i] = callF(filename,which,extra)
-            vfSalvado[i] = VF(filename,extra)
-            mcaSalvado[i] = mca(filename,extra)[0]
-            mcadvSalvado[i] = mca(filename,extra)[1]
-            filename = '../images/scanner/sandwich/sandwich{}.tif'.format(i+1)
-            print filename
-            sandwich[i] = callF(filename,which,extra)
-            vfSandwich[i] = VF(filename,extra)
-            mcaSandwich[i] = mca(filename,extra)[0]
-            mcadvSandwich[i] = mca(filename,extra)[1]
+    with open('../exps/dovesData.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        vfDoves = np.array(spamreader.next()).astype(np.float32)
+        mcaDoves = np.array(spamreader.next()).astype(np.float32)
+        mcadvDoves = np.array(spamreader.next()).astype(np.float32)
 
-            extra = [cantDF,40,1]
-            filename = '../images/camera/baguette/slicer/b{}.tif'.format(i+1)
-            print filename
-            baguetteC[i] = callF(filename,which,extra)
-            vfBaguetteC[i] = VF(filename,extra)
-            mcaBaguetteC[i] = mca(filename,extra)[0]
-            mcadvBaguetteC[i] = mca(filename,extra)[1]
-            filename = '../images/camera/lactal/l{}.tif'.format(i+1)
-            print filename
-            lactalC[i] = callF(filename,which,extra)
-            vfLactalC[i] = VF(filename,extra)
-            mcaLactalC[i] = mca(filename,extra)[0]
-            mcadvLactalC[i] = mca(filename,extra)[1]
-            filename = '../images/camera/salvado/s{}.tif'.format(i+1)
-            print filename
-            salvadoC[i] = callF(filename,which,extra)
-            vfSalvadoC[i] = VF(filename,extra)
-            mcaSalvadoC[i] = mca(filename,extra)[0]
-            mcadvSalvadoC[i] = mca(filename,extra)[1]
-            filename = '../images/camera/sandwich/s{}.tif'.format(i+1)
-            print filename
-            sandwichC[i] = callF(filename,which,extra)
-            vfSandwichC[i] = VF(filename,extra)
-            mcaSandwichC[i] = mca(filename,extra)[0]
-            mcadvSandwichC[i] = mca(filename,extra)[1]
+    with open('../exps/dovesDataC.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        vfDovesC = np.array(spamreader.next()).astype(np.float32)
+        mcaDovesC = np.array(spamreader.next()).astype(np.float32)
+        mcadvDovesC = np.array(spamreader.next()).astype(np.float32)
+
+    with open('../exps/alliedData.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        vfAllied = np.array(spamreader.next()).astype(np.float32)
+        mcaAllied = np.array(spamreader.next()).astype(np.float32)
+        mcadvAllied = np.array(spamreader.next()).astype(np.float32)
+
+    with open('../exps/alliedDataC.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile)
+        i = 0
+        vfAlliedC = np.array(spamreader.next()).astype(np.float32)
+        mcaAlliedC = np.array(spamreader.next()).astype(np.float32)
+        mcadvAlliedC = np.array(spamreader.next()).astype(np.float32)
+
+    #sandwich = allied
+    #sandwichC = alliedC
+
+    #salvado = doves
+    #salvadoC = dovesC
+
+    print "ALLIED: ", allied
+    print "ALLIEDC: ", alliedC
+
+    #vfSalvado = vfAllied
+    #mcaSalvado = mcaAllied
+    #mcadvSalvado = mcadvAllied
+    #vfSalvadoC = vfAlliedC
+    #mcaSalvadoC = mcaAlliedC
+    #mcadvSalvadoC = mcadvAlliedC
+
+    #vfSalvado = vfAllied
+    #mcaSalvado = mcaAllied
+    #mcadvSalvado = mcadvAllied
+    #vfSalvadoC = vfAlliedC
+    #mcaSalvadoC = mcaAlliedC
+    #mcadvSalvadoC = mcadvAlliedC
 
     data = np.vstack((baguette, baguetteC,lactal,lactalC,salvado,salvadoC,sandwich,sandwichC,nonbread[0:(2*(cant))]))
 
-
-    filec = '../exps/baguetteS.csv'
-    with open(filec, 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(baguette)
-
-    filec = '../exps/baguetteC.csv'
-    with open(filec, 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(baguetteC)
-
-    filec = '../exps/lactalS.csv'
-    with open(filec, 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(lactal)
-
-    filec = '../exps/lactalC.csv'
-    with open(filec, 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(lactalC)
-
-    filec = '../exps/salvadoS.csv'
-    with open(filec, 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(salvado)
-
-    filec = '../exps/salvadoC.csv'
-    with open(filec, 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(salvadoC)
-
-    filec = '../exps/sandwichS.csv'
-    with open(filec, 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(sandwich)
-
-    filec = '../exps/sandwichC.csv'
-    with open(filec, 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(sandwichC)
-
-    vfs = np.vstack((vfBaguette,vfBaguetteC,vfLactal,vfLactalC,vfSalvado,vfSalvadoC,vfSandwich,vfSandwichC))
-    mcas = np.vstack((mcaBaguette,mcaBaguetteC,mcaLactal,mcaLactalC,mcaSalvado,mcaSalvadoC,mcaSandwich,mcaSandwichC))
-    stmcas = np.vstack((mcadvBaguette,mcadvBaguetteC,mcadvLactal,mcadvLactalC,mcadvSalvado,mcadvSalvadoC,mcadvSandwich,mcadvSandwichC))
-
-    ##### VF'S
-    filec = '../exps/vfs.csv'
-    with open(filec, 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(vfs)
-
-    ### MCA'S
-    filec = '../exps/mcas.csv'
-    with open(filec, 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(mcas)
-
-    ### STMCA'S
-    filec = '../exps/mcadvs.csv'
-    with open(filec, 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(stmcas)
+    #exit()
 
     #plt.xlabel('Baguette',fontsize=fsize)
     #plt.boxplot(np.vstack((baguette)))
@@ -490,38 +444,52 @@ def main(subname,which,local,classifier):
     #plt.xlabel('SandwichC',fontsize=fsize)
     #plt.boxplot(np.vstack((sandwichC)))
     #plt.show()
-    rB = plt.boxplot(np.vstack((baguette,baguetteC)))
+    xt = np.arange(0,20,2)
+    alpha = map(lambda i:i*0.05, xt)
+
+    rB = plt.boxplot(np.vstack((baguette,baguetteC)), sym='')
+    xticks(xt,alpha) # translate
+    plt.ylim((0, 2))
     plt.ylabel(r'$f(\alpha)$',fontsize=fsize)
-    plt.xlabel('FD',fontsize=fsize)
+    plt.xlabel(r'$\alpha$',fontsize=fsize)
     mediansB = map(lambda i: i.get_data()[1][0],rB['medians'])
     x = np.arange(len(mediansB))
     plt.plot(map(lambda i: i+1, x), mediansB, 'k+--', label='baguette',linewidth=2.0)
     plt.show()
 
-    rL = plt.boxplot(np.vstack((lactal,lactalC)))
+    #exit()
+    plt.ylim((0, 2))
+    rL = plt.boxplot(np.vstack((lactal,lactalC)), sym='')
+    xticks(xt,alpha) # translate
     plt.ylabel(r'$f(\alpha)$',fontsize=fsize)
-    plt.xlabel('FD',fontsize=fsize)
+    plt.xlabel(r'$\alpha$',fontsize=fsize)
     mediansL = map(lambda i: i.get_data()[1][0],rL['medians'])
     plt.plot(map(lambda i: i+1, x), mediansL, 'k+--', label='sliced',linewidth=2.0)
     plt.show()
 
-    rSal = plt.boxplot(np.vstack((salvado,salvadoC)))
+    plt.ylim((0, 2))
+    rSal = plt.boxplot(np.vstack((salvado,salvadoC)), sym='')
+    xticks(xt,alpha) # translate
     mediansSal = map(lambda i: i.get_data()[1][0],rSal['medians'])
     plt.ylabel(r'$f(\alpha)$',fontsize=fsize)
-    plt.xlabel('FD',fontsize=fsize)
+    plt.xlabel(r'$\alpha$',fontsize=fsize)
     plt.plot(map(lambda i: i+1, x), mediansSal, 'k+--',  label='bran',linewidth=2.0)
     plt.show()
 
-    rSan = plt.boxplot(np.vstack((sandwich,sandwichC)))
+    plt.ylim((0, 2))
+    rSan = plt.boxplot(np.vstack((sandwich,sandwichC)), sym='')
+    xticks(xt,alpha) # translate
     plt.ylabel(r'$f(\alpha)$',fontsize=fsize)
-    plt.xlabel('FD',fontsize=fsize)
+    plt.xlabel(r'$\alpha$',fontsize=fsize)
     mediansSan = map(lambda i: i.get_data()[1][0],rSan['medians'])
     plt.plot(map(lambda i: i+1, x), mediansSan, 'k+--',  label='sandwich',linewidth=2.0)
     plt.show()
 
-    rnonB = plt.boxplot(nonbread[0:(2*(cant))])
+    plt.ylim((0, 2))
+    rnonB = plt.boxplot(nonbread[0:(2*(cant))], sym='')
+    xticks(xt,alpha) # translate
     plt.ylabel(r'$NONBREAD$',fontsize=fsize)
-    plt.xlabel('FD',fontsize=fsize)
+    plt.xlabel(r'$\alpha$',fontsize=fsize)
     mediansNonB = map(lambda i: i.get_data()[1][0],rnonB['medians'])
     plt.plot(map(lambda i: i+1, x), mediansNonB, 'k+--', label='nonbread!',linewidth=2.0)
     plt.show()
@@ -574,23 +542,97 @@ def main(subname,which,local,classifier):
     print "Shapes:"
     print arrTodos.shape
     print dataTodos.shape
-    for i in range(cfeat):
+    #for i in range(cfeat):
         #print i
-        cB[i] = np.corrcoef(dataB[:,i],arrB)[0,1]
-        cmcaB[i] = np.corrcoef(dataB[:,i],mcaB)[0,1]
-        cmcadvB[i] = np.corrcoef(dataB[:,i],mcadvB)[0,1]
-        cL[i] = np.corrcoef(dataL[:,i],arrL)[0,1]
-        cmcaL[i] = np.corrcoef(dataL[:,i],mcaL)[0,1]
-        cmcadvL[i] = np.corrcoef(dataL[:,i],mcadvL)[0,1]
-        cSal[i] = np.corrcoef(dataSal[:,i],arrSal)[0,1]
-        cmcaSal[i] = np.corrcoef(dataSal[:,i],mcaSal)[0,1]
-        cmcadvSal[i] = np.corrcoef(dataSal[:,i],mcadvSal)[0,1]
-        cSan[i] = np.corrcoef(dataSan[:,i],arrSan)[0,1]
-        cmcaSan[i] = np.corrcoef(dataSan[:,i],mcaSan)[0,1]
-        cmcadvSan[i] = np.corrcoef(dataSan[:,i],mcadvSan)[0,1]
-        cTodos[i] = np.corrcoef(dataTodos[:,i],arrTodos)[0,1]
-        cmcaTodos[i] = np.corrcoef(dataTodos[:,i],mcaTodos)[0,1]
-        cmcadvTodos[i] = np.corrcoef(dataTodos[:,i],mcadvTodos)[0,1]
+       # cB[i] = np.corrcoef(dataB[:,i],arrB)[0,1]
+       # cmcaB[i] = np.corrcoef(dataB[:,i],mcaB)[0,1]
+       # cmcadvB[i] = np.corrcoef(dataB[:,i],mcadvB)[0,1]
+       # cL[i] = np.corrcoef(dataL[:,i],arrL)[0,1]
+       # cmcaL[i] = np.corrcoef(dataL[:,i],mcaL)[0,1]
+       # cmcadvL[i] = np.corrcoef(dataL[:,i],mcadvL)[0,1]
+       # cSal[i] = np.corrcoef(dataSal[:,i],arrSal)[0,1]
+       # cmcaSal[i] = np.corrcoef(dataSal[:,i],mcaSal)[0,1]
+       # cmcadvSal[i] = np.corrcoef(dataSal[:,i],mcadvSal)[0,1]
+       # cSan[i] = np.corrcoef(dataSan[:,i],arrSan)[0,1]
+       # cmcaSan[i] = np.corrcoef(dataSan[:,i],mcaSan)[0,1]
+       # cmcadvSan[i] = np.corrcoef(dataSan[:,i],mcadvSan)[0,1]
+       # cTodos[i] = np.corrcoef(dataTodos[:,i],arrTodos)[0,1]
+       # cmcaTodos[i] = np.corrcoef(dataTodos[:,i],mcaTodos)[0,1]
+       # cmcadvTodos[i] = np.corrcoef(dataTodos[:,i],mcadvTodos)[0,1]
+
+    cBs = np.zeros(dDFs).astype(np.float32)
+    cmcaBs = np.zeros(dDFs).astype(np.float32)
+    cmcadvBs = np.zeros(dDFs).astype(np.float32)
+    cLs = np.zeros(dDFs).astype(np.float32)
+    cmcaLs = np.zeros(dDFs).astype(np.float32)
+    cmcadvLs = np.zeros(dDFs).astype(np.float32)
+    cSals = np.zeros(dDFs).astype(np.float32)
+    cmcaSals = np.zeros(dDFs).astype(np.float32)
+    cmcadvSals = np.zeros(dDFs).astype(np.float32)
+    cSans = np.zeros(dDFs).astype(np.float32)
+    cmcaSans = np.zeros(dDFs).astype(np.float32)
+    cmcadvSans = np.zeros(dDFs).astype(np.float32)
+
+    cAs = np.zeros(dDFs).astype(np.float32)
+    cmcaAs = np.zeros(dDFs).astype(np.float32)
+    cmcadvAs = np.zeros(dDFs).astype(np.float32)
+
+    cBc = np.zeros(dDFs).astype(np.float32)
+    cmcaBc = np.zeros(dDFs).astype(np.float32)
+    cmcadvBc = np.zeros(dDFs).astype(np.float32)
+    cLc = np.zeros(dDFs).astype(np.float32)
+    cmcaLc = np.zeros(dDFs).astype(np.float32)
+    cmcadvLc = np.zeros(dDFs).astype(np.float32)
+    cSalc = np.zeros(dDFs).astype(np.float32)
+    cmcaSalc = np.zeros(dDFs).astype(np.float32)
+    cmcadvSalc = np.zeros(dDFs).astype(np.float32)
+    cSanc = np.zeros(dDFs).astype(np.float32)
+    cmcaSanc = np.zeros(dDFs).astype(np.float32)
+    cmcadvSanc = np.zeros(dDFs).astype(np.float32)
+
+    cAc = np.zeros(dDFs).astype(np.float32)
+    cmcaAc = np.zeros(dDFs).astype(np.float32)
+    cmcadvAc = np.zeros(dDFs).astype(np.float32)
+
+
+    
+    #print "All: ", allied
+#    print "BAGUETTE", vfBaguette
+ #   exit()
+
+    for i in range(dDFs):
+        cBs[i] = scipy.stats.stats.spearmanr(baguette[:,i],vfBaguette)[0]
+        cmcaBs[i] = scipy.stats.stats.spearmanr(baguette[:,i],mcaBaguette)[0]
+        cmcadvBs[i] = scipy.stats.stats.spearmanr(baguette[:,i],mcadvBaguette)[0]
+        cLs[i] = scipy.stats.stats.spearmanr(lactal[:,i],vfLactal)[0]
+        cmcaLs[i] = scipy.stats.stats.spearmanr(lactal[:,i],mcaLactal)[0]
+        cmcadvLs[i] = scipy.stats.stats.spearmanr(lactal[:,i],mcadvLactal)[0]
+        cSals[i] = scipy.stats.stats.spearmanr(salvado[:,i],vfSalvado)[0]
+        cmcaSals[i] = scipy.stats.stats.spearmanr(salvado[:,i],mcaSalvado)[0]
+        cmcadvSals[i] = scipy.stats.stats.spearmanr(salvado[:,i],mcadvSalvado)[0]
+        cSans[i] = scipy.stats.stats.spearmanr(sandwich[:,i],vfSandwich)[0]
+        cmcaSans[i] = scipy.stats.stats.spearmanr(sandwich[:,i],mcaSandwich)[0]
+        cmcadvSans[i] = scipy.stats.stats.spearmanr(sandwich[:,i],mcadvSandwich)[0]
+        cAs[i] = scipy.stats.stats.spearmanr(allied[:,i],vfAllied)[0]
+        cmcaAs[i] = scipy.stats.stats.spearmanr(allied[:,i],mcaAllied)[0]
+        cmcadvAs[i] = scipy.stats.stats.spearmanr(allied[:,i],mcadvAllied)[0]
+        #camera
+        cBc[i] = scipy.stats.stats.spearmanr(baguetteC[:,i],vfBaguetteC)[0]
+        cmcaBc[i] = scipy.stats.stats.spearmanr(baguetteC[:,i],mcaBaguetteC)[0]
+        cmcadvBc[i] = scipy.stats.stats.spearmanr(baguetteC[:,i],mcadvBaguetteC)[0]
+        cLc[i] = scipy.stats.stats.spearmanr(lactalC[:,i],vfLactalC)[0]
+        cmcaLc[i] = scipy.stats.stats.spearmanr(lactalC[:,i],mcaLactalC)[0]
+        cmcadvLc[i] = scipy.stats.stats.spearmanr(lactalC[:,i],mcadvLactalC)[0]
+        cSalc[i] = scipy.stats.stats.spearmanr(salvadoC[:,i],vfSalvadoC)[0]
+        cmcaSalc[i] = scipy.stats.stats.spearmanr(salvadoC[:,i],mcaSalvadoC)[0]
+        cmcadvSalc[i] = scipy.stats.stats.spearmanr(salvadoC[:,i],mcadvSalvadoC)[0]
+        cSanc[i] = scipy.stats.stats.spearmanr(sandwichC[:,i],vfSandwichC)[0]
+        cmcaSanc[i] = scipy.stats.stats.spearmanr(sandwichC[:,i],mcaSandwichC)[0]
+        cmcadvSanc[i] = scipy.stats.stats.spearmanr(sandwichC[:,i],mcadvSandwichC)[0]
+
+        cAc[i] = np.corrcoef(alliedC[:,i],vfAlliedC)[0,1]
+        cmcaAc[i] = np.corrcoef(alliedC[:,i],mcaAlliedC)[0,1]
+        cmcadvAc[i] = np.corrcoef(alliedC[:,i],mcadvAlliedC)[0,1]
 
 
     print "Coefficients"
@@ -656,56 +698,66 @@ def main(subname,which,local,classifier):
     print "Mean : ", mean[4]
     print "Std : ", std[4]
 
-    x = np.arange(cfeat)
+    x1 = 1
+    x2 = 20
+    x = np.arange(cfeat)+1
+    plt.ylim((-1, 1))
+    plt.xlim(x1,x2)
     plt.ylabel(r'$R$',fontsize=fsize)
     plt.xlabel('FD',fontsize=fsize)
-    plt.plot(x, cB, 'k+--', label='baguette',linewidth=2.0)
-    plt.plot(x, cL, 'r*--',  label='sliced',linewidth=2.0)
-    plt.plot(x, cSal, 'bx--',  label='bran',linewidth=2.0)
-    plt.plot(x, cSan, 'go--',  label='sandwich',linewidth=2.0)
+    plt.plot(x, cBs, 'ko--', label='baguette',linewidth=2.0)
+    plt.plot(x, cLs, 'ro--',  label='sliced',linewidth=2.0)
+    plt.plot(x, cSals, 'bo--',  label='bran',linewidth=2.0)
+    plt.plot(x, cSans, 'go--',  label='sandwich',linewidth=2.0)
     #plt.plot(x, cTodos, 'mo--',  label='todos',linewidth=2.0)
-    plt.legend(loc = 2) # loc 4: bottom, right
+    plt.legend(loc = 3) # loc 4: bottom, right
     plt.show()
 
     plt.ylabel(r'$R$',fontsize=fsize)
     plt.xlabel('FD',fontsize=fsize)
-    plt.plot(x, cmcaB, 'k+--', label='baguette',linewidth=2.0)
-    plt.plot(x, cmcaL, 'r*--',  label='sliced',linewidth=2.0)
-    plt.plot(x, cmcaSal, 'bx--',  label='bran',linewidth=2.0)
-    plt.plot(x, cmcaSan, 'go--',  label='sandwich',linewidth=2.0)
+    plt.ylim((-1, 1))
+    plt.xlim(x1,x2)
+    plt.plot(x, cmcaBs, 'ko--', label='baguette',linewidth=2.0)
+    plt.plot(x, cmcaLs, 'ro--',  label='sliced',linewidth=2.0)
+    plt.plot(x, cmcaSals, 'bo--',  label='bran',linewidth=2.0)
+    plt.plot(x, cmcaSans, 'go--',  label='sandwich',linewidth=2.0)
     #plt.plot(x, cmcaTodos, 'mo--',  label='todos',linewidth=2.0)
-    plt.legend(loc = 2) # loc 4: bottom, right
+    plt.legend(loc = 3) # loc 4: bottom, right
     plt.show()
 
     plt.ylabel(r'$R$',fontsize=fsize)
     plt.xlabel('FD',fontsize=fsize)
-    plt.plot(x, cmcadvB, 'k+--', label='baguette',linewidth=2.0)
-    plt.plot(x, cmcadvL, 'r*--',  label='sliced',linewidth=2.0)
-    plt.plot(x, cmcadvSal, 'bx--',  label='bran',linewidth=2.0)
-    plt.plot(x, cmcadvSan, 'go--',  label='sandwich',linewidth=2.0)
+    plt.ylim((-1, 1))
+    plt.xlim(x1,x2)
+    plt.plot(x, cmcadvBs, 'ko--', label='baguette',linewidth=2.0)
+    plt.plot(x, cmcadvLs, 'ro--',  label='sliced',linewidth=2.0)
+    plt.plot(x, cmcadvSals, 'bo--',  label='bran',linewidth=2.0)
+    plt.plot(x, cmcadvSans, 'go--',  label='sandwich',linewidth=2.0)
     #plt.plot(x, cmcadvTodos, 'mo--',  label='todos',linewidth=2.0)
-    plt.legend(loc = 2) # loc 4: bottom, right
+    plt.legend(loc = 3) # loc 4: bottom, right
     plt.show()
 
     # Graph for means
-    x = np.arange(cfeat)
+    plt.xlim(x1,x2)
+    x = np.arange(cfeat)+1
     plt.ylabel(r'$mean$',fontsize=fsize)
     plt.xlabel('FD',fontsize=fsize)
-    plt.plot(x, mean[0], 'k+--', label='baguette',linewidth=2.0)
-    plt.plot(x, mean[1], 'r*--',  label='sliced',linewidth=2.0)
-    plt.plot(x, mean[2], 'bx--',  label='bran',linewidth=2.0)
+    plt.plot(x, mean[0], 'ko--', label='baguette',linewidth=2.0)
+    plt.plot(x, mean[1], 'ro--',  label='sliced',linewidth=2.0)
+    plt.plot(x, mean[2], 'bo--',  label='bran',linewidth=2.0)
     plt.plot(x, mean[3], 'go--',  label='sandwich',linewidth=2.0)
     #plt.plot(x, mean[4], 'mo--',  label='todos',linewidth=2.0)
     plt.legend(loc = 2)
     plt.show()
 
     # Graph for standard deviations
-    x = np.arange(cfeat)
+    x = np.arange(cfeat)+1
     plt.ylabel(r'$std$',fontsize=fsize)
     plt.xlabel('FD',fontsize=fsize)
-    plt.plot(x, std[0], 'k+--', label='baguette',linewidth=2.0)
-    plt.plot(x, std[1], 'r*--',  label='sliced',linewidth=2.0)
-    plt.plot(x, std[2], 'bx--',  label='bran',linewidth=2.0)
+    plt.xlim(x1,x2)
+    plt.plot(x, std[0], 'ko--', label='baguette',linewidth=2.0)
+    plt.plot(x, std[1], 'ro--',  label='sliced',linewidth=2.0)
+    plt.plot(x, std[2], 'bo--',  label='bran',linewidth=2.0)
     plt.plot(x, std[3], 'go--',  label='sandwich',linewidth=2.0)
     #plt.plot(x, std[4], 'mo--',  label='todos',linewidth=2.0)
     plt.legend(loc = 1)

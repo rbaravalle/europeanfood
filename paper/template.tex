@@ -242,12 +242,12 @@ f(\alpha) = \lim_{\epsilon\to0}{f_{\epsilon}(\alpha)}.
 \end{equation}
 
 \subsubsection{Practical procedure for the MFS}
-There are several techniques described in the literature to obtain the MFS, which lead to different representations of the multifractal information present in the structure. Usually, the method of moments is used \cite{Mendoza2010,Serrano2012}, but it produces a feature vector which is not always suitable for classification tasks. In this work, the implementation presented in \cite{Xu2006} is employed, due to its better classification performance. The implementation first calculates the method of moments and then uses a Legendre transform to obtain the MFS. The procedure consists in partitioning the domain into non-overlapping boxes of length $r$. For $x \in \mathbb{R}^{2}$, denote $B(x,r)$ the closed disk of radius $r > 0$ centered at $x$. The $q$-th moment of the measure $\mu$ is defined as
+There are several techniques described in the literature to obtain the MFS, which lead to different representations of the multifractal information present in the structure. Usually, the method of moments is used \cite{Mendoza2010,Serrano2012}, but it produces a feature vector which is not always suitable for classification tasks. In this work, the implementation presented in \cite{Xu2006} is employed, due to its better classification performance. The implementation first calculates the method of moments and then uses a Legendre transform to obtain the MFS. The procedure consists in partitioning the domain into non-overlapping boxes of length $\epsilon$. For $x \in \mathbb{R}^{2}$, denote $B(x,\epsilon)$ the closed disk of radius $\epsilon > 0$ centered at $x$. The $q$-th moment of the measure $\mu$ is defined as
 \begin{equation}
-M_{r}(q) = \sum{\mu(B(x,r))^{q}},
+M_{\epsilon}(q) = \sum{\mu(B(x,\epsilon))^{q}},
 \label{eqn:eqn8}
 \end{equation}
-where the sum is over the $r$-mesh squares for which $\mu(B(x,r)) > 0$. To denote the power law behavior of $M_{r}(q)$, $\beta(q)$ is defined as a straight line fit of the values $M_{r}(q)$ with respect to $r$, for $r$ in $1,..,n$. It is shown in \cite{Falconer97}, that the MFS (see Eq.~(\ref{eqn:eqn7})) and $\beta(q)$ are related to each other by a Legendre transform as
+where the sum is over the $\epsilon$-mesh squares for which $\mu(B(x,\epsilon)) > 0$. To denote the power law behavior of $M_{\epsilon}(q)$, $\beta(q)$ is defined as a straight line fit of the values $M_{\epsilon}(q)$ with respect to $\epsilon$, for $\epsilon$ in $1,..,n$. It is shown in \cite{Falconer97}, that the MFS (see Eq.~(\ref{eqn:eqn7})) and $\beta(q)$ are related to each other by a Legendre transform as
 
 \begin{equation}
 f(\alpha(q)) = q \alpha(q) - \beta(q),
@@ -267,33 +267,35 @@ As previously stated, the $f(\alpha)$ spectrum (MFS) and the generalized dimensi
 Defining different $\mu$ functions counts for different image features. The first approach is to define $\mu$ in the intensity domain, {\em i.e.}
 
 \begin{equation}
-\mu(B(x,r)) = \int_{B(x,r)}{(G_{r} \ast I)} dx,
+\mu(B(x,\epsilon)) = \int_{B(x,\epsilon)}{(G_{\epsilon} \ast I)} dx,
 \label{eqn:eqn11}
 \end{equation}
-where $\ast$ is the $2D$ convolution operator and $G_{r}$ is a Gaussian smoothing kernel with variance $r$, {\em i.e., } $\mu$ is the weighted average intensity value in the disk of radius $r$ centered at $x$ ($B(x,r)$). This is the density of the intensity function, and it describes how the intensity at a point changes over scale.
+where $\ast$ is the $2D$ convolution operator and $G_{\epsilon}$ is a Gaussian smoothing kernel with variance $\epsilon$, {\em i.e., } $\mu$ is the weighted average intensity value in the disk of radius $\epsilon$ centered at $x$ ($B(x,\epsilon)$). This is the density of the intensity function, and it describes how the intensity at a point changes over scale.
 
-The definition of $\mu$ could serve to specific purposes. For instance, if robustness to illumination changes is needed, one choice is to define $\mu(B(x,r))$ on the domain of the energy of the gradients. Let ${ f_{k} , k = 1, 2, 3, 4}$ be four directional differential operators along the vertical, horizontal, diagonal and anti-diagonal directions. Then we define the measurement function $\mu(B(x,r))$ for the image $I$ as follows:
+The definition of $\mu$ could serve to specific purposes. For instance, if robustness to illumination changes is needed, one choice is to define $\mu(B(x,\epsilon))$ on the domain of the energy of the gradients. Let ${ f_{k} , k = 1, 2, 3, 4}$ be four directional differential operators along the vertical, horizontal, diagonal and anti-diagonal directions. Then we define the measurement function $\mu(B(x,\epsilon))$ for the image $I$ as follows:
 
 \begin{equation}
-\mu(B(x,r)) = (\int_{B(x,r)}{\sum_{k}{(f_{k} \ast (G_{r} \ast I))^{2}} dx)^{1/2}}.
+\mu(B(x,\epsilon)) = (\int_{B(x,\epsilon)}{\sum_{k}{(f_{k} \ast (G_{\epsilon} \ast I))^{2}} dx)^{1/2}}.
 \label{eqn:gradient}
 \end{equation}
 
-Another choice is to define $\mu(B(x, r))$ as the sum of the Laplacians of the image inside $B(x, r)$, that is
+Another choice is to define $\mu(B(x, \epsilon))$ as the sum of the Laplacians of the image inside $B(x, \epsilon)$, that is
 
 \begin{equation}
-\mu(B(x,r)) = \int_{B(x,r)}|\nabla^2 (G_{r} \ast I)| dx.
+\mu(B(x,\epsilon)) = \int_{B(x,\epsilon)}|\nabla^2 (G_{\epsilon} \ast I)| dx.
 \label{eqn:laplacian}
 \end{equation}
+
+All these alternative measures modify the computed FD and MFS (except for trivial or monofractal images), and therefore are valuable choices in finding adequate features, as will be shown in next sections.
 
 \subsection{Image Acquisition}
 \label{sec:7}
 %(in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase).
 Twenty images of $4$ different commercial bread types ({\em baguette}, {\em sliced}, {\em bran} and {\em sandwich}), counting $80$ images, were obtained in the same day of purchase using an HP PSC 1210 scanner with the following settings: highlight 190, shadows 40, and midtones 1, and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible area for the four bread types) and $350$ dpi ($1$ pixel $= 0.00527 mm^{2}$). Then the images were converted to gray scale ($8$ bits). In addition, $20$ images of each bread type were acquired with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig.~\ref{fig:camera} four examples of bread images obtained with the camera are shown. We also employed one hundred randomly selected images from the CalTech101~\cite{FeiFei04} dataset in order to test the method's performance with non-bread images.
 
-The void fraction (VF), mean cell area (MCA) and standard deviation of mean cell area (stCA), were calculated in order to study the relationship of the MFS with the porosity, coarseness and heterogeneity of the different bread crumbs. For this purpose, the image should be binarised. The algorithm presented in \cite{White83} was used. This algorithm applies a local thresholding schema, which showed better results than using a global thresholding schema. Particularly, the algorithm presented in \cite{Huang95} and used in \cite{Gonzales2008}, showed poor results when the illumination conditions vary in the image. In Fig.~\ref{fig:bread} an image of each bread type used in this work (top row) and its resulting binarisation using the proposed algorithm (bottom row) are shown. Small elements of $1$ and $2$ pixels were eliminated by an opening operation (erosion and dilation) using a $2\times2$ structuring element. The method showed good results even for different illumination conditions varying in the same image. 
+The void fraction (VF), mean cell area (MCA) and standard deviation of mean cell area (stCA), were calculated in order to study the relationship of the MFS with the porosity, coarseness and heterogeneity of the different bread crumbs. For this purpose, the image was binarised using the algorithm presented in \cite{White83}. This algorithm applies a local thresholding schema, which showed better results than using a global thresholding schema. Particularly, the algorithm presented in \cite{Huang95} and used in \cite{Gonzales2008}, showed poor results when the illumination conditions vary in the image. In Fig.~\ref{fig:bread} an image of each bread type used in this work (top row) and its resulting binarisation using the proposed algorithm (bottom row) are shown. Small elements of $1$ and $2$ pixels were eliminated by an opening operation (erosion and dilation) using a $2\times2$ structuring element. The method showed good results even for different illumination conditions varying in the same image. 
 
-In order to determine the result of the binarisation at a given pixel, the algorithm obtains some average from the gray levels in a window surrounding the pixel, and compares it to a threshold determined by the actual gray level of the pixel and a bias which is multiplied by this value, {\em i.e.}
+In order to determine the result of the binarisation at a given pixel, the algorithm obtains an average from the gray levels in a window surrounding the pixel, and compares it to a threshold determined by the actual gray level of the pixel and a bias which is multiplied by this value, {\em i.e.}
 
 \begin{equation}
 \frac{\sum_{x,y \in W} f(x,y) }{W_{size}} \geq f(x_{c},y_{c}) \times bias,
@@ -307,7 +309,7 @@ where $x_{c},y_{c}$ are the coordinates of the actual pixel, and $W$ is the wind
 \includegraphics[scale=0.28]{../images/camera/lactal/l14}
 \includegraphics[scale=0.28]{../images/camera/s7}
 \includegraphics[scale=0.28]{../images/camera/sandwich/s1}
-\caption{Digitalized images from a digital camera}
+\caption{Digitized images from a digital camera.}
 \label{fig:camera}
 \end{figure*}
 
@@ -331,7 +333,7 @@ where $x_{c},y_{c}$ are the coordinates of the actual pixel, and $W$ is the wind
 \includegraphics[scale=0.35]{../images/lactal14bin}
 \includegraphics[scale=0.35]{../images/salvado43bin}
 \includegraphics[scale=0.35]{../images/sandwich43bin}
-\caption{Digitalized images of {\em baguette}, {\em sliced}, {\em bran} and {\em sandwich} bread types (top row) with their corresponding binarisations (bottom row)}
+\caption{Digitized images (from a scanner) of {\em baguette}, {\em sliced}, {\em bran} and {\em sandwich} bread types (top row) with their corresponding binarisations (bottom row).}
 \label{fig:bread}
 \end{figure*}
 
@@ -339,14 +341,15 @@ where $x_{c},y_{c}$ are the coordinates of the actual pixel, and $W$ is the wind
 \section{Results and discussion}
 \label{sec:9}
 
-The MFS, using $20$ FDs, was applied for each of the $200$ images ({\em i.e.,} $40$ images of each bread type, and $40$ randomly selected nonbread images, getting $5$ balanced classes).
+In this section we will atempt to show how the MFS behaved adequately as a feature descriptor able to distinguish bread from non-bread images. For this purpose, the MFS, using $20$ FDs, was computed for each of the $200$ images ({\em i.e.,} $40$ images of each bread type, and $40$ randomly selected nonbread images, getting $5$ balanced classes). In the next subsections we show how the computed data is analized and used for classification purposes.
+
 
 \subsection{Data Analysis}
 \label{sec:11}
 
 Self-organizing maps (SOM)~\cite{Kohonen2001} of the vectorized images are useful to visualize these different representation of bread images into a lower dimensional view, in order to understand them better. A SOM map high dimensional data into a (typically) two-dimensional representation, using neighborhood information. Topological information of the original data is preserved.  
 
-Unsupervised SOM of the multifractal representation of bread and non-bread images are shown in Fig.~\ref{fig:somfractal} in a grid of $10\times10$ cells. In the left image, the $5$ classes ({\emph e.g.}: {\emph baguette}, {\emph sliced}, {\emph bran}, {\em sandwich} and {\em nonbread}) are shown, while in the right image, the {\em nonbread} class has been removed, and then the SOM was recomputed for the remaining $4$ classes, in order to highlight details among the MFS of the different bread types. The multifractal features SOM appears to show easily separable classes. It seems that a classifier could potentially obtain low classification errors using the multifractal features.
+Unsupervised SOM of the multifractal representation of bread and non-bread images are shown in Fig.~\ref{fig:somfractal} in a grid of $10\times10$ cells. In the left image, the $5$ classes ({\emph e.g.}: {\emph baguette}, {\emph sliced}, {\emph bran}, {\em sandwich} and {\em nonbread}) are shown, while in the right image, the {\em nonbread} class has been removed, and then the SOM was recomputed for the remaining $4$ classes, in order to highlight details among the MFS of the different bread types. The multifractal features SOM appears to show easily separable classes. It seems that a classifier could potentially obtain low classification errors using the multifractal features, since the numbers representing different classes are clearly separated each other, {\em i.e.}, there are almost no cells with two or more different numbers in it. A classifier can define regions of space (group of cells) for each class.
 \begin{figure*}
 \begin{centering}
 \includegraphics[width=0.45\textwidth]{../exps/som/sommultifractal}

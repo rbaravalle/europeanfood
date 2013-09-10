@@ -444,8 +444,14 @@ def main(subname,which,local,classifier):
     #plt.xlabel('SandwichC',fontsize=fsize)
     #plt.boxplot(np.vstack((sandwichC)))
     #plt.show()
-    xt = np.arange(0,20,2)
-    alpha = map(lambda i:i*0.05, xt)
+    xt = np.arange(1,20,2)
+    print xt
+    alpha = [   6.,   19.,   32.,   45.,   58.,   71.,   84.,   97.,  110.,  123. , 136. , 149.,
+  162.,  175.,  188.,  201. , 214. , 227. , 240.  ,253.]
+    alpha = map(lambda i:"%.2f" % float(i/255.), alpha)
+
+    alpha = alpha[0:len(alpha):2]
+    print alpha
 
     rB = plt.boxplot(np.vstack((baguette,baguetteC)), sym='')
     xticks(xt,alpha) # translate
@@ -740,8 +746,10 @@ def main(subname,which,local,classifier):
     # Graph for means
     plt.xlim(x1,x2)
     x = np.arange(cfeat)+1
+    plt.ylim((0, 2))
+    xticks(xt,alpha) # translate
     plt.ylabel(r'$mean$',fontsize=fsize)
-    plt.xlabel('FD',fontsize=fsize)
+    plt.xlabel(r'$\alpha$',fontsize=fsize)
     plt.plot(x, mean[0], 'ko--', label='baguette',linewidth=2.0)
     plt.plot(x, mean[1], 'ro--',  label='sliced',linewidth=2.0)
     plt.plot(x, mean[2], 'bo--',  label='bran',linewidth=2.0)
@@ -752,8 +760,9 @@ def main(subname,which,local,classifier):
 
     # Graph for standard deviations
     x = np.arange(cfeat)+1
+    xticks(xt,alpha) # translate
     plt.ylabel(r'$std$',fontsize=fsize)
-    plt.xlabel('FD',fontsize=fsize)
+    plt.xlabel(r'$\alpha$',fontsize=fsize)
     plt.xlim(x1,x2)
     plt.plot(x, std[0], 'ko--', label='baguette',linewidth=2.0)
     plt.plot(x, std[1], 'ro--',  label='sliced',linewidth=2.0)

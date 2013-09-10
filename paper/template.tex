@@ -122,7 +122,7 @@ Fractal and multifractal analysis of images have pro\-ved to be able to capture 
 
 Data analysis of the results of the feature extraction process is useful for obtaining key properties of materials. This information could then be used in quality measurements of real samples and in the validation of synthetic representations of them. In other words, these processes are useful to determine if a given image presents the observed features in that material, allowing to associate quality measure parameters to it. In~\cite{Fan2006}, a bread crumb quality test based on Gabor filters was performed, obtaining good results. Nevertheless, a small database was used ($30$ images). In \cite{Gonzales2008} several fractal features were obtained for one type of bread, demonstrating that a vector of FDs would be capable of obtaining key features of the crumb texture more accurately than using a single FD.
 
-In this work we propose the application of the Multifractal Spectrum (MFS) \cite{Xu2006} to describe and classify different bread crumb types. One of the main features of the MFS is its bi-Lipschitz invariance, that is, invariance to perspective transforms (viewpoint changes) and smooth texture surface deformations. It is shown that the MFS is also locally invariant to affine changes in illumination. These features are useful to describe bread crumb structures in a robust way that results adequate for the purposes of this study.
+In this work we propose the application of the Multifractal Spectrum (MFS) \cite{Xu2009} to describe and classify different bread crumb types. One of the main features of the MFS is its bi-Lipschitz invariance, that is, invariance to perspective transforms (viewpoint changes) and smooth texture surface deformations. It is shown that the MFS is also locally invariant to affine changes in illumination. These features are useful to describe bread crumb structures in a robust way that results adequate for the purposes of this study.
 
 The proposed method is compared to other classifiers that use state-of-the-art features for texture classification. The results of this feature extraction procedure show that the classifier is robust and presents good discrimination properties to distinguish between different bread types and also bread from non bread images.
 
@@ -192,9 +192,10 @@ A practical algorithm for computing $D_{b}$ in digital binarised images establis
 
 \begin{figure*}[htb]
 \centering
-$\vcenter{\hbox{\includegraphics[scale=1.8]{images/salvado19}}}$
-$\vcenter{\hbox{\includegraphics[scale = 0.4]{images/fitbox2}}}$
-\caption{A bread image (left) and its computed box dimension (right)}
+$\vcenter{\hbox{\includegraphics[scale=1.35]{images/salvado19}}}$
+$\vcenter{\hbox{\includegraphics[scale = 0.3]{images/bin}}}$
+$\vcenter{\hbox{\includegraphics[scale = 0.35]{images/fitbox2}}}$
+\caption{A bread image (left) with its binarisation (center) and its computed box dimension (right)}
 \label{fig:fitbox}
 \end{figure*}
 
@@ -242,25 +243,12 @@ f(\alpha) = \lim_{\epsilon\to0}{f_{\epsilon}(\alpha)}.
 \end{equation}
 
 \subsubsection{Practical procedure for the MFS}
-There are several techniques described in the literature to obtain the MFS, which lead to different representations of the multifractal information present in the structure. Usually, the method of moments is used \cite{Mendoza2010,Serrano2012}, but it produces a feature vector which is not always suitable for classification tasks. In this work, the implementation presented in \cite{Xu2006} is employed, due to its better classification performance. The implementation first calculates the method of moments and then uses a Legendre transform to obtain the MFS. The procedure consists in partitioning the domain into non-overlapping boxes of length $\epsilon$. For $x \in \mathbb{R}^{2}$, denote $B(x,\epsilon)$ the closed disk of radius $\epsilon > 0$ centered at $x$. The $q$-th moment of the measure $\mu$ is defined as
-\begin{equation}
-M_{\epsilon}(q) = \sum{\mu(B(x,\epsilon))^{q}},
-\label{eqn:eqn8}
-\end{equation}
-where the sum is over the $\epsilon$-mesh squares for which $\mu(B(x,\epsilon)) > 0$. To denote the power law behavior of $M_{\epsilon}(q)$, $\beta(q)$ is defined as a straight line fit of the values $M_{\epsilon}(q)$ with respect to $\epsilon$, for $\epsilon$ in $1,..,n$. It is shown in \cite{Falconer97}, that the MFS (see Eq.~(\ref{eqn:eqn7})) and $\beta(q)$ are related to each other by a Legendre transform as
+There are several techniques described in the literature to obtain the MFS, which lead to different representations of the multifractal information present in the structure. Usually, the method of moments is used \cite{Mendoza2010,Serrano2012}, but it produces a feature vector which is not always suitable for classification tasks. In this work, the implementation presented in \cite{Xu2009} is employed, due to its better classification performance.
 
-\begin{equation}
-f(\alpha(q)) = q \alpha(q) - \beta(q),
-\label{eqn:eqn9}
-\end{equation}
-where
+The implementation first computes $\alpha(x)$ for each pixel $x$ of the image. Denote $B(x,\epsilon)$ the closed disk of radius $\epsilon > 0$ centered at $x$, then, $\alpha(x)$ is defined as a straight line fit of the values $log(\mu(B(x,\epsilon)))$ and $log(\epsilon)$. Then, a discrete sample set $\{\alpha_{i}, i = 1,\dots,M\}$ is taken from the interval $[0,1]$, and the point set corresponding to that value of $\alpha_{i}$ is formed by grouping the values that are close to that $\alpha_{i}$ under some threshold. The FD for each point set is computed as the straight line fit of the values $log(\mu((N_{\epsilon}(\alpha_{i}))$ and $log(\epsilon)$. The value M determines the vector's length, {\em i.e.}. the number of FDs of the MFS.
 
-\begin{equation}
-\alpha(q) = \frac{d\beta(q)}{dq}.
-\label{eqn:eqn10}
-\end{equation}
 
-As previously stated, the $f(\alpha)$ spectrum (MFS) and the generalized dimensions $\beta(q)$ contain the same information, but in this work the first is employed, since it also outperforms the method of moments in classification tasks. Using (\ref{eqn:eqn9}) and (\ref{eqn:eqn10}) the MFS is estimated. The MFS defined produces a finite vector which is used as a feature vector in next sections. As previously said, in this work the implementation in \cite{Xu2006} is used and the parameters of the algorithm are set to default (except for the number of FDs, since they are chosen based on its classification performance).
+As previously stated, the $f(\alpha)$ spectrum (MFS) and the method of moments produce vectors which contains the same information, but in this work the first is employed, since it also outperforms the method of moments in classification tasks. This process produces a finite vector which is used as the feature vector in next sections. As previously said, in this work the implementation in \cite{Xu2009} is used and the parameters of the algorithm are set to default (except for the number of FDs, since they are chosen based on its classification performance).
 
 
 \subsubsection{Multifractal Measures}

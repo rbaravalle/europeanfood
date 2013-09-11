@@ -192,9 +192,9 @@ A practical algorithm for computing $D_{b}$ in digital binarised images establis
 
 \begin{figure*}[htb]
 \centering
-$\vcenter{\hbox{\includegraphics[scale=1.35]{images/salvado19}}}$
+$\vcenter{\hbox{\includegraphics[scale=1.35]{../images/salvado19}}}$
 $\vcenter{\hbox{\includegraphics[scale = 0.3]{images/bin}}}$
-$\vcenter{\hbox{\includegraphics[scale = 0.35]{images/fitbox2}}}$
+$\vcenter{\hbox{\includegraphics[scale = 0.35]{../images/fitbox}}}$
 \caption{A bread image (left) with its binarisation (center) and its computed box dimension (right)}
 \label{fig:fitbox}
 \end{figure*}
@@ -437,7 +437,9 @@ In order to test for the discriminative capability of the method, a classificati
 
 K-fold cross validation is applied to the entire set (with $K=4$), employing three different classifiers: Support Vector Machines (SVM), Random Forests (RF) \cite{Breiman2001}, and Nearest Neighbors (NN). Results show that the MFS presents good classification performance regardless of the classifier employed. The \textsf{libsvm} implementation \cite{Chang2011} was used for the SVM classifier (with RBF kernel). In the case of the RF ($100$ trees) and the NN ($1$ neighbor) classifiers, the \textsf{scikit-learn} python library was employed.
 
-In Table \ref{tab:number}, the classification performance of the method is tested using different numbers of FDs. When $20$ FDs are used, an useful combination of performance and low-dimensionality is achieved, so this number of FDs is used in the following calculations. The goal of this work is to show the impact of the features, rather than that of the classifier. The Nearest Neighbor results are considered the most relevant among the three classifiers, since it presents the simplest classification rules.
+In Table \ref{tab:number}, the classification performance of the method is tested using different numbers of FDs. When $20$ FDs are used, an useful combination of performance and low-dimensionality is achieved (it shows the best classification results for the RF and NN classifiers), so this number of FDs is used in the following calculations. 
+%The goal of this work is to show the impact of the features, rather than that of the classifier. 
+%The Nearest Neighbor results are considered the most relevant among the three classifiers, since it presents the simplest classification rules.
 
 In Table \ref{tab:mfs}, several combinations of different MFS obtained from the images, and their classification performance are shown. The MFS used in the study were the density of the intensity (MFS in the table), the Laplacian of the intensity (L), and the gradient of the intensity (G). In addition, another test is made, using the CIELab color space. The key advantage of this color space is that it tends to reduce the dependency of the resulting image color on the device used in the capture. The intensity of the images is transformed to the CIELab space, and the MFS of the three separated channels ({\em L}, {\em a}, and {\em b}) are combined together, obtaining a vector of $60$ FDs. This combination showed the best classification performance. It means that adding color information in the $a$ and $b$ channels is useful for better classification of different types of bread crumbs, when different capturing devices are used (in this case, a scanner and a digital camera).
 

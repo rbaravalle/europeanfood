@@ -342,8 +342,8 @@ Self-organizing maps (SOM)~\cite{Kohonen2001} of the feature vectors associated 
 Unsupervised SOM of the multifractal representation of bread and non-bread images are shown in Fig.~\ref{fig:somfractal} in a grid of $10\times10$ cells. In the left image, the $5$ classes ({\em e.g.}: {\em baguette}, {\em sliced}, {\em bran}, {\em sandwich} and {\em nonbread}) are shown, while in the right image, the {\em nonbread} class has been removed, and then the SOM was recomputed for the remaining $4$ classes, in order to highlight details among the MFS of the different bread types. The multifractal features SOM appears to show easily separable classes. It seems that a classifier could potentially obtain low classification errors using the multifractal features, since the numbers representing different classes are clearly separated to each other, {\em i.e.}, there are almost no cells with two or more different numbers in it. A classifier can define regions of space (group of cells) for each class.
 \begin{figure*}
 \begin{centering}
-\includegraphics[width=0.45\textwidth]{../exps/som/sommultifractal}
-\includegraphics[width=0.45\textwidth]{../exps/som/sombreadmultifractal}
+\includegraphics[width=0.45\textwidth]{../exps/som/new}
+\includegraphics[width=0.45\textwidth]{../exps/som/new2}
 \caption{SOM of the bread and non-bread images (left) and SOM of the bread types only (right). $1$: {\em baguette}, $2$: {\em sliced}, $3$: {\em bran}, $4$: {\em sandwich}, $5$: {\em nonbread} }
 \label{fig:somfractal}
 \end{centering}
@@ -506,7 +506,7 @@ NN & 79\% & 70\% & \textbf{86\%} \\ % & 48.5
 
 \section{Conclusions}
 \label{sec:11}
-The visual appearance of different types of bread crumbs can be successfully characterized by the fractal dimensions of their digital images. The FDs obtained from the MFS method whose $\alpha \in [0,0.23]$ measured bread crumb porosity, meaning that the higher these FDs, the higher the measure. In addition, the FDs whose $\alpha \in [0.79,1]$ are useful to measure coarseness and heterogeneity of bread crumb. The MFS contains useful data to characterize the three measures, combining the information in one feature vector.
+The visual appearance of different types of bread crumbs can be successfully characterized by the fractal dimensions of their digital images. The FDs obtained from the MFS method whose $\alpha \in [0,0.23]$ provided a good measure of the bread crumb porosity, meaning that the higher these FDs, the higher the measure. In addition, the FDs whose $\alpha \in [0.79,1]$ are useful to measure coarseness and heterogeneity of bread crumb. The MFS contains useful data to characterize the three measures, combining the information in one feature vector.
 
 The use of multifractal features in bread crumb texture classification showed excellent performance. The MFS demonstrated to be accurate enough to perform a classification of different bread types and also to discriminate non bread from bread images. The classification performance of the MFS for the bread crumb database outperforms other state-of-the-art techniques employed in the computer vision literature. The information present in the MFS of the $L$, $a$ and $b$ channels of the CIElab space color obtained the best classification performance in all the developed tests. This result appears to be a consequence of the different capturing devices used in this work. Also, it was shown that the MFS is sensitive to changes in the illumination conditions during image acquisition.
 

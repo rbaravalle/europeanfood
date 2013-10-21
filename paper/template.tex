@@ -118,7 +118,7 @@ The goals of this research are: (1) to evaluate if the MFS can be applied to cha
 
 One of the most important factors to evaluate the quality of a bread loaf is related to its crumb structure. Close examination of different slices reveals considerable variation in the cell (air bubble) size even within a single sample of the same bread type. 
 
-Fractal and multifractal analysis of images have pro\-ved to be able to capture useful properties of the underlying material being represented. These features have been successfully applied in different areas, such as medi\-cine \cite{Andjelkovic2008,Yu2011} and texture classification \cite{Wendt2009}. In food research, fractal and multifractal analysis has been applied in the study of apple tissues \cite{Mendoza2010}, pork sirloins \cite{Serrano2012}, and also in chocolate, potato and pumpkin surfaces \cite{Quevedo2002}. Through several procedures \cite{Peitgen2004,Gonzales2008}, it is possible to obtain different Fractal Dimensions (FD), each of them capturing a different property of the material ({\em e.gs.}, porosity, rugosity).
+Fractal and multifractal analysis of images have pro\-ved to be able to capture useful properties of the underlying material being represented. These features have been successfully applied in different areas, such as medi\-cine \cite{Andjelkovic2008,Yu2011} and texture classification \cite{Wendt2009}. In food research, fractal and multifractal analysis has been applied in the study of apple tissues \cite{Mendoza2010}, pork sirloins \cite{Serrano2012}, and also in chocolate, potato and pumpkin surfaces \cite{Quevedo2002}. Through several procedures \cite{Peitgen2004,Gonzales2008}, it is possible to obtain different Fractal Dimensions (FD), each of them capturing a different property of the material ({\em e.g.}, porosity, rugosity).
 
 Data analysis of the results of the feature extraction process is useful for obtaining key properties of materials. This information could then be used in quality measurements of real samples and in the validation of synthetic representations of them. In other words, these processes are useful to determine if a given image presents the observed features in that material, allowing to associate quality measure parameters to it. In~\cite{Fan2006}, a bread crumb quality test based on Gabor filters was performed, obtaining good results. Nevertheless, a small database was used ($30$ images). In \cite{Gonzales2008} several fractal features were obtained for one type of bread, demonstrating that a vector of FDs would be capable of obtaining key features of the crumb texture more accurately than using a single FD.
 
@@ -189,7 +189,7 @@ D_{b} \triangleq \displaystyle\lim_{\epsilon \to 0}{\frac{\log(N_{\epsilon})}{\l
 \label{eqn:1}
 \end{equation}
 
-A practical algorithm for computing $D_{b}$ in digital binarized images establishes different partitions of the original image in regular grids of side $\epsilon$ (in pixels) and counts for each partition the amount $N_{\epsilon}$ of boxes that contained a portion of the object of interest. It uses a binarized image and selects different values of $\epsilon$ in it, making a count of the boxes that contains pixels in each case. Since this procedure is not invariant under translations, an average of grid counting is performed under several translations at a given grid size $\epsilon$.­ With the previous steps, a set of $<1/\epsilon, N_\epsilon>$ pairs is obtained, with which a linear fit is performed in log-space. Finally, the slope of the resulting straight line is by definition the box dimension of the image. In Fig.~\ref{fig:fitbox} an image of the bread type {\em bran} is shown (left), with an example of binarization (center) and its corresponding box dimension computation (right).
+A practical algorithm for computing $D_{b}$ in digital binarized images establishes different partitions of the original image in regular grids of side $\epsilon$ (in pixels) and counts for each partition the amount $N_{\epsilon}$ of boxes that contains a portion of the object of interest. It uses a binarized image and selects different values of $\epsilon$ in it, making a count of the boxes that contains pixels in each case. Since this procedure is not invariant under translations, an average of grid counting is performed under several translations at a given grid size $\epsilon$.­ With the previous steps, a set of $<1/\epsilon, N_\epsilon>$ pairs is obtained, with which a linear fit is performed in log-space. Finally, the slope of the resulting straight line is by definition the box dimension of the image. In Fig.~\ref{fig:fitbox} an image of the bread type {\em bran} is shown (left), with an example of binarization (center) and its corresponding box dimension computation (right).
 
 \begin{figure*}[htb]
 \centering
@@ -222,7 +222,7 @@ Each substructure $E_{i}$ is characterized by a measure $\mu(E_{i})$. From the p
 \label{eqn:eqn4}
 \end{equation}
 \noindent
-and to take the limit when $\epsilon$ tends to $0$. The limit represents the value of the H\"older exponent at a point in the structure, that is
+and to take the limit when $\epsilon$ tends to $0$. The limit $\alpha$ represents the value of the H\"older exponent at a point in the structure, that is
 
 \begin{equation}
 \alpha = \lim_{\epsilon\to0}{\alpha_{i}}.
@@ -298,7 +298,7 @@ where $x_{c},y_{c}$ are the coordinates of the actual pixel, and $W$ is the wind
 \includegraphics[scale=0.28]{../images/camera/lactal/l14}
 \includegraphics[scale=0.28]{../images/camera/s7}
 \includegraphics[scale=0.28]{../images/camera/sandwich/s1}
-\caption{Digitized images from a digital camera.}
+\caption{Digitized images from a digital camera}
 \label{fig:camera}
 \end{figure*}
 
@@ -322,7 +322,7 @@ where $x_{c},y_{c}$ are the coordinates of the actual pixel, and $W$ is the wind
 \includegraphics[scale=0.35]{../images/lactal14bin}
 \includegraphics[scale=0.35]{../images/salvado43bin}
 \includegraphics[scale=0.35]{../images/sandwich43bin}
-\caption{Digitized images (from a scanner) of {\em baguette}, {\em sliced}, {\em bran} and {\em sandwich} bread types (top row) with their corresponding binarizations (bottom row).}
+\caption{Digitized images (from a scanner) of {\em baguette}, {\em sliced}, {\em bran} and {\em sandwich} bread types (top row) with their corresponding binarizations (bottom row)}
 \label{fig:bread}
 \end{figure*}
 
@@ -449,12 +449,12 @@ In Table \ref{tab:other}, state-of-the-art features (Haralick \cite{Haralick73},
 
 \begin{table}
 % table caption is above the table
-\caption{classification results with different number of FDs for the MFS}
+\caption{Bread crumb classification results with different number of FDs for the MFS}
 \label{tab:number}       % Give a unique label
 % For LaTeX tables use
 \begin{tabular}{lllll}
 \hline\noalign{\smallskip}
-Number of FDs & 10  & 20 & 30 \\
+\#FDs & 10  & 20 & 30 \\
 \noalign{\smallskip}\hline\noalign{\smallskip}
 SVM & \textbf{96\%} & 94.5\% & 95.5\% \\
 RF  & 91.5\% & \textbf{93.5\%} & 93\% \\
@@ -466,7 +466,7 @@ NN & 88.5\% & \textbf{90.5\%} & 90\% \\
 
 \begin{table}
 % table caption is above the table
-\caption{classification results using different combinations of the MFS}
+\caption{Bread crumb classification results using different combinations of the MFS}
 \label{tab:mfs}       % Give a unique label
 % For LaTeX tables use
 \begin{tabular}{lllll}
@@ -485,7 +485,7 @@ NN & 90.5\% & 90\% & 87\% & \textbf{92\%} \\
 
 \begin{table}
 % table caption is above the table
-\caption{classification results for different state-of-the-art features}
+\caption{Bread crumb classification results for different state-of-the-art features}
 \label{tab:other}       % Give a unique label
 % For LaTeX tables use
 \begin{tabular}{llllll}
